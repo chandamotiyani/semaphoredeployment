@@ -1,0 +1,38 @@
+{% do craft.app.elements.eagerLoadElements(
+  className(product),
+  [product],
+  [
+  ['variants.productImageFront', {
+    withTransforms: ['productLarge']
+  },
+  'variants.productImageBack', {
+    withTransforms: ['productLarge']
+  }],
+  'variants.bottleSizes',
+  'variants',
+  'regionsCategory',
+  'wineType',
+  'collections',
+  'varieties',
+  'vintage',
+   ]) %}
+
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+  {% block filter %}
+    {% include "_base/_back-button.twig" with { url: 'shop/wines' } %}
+  {% endblock %}
+
+  {% block featured %}
+    {% include '_containers/_shop/_product-main' with { productType: 'wine' } %}
+  {% endblock %}
+
+  {% block content %}
+
+    {% for component in product.components %}
+      {% include [ "_containers/_page-builder/_" ~ component.type.handle | kebabCase, "_containers/_page-builder/_unsupported" ]  with { header: component.sectionHeader.one() | default, component: component | default, product: product|default } only %}
+    {% endfor %}
+
+  {% endblock %}
+
+{% endembed %}

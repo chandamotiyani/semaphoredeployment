@@ -1,0 +1,17 @@
+{% set tabs = [
+	{
+		name: 'My Membership',
+		url: '/members/my-membership',
+		active: craft.app.request.segments|last == 'sign-in',
+	},
+	{
+		name: 'Update Account Details',
+		url: '/members/sign-up',
+		active: craft.app.request.segments|last == 'sign-up',
+  },
+  {
+		name: 'View My Purchases',
+		url: '/members/sign-up',
+		active: craft.app.request.segments|last == 'sign-up',
+	},
+] %}

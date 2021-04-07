@@ -1,0 +1,14 @@
+<div class="form__input-wrap {{ blockClass|default('') }}__input-wrap form__input-wrap--has-icon">
+  {% if label %}
+    <label for="" class="{{ blockClass|default('') }}__form-label form__label">{{ label }} test</label>
+  {% endif %}
+  {% if label %}
+  {% if instruction is defined and instruction | length %}
+    <div class="form__instruction">
+      {{ instruction|default('') }}
+    </div>
+  {% endif %}
+  {% endif %}
+  {#<svg class="form__input-icon"><use xlink:href="#search-icon"></use></svg>#}
+    <search></search>
+</div>

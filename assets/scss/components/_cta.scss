@@ -1,0 +1,44 @@
+.cta {
+	@include heading-with-text;
+
+	&__buttons {
+		display: flex;
+		flex-wrap: wrap;
+		// flex-grow: 1;
+		justify-content: center;
+		
+		@include media-breakpoint-down($single-column-breakpoint) {
+			flex-direction: column;
+
+			& > :not(:first-child) {
+				margin-top: $padding-small / 2;
+			}
+		}
+		
+		@include media-breakpoint-up($single-column-breakpoint) {
+			flex-direction: row;
+
+			& > :not(:first-child) {
+				margin-left: $padding-small / 2;
+			}
+		}
+	}
+
+	&__button {
+		@extend .boxed-button;
+	}
+
+
+	.product-form__button {
+		background: black;
+    color: white;
+    padding: 20px 30px;
+		height: 50px;
+		border: 1px solid black;
+		
+		&:hover {
+			background: transparent;
+			color: black;
+		}
+	}
+}

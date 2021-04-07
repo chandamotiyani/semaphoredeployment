@@ -1,0 +1,57 @@
+{% set blockModifier = blockModifier|default('') %}
+
+{% set purchasable = item.element.defaultVariant|default(0) %} {# use the default variation for cart listings #}
+
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+{% set lineItem = null %}
+{% for item in cart.lineItems %}
+  {% if item.purchasableId is defined and purchasable.id == item.purchasableId  %}
+    {% set lineItem = item %}
+  {% endif %}
+{% endfor %}
+
+{%
+  set product = {
+    id: item.id,
+    productId: item.element.id,
+    price: item.element.defaultVariant.price|default('0')|currency('AUD', stripZeros = true),
+    imageUrl: item.element.defaultVariant.productImageFront.one().getUrl() ?? item.element.defaultVariant.product.productinfogift.productImageFront.one().getUrl() ?? item.element.defaultVariant.product.productInfoMerchandise.productImageFront.one().getUrl()|default,
+    title: item.element.title,
+    removeUrl: item.removeUrl(),
+    qtyInCart: lineItem.qty|default(0),
+    lineItemId: lineItem.id|default(0),
+    purchasableId: purchasable.id,
+    outOfStock:  purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false,
+    premiseOnly: item.premiseOnly|default ? item.premiseOnly.options[0].selected : false,
+    disableBuyButton: (purchasable.getIsAvailable() == false) or (item.premiseOnly|default and item.premiseOnly.options[0].selected) or (purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false)|default(false),
+    isOnSale: purchasable.sales|promotions|length,
+  }
+%}
+{% embed "shop/_cart/line-item-product" with { product: product, blockModifier: blockModifier } only %}
+  {% block formInputs %}
+    <input type="hidden" name="action" value="/commerce/cart/update-cart">
+    <input type="hidden" name="lineItemId" value="{{ product.id }}">
+    <input type="hidden" name="removeFromWishlist" value="">
+    <input type="hidden" name="purchasableId" value="{{ product.purchasableId }}">
+    {{ csrfInput() }}
+  {% endblock %}
+  {% block options %}
+    <div class="cart-item__right">
+      <div class="cart-item__price">{{ product.price }}</div>
+      {% if product.qtyInCart %}
+        <input type="hidden" name='lineItems['~product.lineItemId|default('')~'][qty]'>
+      {% endif %}
+
+      {% if product.outOfStock %}
+        <span class="product-form__cart-stock-btn">Out of Stock</span>
+      {% else %}
+        <input type="submit" value="{{ "Add to cart"|t }}" class="product-form__cart-add-btn" {{ product.disableBuyButton == true ? 'disabled' }}>
+      {% endif %}
+
+      <a class="cart-item__remove js-product-cart-summary-remove-wishlist" href="{{ product.removeUrl }}">Remove</a>
+    </div>
+  {% endblock %}
+{% endembed %}

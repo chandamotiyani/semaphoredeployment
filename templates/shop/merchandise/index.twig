@@ -1,0 +1,49 @@
+{% set tabs = [
+	{
+		name: 'Wines',
+		url: '/shop/wines',
+		active: craft.app.request.segments|last == 'wines',
+	},
+	{
+		name: 'Wine Packs and Gifts',
+		url: '/shop/gifts',
+		active: craft.app.request.segments|last == 'gifts',
+	},
+	{
+		name: 'Merchandise',
+		url: '/shop/merchandise',
+		active: craft.app.request.segments|last == 'merchandise'
+	},
+] %}
+
+{% embed "_layouts/_listing-page.twig" with { title: 'Merchandise', image: alias('@assetBaseUrl/img/wine-listing-cover.jpg'), tabs: tabs } %}
+  {% set wines = craft
+    .products()
+	.withPermission()
+    .type(['merchandise']).all()
+  %}
+
+
+  {% block list %}
+
+			{% embed '_layouts/_section.twig' %}
+				{% block body %}
+					<div class="js-product-listing card-list">
+						{% if wines|default %}
+              {% embed "_partials/_card-list.twig" with { items: wines, type: 'product--gift' } only %}
+        				{% block item %}
+									{% include "_containers/_shop/_product-merchandise-card" with { wine: item } only %}
+								{% endblock %}
+							{% endembed %}
+            {% else %}
+              <div class="card-list-product card-list-product--empty">
+                <h2 class="heading">Sorry - no items exist.</h2>
+              </div>
+            {% endif %}
+
+					</div>
+				{% endblock %}
+			{% endembed %}
+
+  {% endblock %}
+{% endembed %}

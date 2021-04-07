@@ -1,0 +1,5 @@
+.article-button {
+	& > a {
+		@extend .boxed-button;
+	}
+}

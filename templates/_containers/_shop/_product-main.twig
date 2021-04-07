@@ -1,0 +1,125 @@
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+{# append members note to product note #}
+
+{% set productNotes = [] %}
+{% for productNote in product.productInfo.productNotes|default([]) %}
+
+{% set productNotes = productNotes | merge([{
+    heading: productNote.heading,
+    description: productNote.description,
+  }]) %}
+{% endfor %}
+
+{% set badges = [] %}
+{% for badge in product.productInfo.badges|default([]) %}
+  {% set badges = badges | merge([{
+    url: badge.badge.image.one.url|default('')
+  }]) %}
+{% endfor %}
+
+{% for badge in product.productInfo.awards|default([]) %}
+  {% set badges = badges | merge([{
+    url: badge.badge.image.one.url|default('')
+  }]) %}
+{% endfor %}
+
+{% set variantId = craft.app.request.getQueryParam('variant')|default %}
+{% if variantId %}
+  {% set purchasable = craft.variants().id(variantId).one %}
+{% else %}
+  {% set purchasable = product.variants[0] %}
+{% endif %}
+
+{% set lineItem = null %}
+{% for item in cart.lineItems %}
+  {% if item.purchasableId is defined and purchasable.id == item.purchasableId  %}
+    {% set lineItem = item %}
+  {% endif %}
+{% endfor %}
+
+{% if wishList is not defined %}
+  {% set wishList = craft.wishlist.lists().default(true).one() %}
+{% endif %}
+
+{% if product.productInfo %}
+  {% set tastingNotes = [] %}
+  {% set tastingNoteField = product.productInfo.tastingNotes.one()|default %}
+
+  {% set tastingNoteEntries = tastingNoteField.children().level(2) ?? false %}
+
+  {% if tastingNoteEntries %}
+    {% for tastingNoteEntry in tastingNoteEntries %}
+      {% set tastingNotes = tastingNotes | merge([{
+        url: tastingNoteEntry.backVintages.tastingNotePDF.one().getUrl() ?? '#',
+        title: tastingNoteEntry.title,
+        pageUrl: tastingNoteEntry.getUrl()
+      }]) %}
+    {% endfor %}
+  {% endif %}
+{% endif %}
+
+{%
+	set productFields = {
+		id: product.id,
+		title: product.title,
+    super: product.regionsCategory[1]|default ? product.regionsCategory|joinCategoryTitle(2) : '',
+		vintage: product.productInfo[0].vintage|default('non vintage'),
+    subtitle: product.wineType|joinCategoryTitle(2)|default~' '~product.productInfo[0].vintage|default('non vintage'),
+    superUrl: '#',
+		description: product.productInfo.description ?? product.description|default,
+		variety: product.wineType.level(2)|default ? product.wineType.level(2)|join(' ') : 'Variety',
+    height: product.variants[0].bottleSizes|join(' ') | default(13),
+    price: purchasable.salePrice|currency('AUD', stripZeros = true)|replace('$'),
+    rrpPrice: purchasable.price|currency('AUD', stripZeros = true)|replace('$'),
+		qtyInCart: lineItem.qty|default(0),
+		lineItemId: lineItem.id|default(0),
+		purchasableId: purchasable.id,
+    url: product.url,
+    productNotes: productNotes|default,
+    giftOptions: product.variants[0].giftOptions|default,
+    inWishlist: wishList.items().elementId(product.id).one()|default ? true : false,
+    badges: badges|default([]),
+    note: purchasable.note|default,
+    specialRelease: product.specialReleases,
+    imageFront: purchasable.productImageFront[0].getUrl('productLarge')|default,
+    imageBack: purchasable.productImageBack[0].getUrl('productLarge')|default,
+    variants: product.variants(),
+    bottleSize: purchasable.bottleSizes|join(' ') | default(),
+    tastingNotes: tastingNotes|default,
+    outOfStock:  purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false,
+    isAvailable: purchasable.getIsAvailable(),
+		premiseOnly: product.premiseOnly.options|default ? product.premiseOnly.options[0].selected : false,
+    disableBuyButton: (purchasable.getIsAvailable() == false) or (product.premiseOnly.options|default and product.premiseOnly.options[0].selected) or (purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false)|default(false),
+    isOnSale: purchasable.sales|promotions|length,
+    sales: purchasable.sales|promotions,
+    membershipsDiscounts: purchasable.sales|memberships,
+    showSaleBadge: purchasable.sales|showbadge,
+    isWineOfTheMonth: purchasable.id in getWOMSales(),
+    wishlistToggleUrl: craft.wishlist.item(product.id).toggleUrl(),
+    isMembersOnly: product|isMembersOnly,
+  }
+%}
+
+
+{% if product is defined %}
+  {% include "shop/_cart/cart-sticky-header" with productFields %}
+
+  {% embed '_layouts/_section.twig' %}
+    {% block body %}
+      {% embed '_layouts/_product.twig' with { productType: productType } %}
+        {% block productFooter %}
+          {{ parent() }}
+
+          {% if productType|default == 'premium' and tastingNotes %}
+            {% include "shop/_partials/vintages-slider.twig" with { tastingNotes: tastingNotes|reverse  } only %}
+          {% endif %}
+        {% endblock %}
+
+      {% endembed %}
+
+
+    {% endblock %}
+  {% endembed %}
+{% endif %}

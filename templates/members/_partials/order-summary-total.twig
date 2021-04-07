@@ -1,0 +1,13 @@
+<div class="order-summary__footer">
+  <div class="cart-totals cart-totals--checkout-final">
+    <div class="cart-totals__totals">
+      <h3 class="cart-totals__totals-heading">Total</h3>
+      {% if cart|default(0) %}
+      <div class="cart-totals__totals-price">{{ order.totalPrice|commerceCurrency(cart.currency) }}</div>
+      {% else %}
+{#        Sometimes we don't have a cart - in this case we can assume the prices are in AUD for now#}
+        <div class="cart-totals__totals-price">{{ order.totalPrice|commerceCurrency('AUD') }}</div>
+      {% endif %}
+    </div>
+  </div>
+</div>

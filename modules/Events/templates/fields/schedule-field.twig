@@ -1,0 +1,137 @@
+{% import "_includes/forms" as forms %}
+{% set groupId = craft.scheduleGroups.where({'handle':'default'}).one().id %}
+<div class="schedule-api">
+    {% if(element.schedule|length) %}
+        <p>Schedule is being pulled in from Rezdy.</p>
+    {% else %}
+        <p>Schedule will be pulled in from Rezdy.</p>
+    {% endif %}
+    {% set allSchedule = element.schedule.orderBy('startDateTime ASC').all() %}
+    <p class="filter-buttons">
+        <a href="#" role="button" type="button" data-filter="show-all" class="event-filter active">show all</a> |
+        <a href="#" role="button" type="button" data-filter="upcoming" class="event-filter">only upcoming events</a> |
+        <a href="#" role="button" type="button" data-filter="past" class="event-filter">only past events</a>
+    </p>
+    <table class="data fullwidth">
+        <tr>
+            <th>id</th>
+            <th>Start DateTime</th>
+            <th>End DateTime</th>
+            <th>Tickets Available</th>
+        </tr>
+        {% for schedule in allSchedule %}
+            <tr class="data-row {{ schedule.status }}">
+                <td>
+                    <a href="/admin/events/schedule/{{ schedule.id }}/edit">{{ schedule.id }}</a></td>
+                <td>
+                    {{ schedule.startDateTime|date(('H:i:s D dS M Y')) }}
+                </td>
+                <td>
+                    {{ schedule.endDateTime|date(('H:i:s D dS M Y')) }}
+                </td>
+                <td>
+                    {{ schedule.ticketsAvailable }} Available<br />
+                    {{ schedule.tickets }} Total
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+<div class="schedule-manual">
+    <p>Schedule is being handled manually.</p>
+    <p class="filter-buttons">
+        <a href="#" role="button" type="button" data-filter="show-all" class="event-filter active">show all</a> |
+        <a href="#" role="button" type="button" data-filter="upcoming" class="event-filter">only upcoming events</a> |
+        <a href="#" role="button" type="button" data-filter="past" class="event-filter">only past events</a>
+    </p>
+    <select data-key="delete-schedule-control" name="schedulesToDelete[]" multiple class="hidden">
+        {% for schedule in allSchedule %}
+            <option value="{{ schedule.id }}">{{ schedule.id }}</option>
+        {% endfor %}
+    </select>
+    <table class="data fullwidth">
+        <tr>
+            <th>Start DateTime</th>
+            <th>End DateTime</th>
+            <th>Tickets Available</th>
+        </tr>
+        <tr data-key="blank-schedule-controls" class="hidden">
+            <td>
+                {{ forms.datetimeField({
+                    id: 'startDateTime',
+                    name: 'startDateTime',
+                    value: ''
+                }) }}
+            </td>
+            <td>
+                {{ forms.datetimeField({
+                    id: 'endDateTime',
+                    name: 'endDateTime',
+                    value: ''
+                }) }}
+            </td>
+            <td>
+                {{ forms.text({
+                    id: 'ticketsAvailable',
+                    type: 'number',
+                    name: 'ticketsAvailable',
+                    value: ''
+                }) }}
+                {{ forms.text({
+                    id: 'groupId',
+                    type: 'hidden',
+                    name: 'scheduleGroupId',
+                    value: groupId
+                }) }}
+            </td>
+            <td>
+                <a href="#" class="delete icon" role="button" data-item-to-delete="" data-item-id="" data-action="delete-schedule" data-icon="remove"></a>
+            </td>
+        </tr>
+        {% for schedule in allSchedule %}
+        <tr data-item="schedule[{{ schedule.id }}]" class="data-row {{ schedule.status }}">
+            <td>
+                {{ forms.datetimeField({
+                    id: 'startDateTime',
+                    name: 'schedule['~schedule.id~'][startDateTime]',
+                    value: schedule.startDateTime?(schedule.startDateTime|date('Y-m-d H:i:s')):"",
+                    errors: element.getErrors('startDateTime'),
+                    autofocus: true
+                }) }}
+            </td>
+            <td>
+                {{ forms.datetimeField({
+                    id: 'endDateTime',
+                    name: 'schedule['~schedule.id~'][endDateTime]',
+                    value: schedule.endDateTime?(schedule.endDateTime|date('Y-m-d H:i:s')):"",
+                    errors: element.getErrors('endDateTime'),
+                    autofocus: true
+                }) }}
+            </td>
+            <td>
+                {{ forms.text({
+                    id: 'ticketsAvailable',
+                    type: 'number',
+                    name: 'schedule['~schedule.id~'][ticketsAvailable]',
+                    value: schedule.ticketsAvailable?schedule.ticketsAvailable:"",
+                    errors: element.getErrors('ticketsAvailable'),
+                    autofocus: true
+                }) }}
+
+                {{ forms.text({
+                    id: 'groupId',
+                    type: 'hidden',
+                    name: 'schedule['~schedule.id~'][groupId]',
+                    value: schedule.groupId?schedule.groupId:"",
+                    errors: element.getErrors('groupId'),
+                    autofocus: true
+                }) }}
+            </td>
+            <td>
+                <a href="#" class="delete icon" role="button" data-item-id="{{ schedule.id }}" data-item-to-delete="schedule[{{ schedule.id }}]" data-action="delete-schedule"  data-icon="remove"></a>
+            </td>
+            {% endfor %}
+        </tr>
+    </table>
+    <button data-action="add-schedule" type="button" class="btn submit add icon" data-icon="add">Add</button>
+</div>

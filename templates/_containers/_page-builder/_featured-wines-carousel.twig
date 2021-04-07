@@ -1,0 +1,141 @@
+{# Set Base Component Fields #}
+{% set introFields = component.featuredWinesCarousel.one|default %}
+
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+{% if wishList is not defined %}
+  {% set wishList = craft.wishlist.lists().default(true).one() %}
+{% endif %}
+
+{% set buttons = [] %}
+
+{% if introFields %}
+	{% set carouselModifiers = {
+		hasText: introFields.heading|length or introFields.text|length,
+		hasOne: component.featuredWines.one.wines|length == 1,
+		hasTwo: component.featuredWines.one.wines|length == 2,
+		hasMany: component.featuredWines.one.wines|length > 2
+	} %}
+
+
+	{# Buttons #}
+	{% for button in introFields.buttons.all() %}
+		{% set buttons = buttons | merge([{
+			label: button.label,
+			entry: button.type.handle == 'entryButton' ? button.entry.one()
+			: (button.type.handle == 'addToCartButton') ? button.product.one()
+			: (button.type.handle == 'externalUrl') ? {
+				url: button.linkUrl,
+				target: button.buttonAttributes.options[0].selected ? 'target=_blank' : ''
+			}
+			: (button.type.handle == 'buttonAddAsAGift') ? { url: '#add-gift' }
+		}]) %}
+	{% endfor %}
+{% endif %}
+
+
+{% set moduleHeading = component.moduleHeading|default %}
+{# Do product query #}
+{% set featuredWines = component.featuredWines.one|default %}
+
+{% set products = [] %}
+
+
+
+{% if currentUser and featuredWines.membersOnly.options[0].selected|default %}
+	{# Fetch Members only #}
+	{% set products = craft.productService.getMembersOnlyProducts('').with([
+		'productInfo',
+		['variants.productImageFront', {
+			withTransforms: ['productListingImage']
+		}],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		]) %}
+{% elseif featuredWines.collection|default %}
+	{# Fetch all of the products in the selected collection category #}
+	{% set level = 0 %}
+	{% for category in featuredWines.collection %}
+			{% set level = category.level > level ? category.level : level %}
+	{% endfor %}
+	{% set products = craft.products.withPermission.relatedTo(featuredWines.collection.level(level)).with([
+		'productInfo',
+		['variants.productImageFront', {
+			withTransforms: ['productListingImage']
+		}],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		]) %}
+{% elseif featuredWines.variety|default %}
+	{# Fetch all of the products in the selected variety category #}
+	{% set level = 0 %}
+	{% for category in featuredWines.variety %}
+			{% set level = category.level > level ? category.level : level %}
+	{% endfor %}
+	{% set products = craft.products.withPermission.relatedTo(featuredWines.variety.level(level)).with([
+		'productInfo',
+		['variants.productImageFront', {
+			withTransforms: ['productListingImage']
+		}],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		]) %}
+{% else %}
+	{# Fetch all of the products manually added to this field #}
+	{% set products = featuredWines.wines.withPermission.with([
+		'productInfo',
+		['variants.productImageFront', {
+			withTransforms: ['productListingImage']
+		}],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		]) %}
+{% endif %}
+
+{% set wineBadge = shopSettings.wineOfTheMonthBadge.one.url|default %}
+{% set wines = [] %}
+{% for wine in products %}
+	{% set template = (wine.type.handle == 'gifts' or wine.type.handle == 'merchandise') ? wine.type.handle : 'wine' %}
+
+	{% set wines = wines | merge([{
+			container: '_containers/_shop/_product-'~ template ~'-card',
+			wine: wine,
+			class: template != 'wine' ? 'carousel__item--large' : '',
+		}]) %}
+{% endfor %}
+
+{% include '_views/_featured-wines-carousel' with { 
+	moduleHeading: moduleHeading, 
+	wines: wines, 
+	introFields: introFields, 
+	carouselModifiers: carouselModifiers|default,
+	buttons: buttons,
+	wineBadge: wineBadge,
+	wishList: wishList, 
+	cart: cart,
+	
+ } only %}
+
+

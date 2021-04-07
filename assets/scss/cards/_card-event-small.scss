@@ -1,0 +1,50 @@
+.card-event-small {
+	@include card;
+	@include card-with-image;
+	// @include card-with-image-at-left;
+	// @include card-with-image-width-locked-to-aspect-ratio;
+	// @include card-with-image-that-scales-on-hover;
+	
+	flex-direction: row;
+	min-height: 10rem;
+
+	&__title {
+		@extend .heading-primary-xs;
+	}
+
+	&__dates {
+		margin-top: 1rem;
+	}
+
+	&__location {
+		margin-top: 0.5rem;
+	}
+
+	&__price {
+		@extend .body-text;
+		font-weight: bold;
+		margin-top: 0.5rem;
+	}
+
+	&__details {
+		// height: 0;
+		// display: flex;
+		// flex-grow: 1;
+		// flex-direction: column;
+		// justify-items: flex-start;
+		margin-left: $card-padding-small / 2;
+		// border: 1px solid #f00;
+	}
+
+	&__image {
+	}
+	
+	&__image-mask {
+		flex-shrink: 0;
+		align-self: stretch;
+		max-height: 10rem;
+		position: relative;
+		flex-basis: 5/12*100%;
+		max-width: 5/12*100%;
+	}
+}

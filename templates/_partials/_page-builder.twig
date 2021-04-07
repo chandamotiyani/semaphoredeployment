@@ -1,0 +1,3 @@
+{% for component in components %}
+	{% include [ "_containers/_page-builder/_" ~ component.type.handle | kebabCase, "_containers/_page-builder/_unsupported" ]  with { header: component.sectionHeader.one() | default, component: component | default } only %}
+{% endfor %}

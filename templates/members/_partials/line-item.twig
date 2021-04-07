@@ -1,0 +1,59 @@
+  {%
+    set lineItem = {
+      id: item.id,
+      qty: item.qty|default(0),
+      title: item.purchasable.description|default,
+      options: item.options|default,
+      note: item.note|default,
+      adjustments: item.adjustments|default,
+      description: item.description,
+      url: item.snapshot.url,
+      salePrice: item.salePrice|currency('AUD', stripZeros = true),
+      beforeSalePrice: item.price|currency('AUD', stripZeros = true),
+      onSale: item.onSale,
+      price: item.total|currency('AUD', stripZeros = true),
+      lineItem: item,
+    }
+    
+    %}
+
+    <li>
+      <div class="order-summary__totals-list-item">
+        <div>
+          <h3 class="order-summary__totals-list-item-heading">{{ lineItem.qty }} x {{ lineItem.description }} {{ lineItem.lineItem.snapshot.bottleSize|default }}
+            {% if showLink|default %}
+              &nbsp;<a href="{{ lineItem.url }}" class="product-form__cart-add-btn">View Item</a>
+            {% endif %}
+          </h3>
+        </div>
+        <div class="order-summary__totals-list-item-price">
+          {{ lineItem.price }}
+        </div>
+      </div>
+      <div class="order-summary__options">
+        {% if lineItem.onSale %}
+        <div class="order-summary__option">(Sale Price: 
+          <strike>{{ lineItem.beforeSalePrice }}</strike> {{ lineItem.salePrice }})
+        </div>
+      {% endif %}
+
+      {% if lineItem.adjustments|length %}
+          {% for adjustment in lineItem.adjustments %}
+            <div class="order-summary__option">
+              {% if adjustment.type == 'discount' and order.couponCode %}
+                <strong>'{{ adjustment.name }}' {{ adjustment.amount|currency('AUD', stripZeros = true)}}</strong>
+              {% else %}
+                <strong>{{ lineItem.qty }} x {{ adjustment.name }} ({{ adjustment.amount|currency('AUD', stripZeros = true)}})</strong>
+              {% endif %}
+              <br>
+              {% if lineItem.note and adjustment.id == 1072 %}
+                <span class="order-summary__product-note">"{{ lineItem.note|nl2br }}"</span>
+              {% endif %}
+            </div>
+          {% endfor %}
+          {# if cart.totalDiscount != 0 or cart.couponCode %}
+            - {{ cart.totalDiscount | currency(cart.currency) }}
+          {% endif #}
+        {% endif %}
+      </div>
+    </li>

@@ -1,0 +1,109 @@
+.modal {
+  position: fixed;
+  display: block;
+  overflow: scroll;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 999999999;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+  pointer-events: none;
+  background: transparent;
+
+  @include media-breakpoint-up(sm) {
+    
+  }
+
+  &--active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &__background { // the background IS the close button
+    cursor: pointer;
+    width: 100px;
+    height: 90px;
+    position: absolute;
+    right: 0;
+    z-index: 999999;
+
+    @include media-breakpoint-up(sm) {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: $black;
+      opacity: 0.8;
+      z-index: 0;
+
+    }
+  }
+
+  &__slide {
+    transform: translateX( 100% );
+    transition: transform 0.4s ease-in;
+    width: 100%;
+
+    @at-root .modal--active & {
+      transform: translateX( 0 );
+    }
+
+    @include media-breakpoint-up(sm) {
+      max-width: 90%;
+      min-height: 100%;
+    }
+  }
+
+  &__close-icon {
+    @extend .icon--close;
+
+    stroke: darken($white, 30);
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+    pointer-events: none;
+    top: 55px;
+    position: absolute;
+
+    @include media-breakpoint-up(sm) {
+      position: absolute;
+      left: - em(40);
+      top: em(20);
+      stroke: $white;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      transition: transform 0.4s ease;
+    }
+  }
+
+  &__close {
+    position: relative;
+  }
+
+  &__col {
+    padding: 3rem;
+  
+    @include media-breakpoint-up(md) {
+      padding: 5rem;
+    }
+  }
+
+  &__heading {
+    @extend .heading-primary-lg;
+
+    margin-top: 0;
+    line-height: 0.8;
+    color: $black;
+    margin-bottom: 5rem;
+  }
+
+  .sign-in__row,
+  .sign-in-no-insider__row {
+    max-width: 500px;
+    margin-left: auto;
+  }
+}

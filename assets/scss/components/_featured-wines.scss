@@ -1,0 +1,263 @@
+.featured-wines {
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+
+  &--has-bg {
+    background: $white;
+
+    @include media-breakpoint-up($single-column-breakpoint) {
+      background: $background-secondary;
+     // padding-right: $flexboxgrid-outer-margin;
+    }
+  }
+
+  &__wrap {
+    @extend .section__wrap;
+
+    padding: 2rem;
+    flex-direction: column;
+    background: $white;
+
+    @include media-breakpoint-up(sm) {
+      padding: $card-padding-small;
+    }
+
+    @at-root .featured-wines--has-many & {
+      //padding-right: 0;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+    }
+  }
+
+  &__carousel {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+
+    @include media-breakpoint-up($single-column-breakpoint) {
+      @at-root .featured-wines--has-text & {
+        width: 50%;
+      }
+    }
+
+    @include media-breakpoint-up(lg) {
+      min-height: 400px;
+    }
+
+    &:focus {
+      outline:0;
+    }
+  }
+
+  &__gutter {
+    @extend .section__gutter;
+  }
+
+  &__content {
+    width: 70%;
+    padding-left: 4rem;
+    overflow: hidden;
+    max-width: 380px;
+
+    @at-root .featured-wines--has-one & {
+      padding-right: 0;
+    }
+
+    @include media-breakpoint-up(xxs) {
+      padding-top: 22%;
+    }
+
+    @include media-breakpoint-up($single-column-breakpoint) {
+      max-width: none;
+    }
+
+    @include media-breakpoint-up(xl) {
+      padding-top: 26%;
+      width: 70%;
+    }
+  }
+
+  &__content-slider {
+    width: 200%;
+    display: flex;
+  }
+
+  &__content-preview, &__content-detail {
+    width: 50%;
+    padding-right: 4rem;
+    transition: transform 0.4s ease, opacity 0.3s ease;
+    transform: translateX(-100%);
+    display: inline-block;
+
+    @at-root .featured-wines__item:hover & {
+      transform: translateX(0);
+    }
+  }
+
+  &__content-preview {
+    opacity: 1;
+
+    @at-root .featured-wines__item:hover & {
+      opacity: 0;
+    }
+  }
+
+  &__content-detail {
+    opacity: 0;
+
+    @at-root .featured-wines__item:hover & {
+      opacity: 1;
+    }
+  }
+
+  &__footer {
+    @extend .section__footer;
+  }
+
+  &__button {
+    @extend .boxed-button;
+
+    display: flex;
+
+    @include media-breakpoint-up(sm) {
+      align-self: flex-start;
+    }
+  }
+
+  .flickity-viewport {
+    flex-basis: 100%;
+  }
+
+  .flickity-slider {
+    //transition: transform 0.2s ease-out;
+  }
+
+  &__progress {
+    //@extend .progress;
+
+    @at-root .featured-wines--has-one & {
+      display: none !important;
+    }
+  }
+  
+  &__progress-indicator {
+    //@extend .progress__indicator;
+  }
+
+  &__product-info {
+    @extend .heading-secondary-md;
+
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+
+  &__more-info {
+    @extend .heading-secondary-md;
+  }
+
+  &__text {
+    padding: 0;
+    margin-bottom: 4rem;
+    text-align: center;
+
+    @include media-breakpoint-up(sm) {
+      padding: 4rem 4rem;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+
+    @include media-breakpoint-up(md) {
+      text-align: left;
+      width: 50%;
+      padding: 4rem 5rem;
+      padding-left: 3rem;
+    }
+
+    @include media-breakpoint-up(xl) {
+      //width: 80%;
+    }
+
+    @include media-breakpoint-up(xxl) {
+      width: 50%;
+      padding: 4rem 5rem;
+    }
+  }
+
+  &__text-heading {
+    @extend .heading-primary-md;
+
+    margin-top: 0;
+    margin-bottom: em(8);
+    color: $black;
+  }
+
+  &__text-description {
+    @extend .body-text;
+
+    margin-top: 0;
+    margin-bottom: 3rem;
+  }
+
+  &__carousel-control {
+    @extend .nav-buttons;
+
+    margin-right: -1rem;
+    margin-left: auto;
+
+    @include media-breakpoint-down(sm) {
+      display: none;
+    }
+
+    @at-root .featured-wines--has-one & {
+      display: none !important;
+    }
+  }
+
+  &__carousel-button {
+    @extend .nav-buttons__button;
+  }
+
+  &__button {
+    display: flex;
+
+    @include media-breakpoint-up(md) {
+      display: none;
+    }
+
+    &--desktop {
+      display: none;
+
+      @include media-breakpoint-up(md) {
+        display: inline-flex;
+        width: auto;
+        max-width: none;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        min-width: 165px;
+      }
+    }
+  }
+
+  &__module-heading {
+    @extend .heading-primary-md;
+
+    color: $black;
+    margin-bottom: 4rem;
+    margin-top: 2.7rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: none;
+  }
+}

@@ -1,0 +1,18 @@
+{# {% set component = component.collage %} #}
+
+{% set items = [] %}
+
+{% for item in component.listRegions %}
+	{% set items = items | merge(
+		[
+			{
+				image: item.image.one() | default(item.entry.one.banner.image.one() | default),
+				title: item.entry.one.title | default,
+				entry: item.entry.one() | default,
+				hash: item.hash,
+			}
+		]
+	) %}
+{% endfor %}
+
+{% include '_views/_list-regions' with { header: header | default, items: items, buttons: component.sectionFooterButtons } only %}

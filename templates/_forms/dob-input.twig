@@ -1,0 +1,33 @@
+{% set blockClass = blockClass|default('form') %}
+
+<div class="form__input-wrap {{ blockClass }}__input-wrap {{ cssClass|default }}">
+  {% if label|default %}
+    <label for="" class="{{ blockClass}}__form-label form__label">{{ label }}{% if required|default %}*{% endif %}</label>
+  {% endif %}
+  {% if instruction is defined and instruction | length %}
+    <div class="form__instruction">
+      {{ instruction|default('') }}
+    </div>
+  {% endif %}
+  <input 
+  type="text"
+  autocomplete="off"
+  class="{{ blockClass|default}}__form-input form__input js-dob-mask"
+  name="{{ name }}"
+  placeholder="dd/mm/yyyy"
+  value="{{ value|default ? value|date("d/m/Y") }}"
+  data-mask='dd/mm/yyyy'
+  {{ disabled|default('') ? 'disabled="disabled"' : '' }}
+  maxlength="{{ maxlength|default('') }}">
+  <div class="form__input-error-msg"></div>
+  {% if subText|default %}
+    <p class="form__sub-text">{{ subText|raw }}</p>
+  {% endif %}
+  {% if hint is defined and hint | length %}
+  <input type="hidden" name="{{ name }}" value="{{ value }}" class="js-dob-input">
+  <div class="form__hint">
+    {{ hint|default('') }}
+  </div>
+{% endif %}
+
+</div>

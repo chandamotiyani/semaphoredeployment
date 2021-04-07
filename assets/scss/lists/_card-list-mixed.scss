@@ -1,0 +1,21 @@
+.card-list-mixed {
+	@include list;
+	@include list-gutters-vertical(0.35);
+	@include list-gutters-horizontal(0.25);
+	// @include list-columns($columns: 2, $breakpoint: sm, $gutterBorders: true);
+	@include list-columns($columns: 3, $breakpoint: $single-column-breakpoint, $gutterBorders: false);
+
+
+	&.card-list-mixed--items-2 .card-list-mixed__item {
+		flex-basis: 100%;
+		width: 100%;
+		max-width: 100%;
+
+		@include media-breakpoint-up(md) {
+			flex-basis: 50%;
+			width: 50%;
+			max-width: 50%;
+		}
+	}
+	flex-wrap: wrap;
+}

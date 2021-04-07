@@ -1,0 +1,18 @@
+{
+    "linkNewTab": true,
+    "buttons": [
+        "formatting",
+        "bold",
+        "italic",
+        "unorderedlist",
+        "orderedlist",
+        "link",
+        "image",
+        "video",
+    ],
+    "plugins": [
+        "fullscreen",
+        "video"
+    ],
+    "toolbarFixed": true,
+}

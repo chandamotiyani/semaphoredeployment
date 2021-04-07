@@ -1,0 +1,27 @@
+{% set component = component.cta %}
+
+{% set buttons = [] %}
+{% if component.buttons is defined %}
+
+	{% for button in component.buttons.all() %}
+		{% set buttons = buttons | merge([{
+			label: button.label,
+			entry: button.type.handle == 'entryButton' ? button.entry.one()
+			: (button.type.handle == 'externalUrl') ? {
+				url: button.linkUrl,
+				target: button.buttonAttributes.options[0].selected ? 'target=_blank' : ''
+			}
+			: (button.type.handle == 'buttonAddAsAGift') ? { url: '#add-gift', product: button.product.one() }
+			: (button.type.handle == 'addToCartButton') ? { url: '#add-to-cart', product: button.product.one(), addCurrentProduct: addCurrentProductToCart|default }
+		}]) %}
+	{% endfor %}
+{% endif %}
+
+{% include '_views/_cta' with { 
+	buttons: buttons, 
+	super: component.super, 
+	heading: component.heading, 
+	copy: component.copy, 
+	buttons: buttons,
+	product: product|default,
+	colourScheme: component.colourScheme } only %}

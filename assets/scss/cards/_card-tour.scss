@@ -1,0 +1,50 @@
+@mixin card-tour {
+	@include card;
+	@include card-with-image;
+	@include card-with-image-fill;
+	@include card-with-expanded-content;
+	@include card-with-fixed-aspect-ratio(2,3);
+	@include card-with-location;
+	@include card-with-title;
+	@include card-with-date-tag;
+	@include card-with-cta;
+
+	&__duration {
+		margin-block-start: 2em;
+		@extend .body-text;
+	}
+
+	&__button {
+		@extend .boxed-button;
+		margin-top: 2em;
+		align-self: center;
+	}
+
+	&__price {
+		@include price;
+		align-self: center;
+	}
+
+	&__title {
+		white-space: normal;
+	}
+}
+
+.card-tour {
+	@include card-tour;
+}
+
+.card-list-tour__item:hover {
+	@extend .is-selected;
+
+	.card-tour {
+		@extend .is-selected;
+	}
+}
+
+.page-tours .section__wrap {
+	@include media-breakpoint-between(md, lg) {
+		padding: 0;
+	}
+}
+

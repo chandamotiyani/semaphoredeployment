@@ -1,0 +1,52 @@
+{% extends "_layouts/cp" %}
+
+{% set fullPageForm = true %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    {{ actionInput('events/events/save-event-group') }}
+    {{ redirectInput('events/groups') }}
+
+    {% if eventGroup.id %}{{ hiddenInput('eventGroupId', eventGroup.id) }}{% endif %}
+
+    <div id="eventgroup-settings">
+        {{ forms.textField({
+            first: true,
+            label: "Name"|t('app'),
+            instructions: "What this event group will be called in the CP."|t('app'),
+            id: 'name',
+            name: 'name',
+            value: eventGroup.name,
+            errors: eventGroup.getErrors('name'),
+            autofocus: true,
+            required: true,
+        }) }}
+
+        {{ forms.textField({
+            label: "Handle"|t('app'),
+            instructions: "How you’ll refer to this event group in the templates."|t('app'),
+            id: 'handle',
+            name: 'handle',
+            class: 'code',
+            autocorrect: false,
+            autocapitalize: false,
+            value: eventGroup.handle,
+            errors: eventGroup.getErrors('handle'),
+            required: true
+        }) }}
+    </div>
+
+    <div id="eventgroup-fieldlayout" class="hidden">
+        {% include "_includes/fieldlayoutdesigner" with {
+            fieldLayout: eventGroup.getFieldLayout()
+        } only %}
+    </div>
+{% endblock %}
+
+
+{% if not eventGroup.handle %}
+    {% js %}
+        new Craft.HandleGenerator('#name', '#handle');
+    {% endjs %}
+{% endif %}

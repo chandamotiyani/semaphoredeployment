@@ -1,0 +1,7 @@
+{% embed '_cards/_card.twig' with { type: 'region' }%}
+	{% block details %}
+		<div class="{{ class }}__wrap">
+			{% if title is defined %}<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>{% endif %}
+		</div>
+	{% endblock %}
+{% endembed %}

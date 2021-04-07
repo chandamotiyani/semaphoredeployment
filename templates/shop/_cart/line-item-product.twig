@@ -1,0 +1,29 @@
+<li class="js-cart-summary-item-{{ product.id }} js-cart-summary-item js-card-list__item cart-item__product">
+  {% if product.imageUrl|default %}
+    <a href="{{ product.url|default }}">
+      <img src="{{ product.imageUrl }}" class="cart-item__image">
+    </a>
+  {% endif %}
+  <form method="POST" class="cart-item__form cart-item--{{ blockModifier|default }} js-product-add-to-cart">
+    {% block formInputs %}{% endblock %}
+    {{ csrfInput() }}
+    <div class="cart-item__content">
+      <a href="{{ product.url|default }}">
+        <div class="cart-item__detail">
+          {% block title %}
+            <h3 class="cart-item__heading">{{ product.title }}</h3>
+          {% endblock %}
+          <strong class="cart-item__sub-heading"></strong>
+          {# for option in item.options %}
+            <span class="cart-item__tag">{{ option }}</span><br>
+          {% endfor #}
+          {% block productDescription %}{% endblock %}
+        </div>
+      </a>
+      <div class="cart-item__options">
+        {% block options %}{% endblock %}
+      </div>
+    </div>
+    {% block adjustments %}{% endblock %}
+  </form>
+</li>

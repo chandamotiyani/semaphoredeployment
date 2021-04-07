@@ -1,0 +1,18 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+    {% if title is not defined %}
+      {% set title = 'Welcome to The Yalumba Wine Club' %}
+    {% endif %}
+
+    {% block hero %}
+      {% embed "_page-builder-components/hero-small.twig" with {
+          component: {
+            image: entry.heroImage.one.getUrl() ?? alias('@assetBaseUrl/img/members-banner.jpg'),
+          }, title: title|default('') } %}
+      {% endembed %}
+    {% endblock %}
+    {% block content %}
+      {% for component in entry.membershipPageBuilder.all() %}
+        {% include [ "_containers/_members/_" ~ component.type.handle | kebabCase, "_containers/_page-builder/_unsupported" ]  with { component: component | default, signupFormAction: 'site-module/site-module/create-wine-room-user' } only %}
+      {% endfor %}
+    {% endblock %}
+{% endembed %}

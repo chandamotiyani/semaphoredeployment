@@ -1,0 +1,282 @@
+.search-header {
+	display: flex;
+	justify-items: space-between;
+  flex-direction: column;
+  position: relative;
+  z-index: $z-search-header;
+  width: 100%;
+  flex-direction: column;
+  
+  padding: 1rem $section-padding-inset-small;
+
+
+  @include media-breakpoint-up($single-column-breakpoint) {
+	  margin: 0 $section-padding-inset-large;
+  }
+
+  &--search {
+    flex-direction: row;
+  }
+
+  .featured-section + & {
+	  border-top: 1px solid $white;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      height: auto;
+      justify-content: center;
+
+      @at-root .search-header--search & {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    &--large {
+      flex-basis: 70%;
+      min-width: 70%;
+    }
+
+    &--sort {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      min-width: 311px;
+      flex: 0;
+      justify-content: flex-end;
+
+      .choices {
+        border: 0;
+      }
+
+      .choices__list.choices__list--single {
+        display: block;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .choices__item .choices__item--selectable {
+        @extend .heading-secondary-md;
+
+        font-weight: 600;
+      }
+
+      .choices[data-type*="select-one"]:after {
+        right: 10px;
+      }
+
+      .filters__list-title {
+        padding-right: 0;
+      }
+    }
+
+    .choices__list--single .choices__item {
+      width: 100%;
+    }
+  }
+
+  &__heading {
+    @extend .heading-primary-md;
+
+    color: $black;
+    padding-bottom: 0;
+    padding-top: 0;
+
+    @at-root .search-header--search & {
+      margin-bottom: 2rem;
+    }
+  }
+
+
+  &__link {
+    @extend .link;
+  }
+}
+
+
+.search-content {
+  &--with-border {
+    border-bottom: 1px solid darken($white, 20);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding-bottom: 3rem;
+  }
+
+  &__heading {
+    @extend .heading-primary-sm;
+
+    color: $black;
+    padding: 0;
+    padding-right: em(20);
+    line-height: 0.8 !important;
+  }
+
+  &__load-more {
+    @extend .link;
+  }
+
+  &--wines {
+    padding-top: 0;
+  }
+}
+
+.search-header-container {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.js-product-listing.card-list--search {
+  margin-bottom: 6rem;
+
+  .search--no-results {
+    @extend .heading-primary-xs;
+
+    display: block;
+    text-align: center;
+  }
+
+  .card-list-event {
+    margin-bottom: 0;
+  }
+
+  .seperator {
+    margin: 5rem 0rem 3rem 0rem;
+
+    &:first-child {
+      margin: 0;
+      border-bottom: none;
+      margin-top: -2rem;
+    }
+  }
+
+  .js-card-list {
+    margin-bottom: 0;
+  }
+
+  .card-list__pagination {
+    margin-top: 2rem;
+  }
+
+  .card-event:hover:after {
+    display: none;
+  }
+}
+
+.search-header__heading {
+  width: 100%;
+}
+
+.card-product__image-container {
+  flex: 1;
+}
+
+.card-library__content {
+  flex: 1;
+}
+
+.card-product__image {
+  object-position: bottom center;
+}
+
+.search.modal .modal__close-icon {
+
+  @include media-breakpoint-down($single-column-breakpoint) {
+    right: 1rem;
+    top: 1rem;
+  }
+}
+
+
+.search__input-wrap {
+  cursor: pointer;
+
+  .search__select {
+    border: 0;
+    opacity: 0;
+    width: 216px;
+
+    @include media-breakpoint-up($single-column-breakpoint) {
+      width: 266px;
+    }
+    padding: 12px;
+    position: relative;
+    z-index: 5;
+    cursor: pointer;
+  }
+
+  .search__form-input {
+    padding-left: 1rem;
+  }
+
+  .form__label {
+    @extend .search__heading;
+    @extend .modal__heading;
+
+    bottom: 0;
+    top: auto;
+    position: absolute;
+    white-space: nowrap;
+    cursor: pointer;
+    margin-left: 10px;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      bottom: -5px;
+      left: 0;
+      height: 2px;
+      background: black;
+      transition: transform 0.4s ease;
+    }
+
+    &::before {
+      content: "";
+      border: solid black;
+      border-width: 0 3px 3px 0px;
+      display: inline-block;
+      padding: 3px;
+      position: absolute;
+      right: -30px;
+      bottom: 6px;
+      transform: rotate(45deg);
+    }
+
+    &:hover::after {
+      transform: scaleY(0);
+      transform-origin: center;
+    }
+  }
+}
+.card-list--search {
+
+  .card-tasting, .card-tour {
+    overflow: hidden;
+
+    &__image {
+      transition: transform 0.4s ease;
+    }
+
+    &:hover .card-tasting__image,
+    &:hover .card-tour__image {
+      transform: scale(1.1);
+    }
+  }
+}

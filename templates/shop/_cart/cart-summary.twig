@@ -1,0 +1,48 @@
+
+  <cart-summary></cart-summary>
+
+
+
+{#
+
+
+<div class="cart-summary-js">
+  {% if cart.lineItems %}
+
+
+  {% set products = cart.lineItems|filterByGroupHandle('products') %}
+
+  {% if products %}
+    <ul class="cart-summary__cart-items js-card-list js-card-list-product" data-total-cart-qty="{{ cart.totalQty }}">
+      {% for item in products %}
+        {% include "_containers/_shop/_cart/_line-item-product" with { blockModifier: 'modal', item: item } %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+    {% set events = cart.lineItems|filterByGroupHandle(['events']) %}
+    {% if events %}
+      <ul class="cart-summary__cart-items js-card-list js-card-list-product" data-total-cart-qty="{{ cart.totalQty }}">
+        {% for item in events %}
+          {% include "_containers/_shop/_cart/_line-item-event" with { blockModifier: 'modal', item: item } %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% set experiences = cart.lineItems|filterByGroupHandle(['experiences', 'tours', 'tastings']) %}
+    {% if experiences %}
+      <ul class="cart-summary__cart-items js-card-list js-card-list-product" data-total-cart-qty="{{ cart.totalQty }}">
+        {% for item in experiences %}
+          {% include "_containers/_shop/_cart/_line-item-event" with { blockModifier: 'modal', item: item } %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% include "shop/_cart/cart-totals" with { blockModifier: 'modal', cart: cart } %}
+
+  {% else %}
+  Your Cart is empty
+{% endif %}
+</div>
+
+#}

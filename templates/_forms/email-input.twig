@@ -1,0 +1,12 @@
+{% set blockClass = blockClass|default('form') %}
+
+<div class="form__input-wrap {{ blockClass }}__input-wrap">
+  <label for="" class="{{ blockClass }}__form-label form__label">{{ label }}</label>
+
+  {% if instruction is defined and instruction | length %}
+    <div class="form__instruction">{{ instruction|default('') }}</div>
+  {% endif %}
+
+  <div class="form__input-error-msg"></div>
+  <input type="email" class="{{ blockClass }}__form-input form__input" name="{{ name }}" placeholder="{{ placeholder|default('') }}" value="{{ value|default('') }}">
+</div>

@@ -1,0 +1,47 @@
+.hero-table {
+	display: table;
+	width: 100%;
+	max-width: 240px;
+	margin: em(20) auto 0;
+
+	@include media-breakpoint-up(sm) {
+		margin: em(50) auto 0;
+	}
+
+	border-collapse: collapse;
+	background-color: rgba($black, 0.3);
+	color: $white;
+
+	@include media-breakpoint-up(sm) {
+		width: auto;
+		max-width: auto;
+	}
+
+	&__cell {
+		display: block;
+		width: 100%;
+		padding: 1rem 3rem 0.6rem;
+		border: 1px solid currentColor;
+		margin-bottom: -1px;
+		box-sizing: border-box;
+
+		@include media-breakpoint-up(xxxs) {
+			padding: 2rem 3rem 1.6rem;
+		}
+
+		@include media-breakpoint-up(sm) {
+			display: table-cell;
+			width: auto;
+			min-width: 180px;
+		}
+	}
+
+	&__heading {
+		@extend .heading-secondary-md;
+	}
+
+	&__description {
+		@extend .body-text;
+		margin-top: 0.25em;
+	}
+}

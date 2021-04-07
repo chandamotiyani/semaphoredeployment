@@ -1,0 +1,31 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% macro dateFormatted(givenDate) %}
+    {{ givenDate | date("jS F Y") }}
+{% endmacro %}
+
+{% macro formatTimeRange(start, end) %}
+	{{ start | date('g') ~ (start | date('i') != '00' ? ':' ~ start | date('i') : '') ~ (start | date('a') != (end | default) | date('a') ? start | date('a') : '') }} – {% if end is defined %}{{ end | date('g') ~ (end | date('i') != '00' ? ':' ~ end | date('i') : '') ~ (end | date('a')) }}{% endif %}
+{% endmacro %}
+
+{# NOTE Aaron - this is used to determine the link URL for a route based on its name in routes.php. Useful for defining URLS for back buttons like the one on the Blog Post / Recipe detail page sidebar. #}
+{% macro getRouteUrl(routeName) %}{% for key, route in craft.app.routes.getConfigFileRoutes %}{% if route.name == routeName %}{{ key }}{% endif %}{% endfor %}{% endmacro %}
+
+
+{# SRC Set #}
+{% macro srcset(image, outputWidths, sizes) %}
+
+  {% if outputWidths and sizes %}
+    {% set srcset = [] %}
+    {% set cdnOptions = '/cdn-cgi/image/fit=contain' %}
+
+    {% for outputWidth in outputWidths %}
+        {% set srcset = srcset | merge([cdnOptions ~ ',width=' ~ outputWidth ~ '/' ~ image ~ ' ' ~ outputWidth ~ 'w']) %}
+    {% endfor %}
+
+    srcset="{{ srcset | join(', ') }}"
+    sizes="{{ sizes | join(', ') }}"
+  {% endif %}
+
+  {# output srcset #}
+  src="{{ image }}"
+{% endmacro %}

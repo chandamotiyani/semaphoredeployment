@@ -1,0 +1,14 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    first: true,
+    label: "API Key",
+    name: 'apikey',
+    value: settings.apikey
+}) }}
+
+{{ forms.textField({
+    label: "API URL",
+    name: 'api_url',
+    value: settings.api_url
+}) }}

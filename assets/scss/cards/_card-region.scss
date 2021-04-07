@@ -1,0 +1,17 @@
+.card-region {
+	@include card;
+
+	@include card-with-image;
+	@include card-with-image-as-background;
+
+	@include card-with-white-text;
+	@include card-with-buttons($justify-to-bottom: true);
+
+	@include card-collage-with-text;
+	@include card-collage-metrics;
+	@include card-collage-with-image;
+	
+	@include card-with-image-that-dims-on-hover;
+	@include card-with-image-that-scales-on-hover;
+	@include card-with-image-height-locked-to-aspect-ratio(1,1);
+}

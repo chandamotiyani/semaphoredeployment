@@ -1,0 +1,134 @@
+{% requireLogin %}
+
+{% set tabs = [
+	{
+		name: 'My Membership',
+		url: '/members/my-membership',
+		active: craft.app.request.segments|last == 'my-membership',
+	},
+	{
+		name: 'Update Account Details',
+		url: '/members/update-account-details',
+		active: craft.app.request.segments|last == 'update-account-details',
+  },
+  {
+		name: 'View My Purchases',
+		url: '/members/my-purchases',
+		active: craft.app.request.segments|last == 'my-purchases',
+	},
+	{
+		name: 'View My Wishlist',
+		url: '/shop/wishlist',
+		active: craft.app.request.segments|last == 'my-wishlist',
+	},
+] %}
+
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+    {% if title is not defined %}
+      {% set title = 'Welcome to The Yalumba Wine Club' %}
+
+      {% if currentUser %}
+        {% set title = 'Welcome '~currentUser.firstName|capitalize %}
+      {% endif %}
+    {% endif %}
+
+
+    {% if cart is not defined %}
+      {% set cart = craft.commerce.carts.cart %}
+    {% endif %}
+
+    {% block hero %}
+      {% embed "_page-builder-components/hero-small.twig" with {
+          component: {
+            image: entry.heroImage.one.getUrl() ?? alias('@assetBaseUrl/img/members-banner.jpg'),
+          }, title: title|default('') } %}
+      {% endembed %}
+    {% endblock %}
+
+
+    {% block content %}
+
+
+   
+{# Fetch the current user's orders #}
+{% set userId = craft.commerce.customers.customer.id %}
+{% set orders = craft.orders()
+  .customerId(userId)
+  .all() %}
+
+
+    <section class="cart">
+      <div class="container-fluid cart__container-thin">
+        <div class="cart__items">
+          <div class="cart__list cart__list--products">
+
+            <div class="cart-summary">
+              {% if currentUser %}
+
+              {% set orders = craft.yalumbaOrders().getYalumbaOrdersByCustomer(craft.commerce.customers.customer) %}
+              <h2 class="purchaces__heading">My Purchases</h2>
+
+              {% if orders|length %}
+              {# Get completed orders for the current customer.#}
+              <ul class="card-list-accordion js-card-list-accordion">
+                {% for order in orders %}
+                    <li class="card-list-accordion__item js-card-list__item">
+                      <div class="card-accordion">
+                        {% if order.order %}
+                          <div class="card-accordion__title">
+                            <h3>Website Order # {{ order.order.reference }} - {{ order.order.dateOrdered|default|date }}</h3>
+                            <strong>Total: {{ order.totalPrice|commerceCurrency(cart.currency) }}</strong>
+                          </div>
+                          <div class="card-accordion__details-mask">
+                            <div class="card-accordion__details">
+                              {% include 'members/_partials/order-summary' with { 
+                                items: order.order.lineItems, 
+                                order: order, 
+                                orderDetail: order.order, 
+                                lineItemTemplate: 'line-item',
+                                showProductLink: true,
+                              } %}
+                            </div>
+                          </div>
+                        {% else %}{# an order made from an external source (wine room etc) #}
+                          <div class="card-accordion__title">
+                            <h3>External Order - {{ order.order.number|default }} {{ order.orderDate|date }}</h3>
+                            {{ order.totalPrice|commerceCurrency(cart.currency) }}
+                          </div>
+                          <div class="card-accordion__details-mask">
+                            <div class="card-accordion__details">
+                              {% include 'members/_partials/order-summary' with {
+                                items: order.lineItems, 
+                                order: order, 
+                                orderDetail: order, 
+                                lineItemTemplate: 'line-item-external-order',
+                              } only %}
+                            </div>
+                          </div>
+                        {% endif %}
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <div class="empty-index">
+                  <i class="fas fa-box-open"></i>
+                  <p class="center">You don’t have any orders yet.</p>
+                </div>
+              {% endif %}
+          {% endif %}
+            </div>
+
+            <div class="cart__continue">
+              <a href="/shop/" class="cart__continue-button">Continue shopping</a>
+              <a href="/shop/checkout" class="cart__continue-button">Go to Checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    {% endblock %}
+{% endembed %}

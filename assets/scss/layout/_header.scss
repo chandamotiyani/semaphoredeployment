@@ -1,0 +1,10 @@
+.header {
+  position: absolute;
+  width: 100%;
+  
+  @include media-breakpoint-up($single-column-breakpoint) {
+    display: none;
+  }
+}
+
+

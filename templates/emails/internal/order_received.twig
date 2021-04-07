@@ -1,0 +1,57 @@
+{% set user = null %}
+{% set customer = order.customer %}
+{% if customer is not null %}
+  {% set user = customer.user %}
+{% endif %}
+
+{% embed 'emails/layout' with { 
+  title: 'New Website Order', 
+  heading: 'Website Order' 
+} %}
+
+  {% block content %}
+
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        You have received a new website order on {{ order.dateOrdered|date('medium') }}.<br>
+      {% endblock %}
+    {% endembed %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        {% if user|default %}
+          Customer:  {{ user.firstName }} {{ user.lastName }}<br>
+        {% endif %}
+
+        Website order number: <span style="font-weight: 900">#{{ order.number[:7] }}</span><br>
+      {% endblock %}
+    {% endembed %}
+
+    {% include 'emails/_partials/order_table' with { order: order } %}
+
+    <div style="padding: 40px 48px 20px 48px;">
+      {% if user|default %}
+
+        {% embed 'emails/_components/heading' %}
+          {% block text %}Customer Details{% endblock %}
+        {% endembed %}
+
+        <ul style="padding: 0; margin: 0; list-style: none">
+          <li>Name: {{ user.firstName }} {{ user.lastName }}</li>
+          <li>Email: {{ order.email }}</li>
+          {% if user.phoneNumber|default %}
+            <li>Phone: {{ user.phoneNumber }}</li>
+          {% endif %}
+          {% if user.groups[0] %}
+            <li>Yalumba Wine Club: {{ user.groups[0].name }}</li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+
+    {% include 'emails/_partials/addresses' with { order: order } %}
+
+  {% endblock %}
+
+{% endembed %}

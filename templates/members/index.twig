@@ -1,0 +1,47 @@
+
+{% set componentOverrides = [] %}
+{% if currentUser and currentUser.getGroups()[0].handle %}
+  {% set memeberPage = craft.entries()
+  .section('memberships').status(null)
+  .userType( currentUser.getGroups()[0].handle ).one() %}
+  {% set componentOverrides = memeberPage.membershipPageBuilder.all() %}
+{% endif %}
+
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+    {% if title is not defined %}
+      {% set title = 'Welcome to The Yalumba Wine Club' %}
+
+      {% if currentUser %}
+        {% set title = 'Welcome '~currentUser.firstName|capitalize %}
+      {% endif %}
+    {% endif %}
+
+
+    {% if cart is not defined %}
+      {% set cart = craft.commerce.carts.cart %}
+    {% endif %}
+
+    {% block hero %}
+      {% embed "_page-builder-components/hero-small.twig" with {
+          component: {
+            focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+            image: entry.heroImage.one.getUrl() ?? alias('@assetBaseUrl/img/members-banner.jpg'),
+          }, title: title|default('') } %}
+      {% endembed %}
+    {% endblock %}
+    {% block content %}
+
+      {% for component in entry.membershipPageBuilder.all() %}
+
+        {# Allow components to be overriden from membership pages #}
+        {% for componentOverride in componentOverrides %}
+          {% if componentOverride.type.handle == component.type.handle %}
+            {% set component = componentOverride %}
+          {% endif %}
+        {% endfor %}
+
+        {% include [ "_containers/_members/_" ~ component.type.handle | kebabCase, "_containers/_page-builder/_unsupported" ]  with { component: component | default } only %}
+      {% endfor %}
+  {% endblock %}
+{% endembed %}

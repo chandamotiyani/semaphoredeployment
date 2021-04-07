@@ -1,0 +1,43 @@
+<div class="filters__dropdown-panel collapsible__panel">
+  <a href="#" class="dropdown-panel__close hidden-mobile js-toggle-target collapsible__trigger js-apply-filters">
+    <svg class="exceptions-list__icon--close">
+    <use xlink:href="#close"></use>
+  </svg>
+</a>
+  <div class="filters__dropdown-panel-row">
+    {% for filter in filters %}
+      {% set openDefault = filter.children|length <= 1 or filters|length <= 1 %}
+      <div class="filters__dropdown-panel-col collapsible">
+        {% if not openDefault %}
+          <h3 class="filters__dropdown-title collapsible__trigger">{{ filter.title }}</h3>
+        {% endif %}
+        {% if filter.children|length %}
+          <ul class="filters__dropdown-list {{ openDefault ? 'filters__dropdown-list--open' }} collapsible__panel">
+            {% if filters|length > 1 and filter.children|length > 1 %}
+              <div class="form__input-wrap __input-wrap">
+                <label class="form__checkbox">
+                    <span class="form__checkout-label">Check All</span>
+                  <input type="checkbox" value="" name="" id="" class="check-all">
+                  <span class="form__checkmark"></span>
+                </label>
+              </div>
+            {% endif %}
+            {% for node in filter.children %}
+              <li class="filters__dropdown-list-item">{% include "_forms/checkbox" with { 
+                name: node.name,
+                value: node.value|default,
+                label: node.label,
+                blockClass: node.blockClass,
+                checked: node.checked,
+                id: node.id
+               } %}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="filters__dropdown-panel-row hidden-mobile">
+    <a href="#" class="boxed-button filters__dropdown-panel-button js-toggle-target collapsible__trigger js-apply-filters">View Results</a>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+@mixin list {
+	$parent: &;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	flex-grow: 1;
+	box-sizing: content-box;
+
+	&__item {
+		position: relative;
+		display: flex;
+		align-items: stretch;
+		flex-basis: auto;
+		width: 100%;
+		box-sizing: border-box;
+		transition: opacity 0.6s ease;
+
+		& > * {
+			overflow-wrap: break-word;
+			width: 100%;
+		}
+
+	}
+}
+
+@mixin list-debug {
+	border: 1px solid #0F0;
+
+	&__item {
+		border: 1px solid #f00;
+		& > * {
+			border: 1px solid #00F;
+		}
+	}
+}
+
+@mixin list-gutters-horizontal($multiple: 0.5) {
+	margin-left: -$card-list-gutter-width-small * $multiple; // Counteract the left and right padding on $__item
+	margin-right: -$card-list-gutter-width-small * $multiple; // Counteract the left and right padding on $__item
+	
+	&__item {
+		padding-left: $card-list-gutter-width-small * $multiple; // Counteracted by left and right negative margin on parent
+		padding-right: $card-list-gutter-width-small * $multiple; // Counteracted by left and right negative margin on parent
+	}
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		margin-left: -$card-list-gutter-width-large * $multiple; // Counteract the left and right padding on $__item
+		margin-right: -$card-list-gutter-width-large * $multiple; // Counteract the left and right padding on $__item
+		
+		&__item {
+			padding-left: $card-list-gutter-width-large * $multiple; // Counteracted by left and right negative margin on parent
+			padding-right: $card-list-gutter-width-large * $multiple; // Counteracted by left and right negative margin on parent
+		}
+	}
+}
+
+@mixin list-gutters-vertical($multiple: 0.5) {
+	margin-bottom: -$card-list-gutter-height-small * $multiple; // Counteract the left and right padding on $__item
+	margin-top: -$card-list-gutter-height-small / 2 * $multiple; // Counteract the left and right padding on $__item
+	
+	&__item {
+		padding-bottom: $card-list-gutter-height-small * $multiple; // Counteracted by left and right negative margin on parent
+		padding-top: $card-list-gutter-height-small * $multiple; // Counteracted by left and right negative margin on parent
+	}
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		margin-bottom: -$card-list-gutter-height-large * $multiple; // Counteract the left and right padding on $__item
+		margin-top: -$card-list-gutter-height-large * $multiple; // Counteract the left and right padding on $__item
+		
+		&__item {
+			padding-bottom: $card-list-gutter-height-large * $multiple; // Counteracted by left and right negative margin on parent
+			padding-top: $card-list-gutter-height-large * $multiple; // Counteracted by left and right negative margin on parent
+		}
+	}
+}
+
+// @mixin list-horizontal-wrap {
+// 	display: flex;
+// 	flex-direction: column;
+
+// 	@include media-breakpoint-up(sm) {
+// 		flex-direction: row;
+// 		flex-wrap: wrap;
+// 	}
+// }
+
+@mixin list-vertical {
+	display: flex;
+	flex-direction: column;
+
+	&__item {
+		flex-basis: 100%;
+	}
+}
+
+@mixin list-hover-fade-effect {
+	&:hover  &__item {
+		opacity: 0.5;
+		text-decoration: none;
+		color: $text-color-primary;
+	}
+
+	&:hover  &__item:hover {
+		opacity: 1;
+	}
+
+	&__item {
+		transition-property: opacity;
+		transition-duration: 0.4s;
+		transition-timing-function: ease;
+	}
+}
+
+@mixin list-focus-dim-effect {
+	&:after {
+		content: '';
+		pointer-events: none;
+		display: block;
+		position: fixed;
+		background-color: black;
+		opacity: 0;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		transition-property: opacity;
+		transition-duration: 0.4s;
+		transition-timing-function: ease;
+	}
+
+	&__item.is-selected {
+		z-index: 1;
+	}
+
+	&__item:not(.is-selected) {
+		z-index: 0;
+	}
+
+	&.is-selected:after {
+		opacity: 0.5;
+	}
+}
+
+@mixin list-columns($columns, $breakpoint, $gutterBorders: false) {
+	&__item {
+		flex-basis: auto;
+		width: 100%;
+
+		@include media-breakpoint-up($breakpoint) {
+			flex-basis: 1 / $columns * 100%;
+			width: 1 / $columns * 100%;
+			max-width: 1 / $columns * 100%;
+			
+			@if($gutterBorders) {
+				&:not(:nth-child(0n)) {
+					border-right: 0;
+				}
+				&:not(:nth-child(#{$columns}n)) {
+					border-right: 1px solid transparentize($black, 0.9);
+				}
+			}
+		}
+	}
+}
+
+@mixin list-vertical-gutter-borders {
+	&__item:not(:first-child) {
+		border-top: 1px solid transparentize($black, 0.9);
+	}
+}
+
+@mixin list-spill-to-edges {
+	margin-left: -$padding-large;
+	margin-right: -$padding-large;
+}
+
+@mixin list-seperator {
+	&:after {
+		content: "";
+		display: flex;
+		flex: 1;
+		width: 1px;
+		height: 100%;
+		margin-left: 3px;
+		color: inherit;
+	}
+}

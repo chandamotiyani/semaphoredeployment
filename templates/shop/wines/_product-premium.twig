@@ -1,0 +1,56 @@
+{% do craft.app.elements.eagerLoadElements(
+  className(product),
+  [product],
+  [
+  ['variants.productImageFront', {
+    withTransforms: ['productLarge']
+  },
+  'variants.productImageBack', {
+    withTransforms: ['productLarge']
+  }],
+  'variants.bottleSizes',
+  'variants',
+  'regionsCategory',
+  'wineType',
+  'collections',
+  'varieties',
+  'vintage',
+   ]) %}
+
+
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+  {% if product.banner is defined %}
+
+    {% set banner = product.banner.one %}
+
+    {% set banner = banner|merge({
+      heading: product.title,
+      text: product.productInfo.vintage|default,
+      bannerSuper: product.collections.level(2)|default ? product.collections.level(2)|join(' ') : '',
+    }) %}
+
+    {% embed "_page-builder-components/hero.twig" with { component: banner } %}
+      {% block extended %}
+        {{ product.varieties.level(2)|default ? product.varieties.level(2)|join(' and ') }}
+      {% endblock %}
+    {% endembed %}
+	{% endif %}
+{% endblock %}
+
+{% block featured %}
+  {% if product.quote.text %}
+    <div class="quote-featured">
+      {% include "_containers/_page-builder/_quote.twig" with { component: product } %}
+    </div>
+  {% endif %}
+  {% include '_containers/_shop/_product-main' with { productType: 'premium' } %}
+{% endblock %}
+
+
+{% block content %}
+  {% for component in product.components %}
+    {% include "_containers/_page-builder/_" ~ component.type.handle|kebabCase with { component: component, header: component.sectionHeader.one() | default } %}
+  {% endfor %}
+{% endblock %}

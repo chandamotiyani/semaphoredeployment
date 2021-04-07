@@ -1,0 +1,49 @@
+.card-membership-option {
+	@include card;
+	@include card-with-image;
+	@include card-with-image-at-top;
+	@include card-with-white-background-on-hover;
+	@include card-with-centre-alignment;
+	@include card-with-image-height-locked-to-aspect-ratio;
+
+
+	&__title {
+		@extend .heading-primary-sm;
+		margin-block-start: 0;
+		margin-block-end: 0;
+	}
+
+	&__description {
+		margin-block-start: 1.5em;
+		margin-bottom: 1.5em;
+		@extend .body-text;
+		text-align: left;
+	}
+
+	&__price {
+		@include price;
+	}
+
+	&__button {
+		margin-top: 3em;
+	}
+
+	&__date {
+		@extend .heading-secondary-sm;
+	
+		& > span:first-child {
+			font-weight: bold;
+			&:after {
+				content: ' |';
+				letter-spacing: 1em;
+			}
+		}
+	}
+
+	&__cta {
+		@extend .heading-secondary-sm;
+		color: $brand-primary;
+		display: inline-block;
+		margin-top: 1em;
+	}
+}

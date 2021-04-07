@@ -1,0 +1,64 @@
+{% set user = null %}
+{% set customer = order.customer %}
+{% if customer is not null %}
+  {% set user = customer.user %}
+{% endif %}
+
+{% embed 'emails/layout' with { 
+  title: 'Yalumba order', 
+  heading: 'Order Received' 
+} %}
+
+  {% block content %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        <strong>Thank you for ordering from Yalumba.com.</strong>
+      {% endblock %}
+    {% endembed %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        Here is the summary of your order number #{{ order.number[:7] }}.
+      {% endblock %}
+    {% endembed %}
+
+    {% include 'emails/_partials/order_table' with { order: order } %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        If you have any questions about your order, please contact The Wine Room on <a href="tel:+61885613309" style="color: #c88242;">+61 8 8561 3309</a> or <a href="mailto:wineroom@​yalumba.​com" style="color: #c88242;">wineroom@​yalumba.​com</a>. 
+      {% endblock %}
+    {% endembed %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        <i>To track your order, please refer to the tracking number which you will receive shortly in an email from Australia Post.</i>
+      {% endblock %}
+    {% endembed %}
+
+    <div style="padding: 40px 48px 20px 48px;">
+      {% if user|default %}
+
+        {% embed 'emails/_components/heading' %}
+          {% block text %}Customer Details{% endblock %}
+        {% endembed %}
+
+        <ul style="padding: 0; margin: 0; list-style: none">
+          <li>Name: {{ user.firstName }} {{ user.lastName }}</li>
+          <li>Email: {{ order.email }}</li>
+          {% if user.phoneNumber|default %}
+            <li>Phone: {{ user.phoneNumber }}</li>
+          {% endif %}
+          {% if user.groups[0] %}
+            <li>Yalumba Wine Club: {{ user.groups[0].name }}</li>
+          {% endif %}
+        </ul>
+      {% endif %}
+    </div>
+
+    {% include 'emails/_partials/addresses' with { order: order } %}
+
+  {% endblock %}
+
+{% endembed %}

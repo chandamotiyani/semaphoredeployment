@@ -1,0 +1,14 @@
+{# js-update-cart-address-select #}
+{% if addresses|length %}
+    <div class="form__input-wrap {{ blockClass|default('') }}__input-wrap">
+        {#Use existing Address: #}
+        <select name="{{ addressType|default('') }}AddressId" class="{{ blockClass|default('select') }}__select form__select js-update-cart-address-select select">
+            <option value="">New Address</option>
+            {% for address in addresses %}
+                <option value="{{ address.id }}" {{ selected|default == address.id ? 'selected=1' : '' }}">
+                {{ address.firstName ~' '~  address.lastName ~' - '~ address.address1 }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+{% endif %}

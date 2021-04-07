@@ -1,0 +1,28 @@
+{% if slug|default %}
+	{% set category = craft.categories().slug(slug) %}
+	{% set query = craft.entries().relatedTo(category).orderBy('postDate desc') %}
+{% else %}
+	{% set query = craft.entries().section(section).orderBy('postDate desc') %}
+{% endif %}
+
+{% if featuredItem is defined and featuredItem|length %}
+	{% set query = query.id('not ' ~ featuredItem.entry.id) %}
+{% endif %}
+
+{% paginate query.limit(9) as paginationInfo, entries %}
+
+{% set items = [] %}
+
+{% for entry in entries %}
+	{% set items = items | merge([{
+		image: entry.articleBanner.image.one(),
+		title: entry.title,
+		description: entry.articleAbstract,
+		entryType: entry.articleCategory.one().title | default('Article'),
+		date: entry.postDate,
+		cta: 'Read more',
+		entry: entry
+	}]) %}
+{% endfor %}
+
+{% embed "archives/_list-with-featured-item.twig" with { type: 'mixed', items: items, paginationInfo: paginationInfo, featuredItem: featuredItem|default([]) } only %}{% endembed %}

@@ -1,0 +1,57 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% cache %}
+    <nav class="footer-navigation footer-navigation--default">
+        {% block footerNavigation %}
+        {% set nodes = craft.navigation.nodes().handle('footerNavigation').level(1).all() %}
+            {% if nodes %}
+                <ul class="footer-navigation__list footer-navigation__list--left">
+                    {% for node in nodes %}
+                            {% set activeChildren = false %}
+
+                            {% for child in node.children %}
+                                {% if child.active %}
+                                    {% set activeChildren = true %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if 'wines' in node.url and craft.request.getSegment(2) == 'premium-wines' %}
+                                {% set activeChildren = true %}
+                            {% endif %}
+
+                        <li class="footer-navigation__item {{ node.classes }} {{ node.active or activeChildren ? 'navigation-hover--active footer-navigation__item--default' : '' }}">
+                            <a href="{{ node.url }}" class="footer-navigation__link navigation-hover {{ node.active or activeChildren ? 'footer-navigation__link--active' : '' }}">{{ node.title }}</a>
+                            {% if node.children|length %}
+                                <ul class="footer-navigation__list footer-navigation__list--right {{ node.active or activeChildren ? 'footer-navigation__list--right-default' : '' }}">
+                                    <li class="footer-navigation__item footer-navigation__item--small footer-navigation__item--title">
+                                        <a href="#" class="footer-navigation__link footer-navigation__back-button"><span><</span>{{ node.title }}</a>
+                                    </li>
+                                    {% for child in node.children.all %}
+                                        <li class="footer-navigation__item footer-navigation__item--small footer-navigation__link">
+                                            <a href="{{ child.url }}" class="footer-navigation__link {{ child.active ? 'footer-navigation__link--active' : '' }}">{{ child.title }}</a>
+
+
+    {#
+                                            {% if child.children|length %}
+                                            <ul class="footer-navigation__list footer-navigation__list--right {{ child.active or activeChildren ? 'footer-navigation__list--right-default' : '' }}">
+                                                <li class="footer-navigation__item footer-navigation__item--small footer-navigation__item--title">
+                                                    <a href="#" class="footer-navigation__link footer-navigation__back-button"><span><</span>{{ child.title }}</a>
+                                                </li>
+                                                {% for child2 in child.children.all %}
+                                                    <li class="footer-navigation__item footer-navigation__item--small footer-navigation__link">
+                                                        <a href="{{ child2.url }}" class="footer-navigation__link {{ child2.active ? 'footer-navigation__link--active' : '' }}">{{ child2.title }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                        #}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endblock %}
+    </nav>
+{% endcache %}

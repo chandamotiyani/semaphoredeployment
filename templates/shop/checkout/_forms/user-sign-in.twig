@@ -1,0 +1,30 @@
+<p class="checkout__col-text">Looks like you're already a Yalumba member? Sign in to automatically add your details and access special member discounts.</p>
+
+<form method="post" accept-charset="UTF-8" class="js-checkout-user-sign-in">
+    <div class="alert js-msg"></div>
+
+    {{ csrfInput() }}
+    {{ actionInput('users/login') }}
+
+    <div class="checkout__form-row">
+        <input name="loginName" type="hidden" value="{{ cart.email }}">
+
+        {% include "_forms/text-input" with {
+            name: 'password',
+            type: 'password',
+            label: 'Password*',
+            blockClass: 'checkout',
+        } %}
+    </div><br>
+
+    <div class="checkout__form-row">
+        {% include "_forms/checkbox" with { name: 'rememberMe', label: 'Remember me', blockClass: 'checkout', checked: true, value: '1' } %}
+    </div>
+
+    <p><a href="{{ url('members/forgot-password') }}">Forget your password?</a></p>
+
+    <div class="signin-buttons">
+        <input type="submit" value="Sign In" class="signin-submit checkout__button-sign-in">
+        <input type="button" value="Continue as Guest" class="js-sign-in-continue-guest signin-submit checkout__button-sign-in">
+    </div>
+</form>

@@ -1,0 +1,154 @@
+{% extends '_layouts/cp' %}
+{% set title = 'Events' %}
+
+{% set fullPageForm = true %}
+
+{% import "_includes/forms" as forms %}
+
+{% block header %}
+    <div class="flex flex-nowrap">
+        {{ block('pageTitle') }}
+        {{ block('contextMenu') }}
+    </div>
+    <div class="flex">
+        {% if showPreviewBtn or shareUrl is defined %}
+            <div class="btngroup">
+                {% if showPreviewBtn %}
+                    <div class="btn livepreviewbtn" data-icon="view">{{ "Preview"|t('app') }}</div>
+                {% endif %}
+                {% if shareUrl is defined %}
+                    <a href="{{ shareUrl }}" class="btn sharebtn" data-icon="share" rel="noopener" target="_blank">{{ 'Share'|t('app') }}</a>
+                {% endif %}
+            </div>
+        {% endif %}
+        {{ block('actionButton') }}
+    </div>
+{% endblock %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <input type="submit" class="btn submit" value="{{ 'Save'|t('commerce') }}">
+        <div class="btn submit menubtn"></div>
+        <div class="menu">
+            <ul>
+                <li>
+                    <a class="formsubmit"
+                       data-redirect="{{ continueEditingUrl|hash }}">
+                        {{ "Save and continue editing"|t('commerce') }}
+                        {{ forms.optionShortcutLabel('S') }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+
+    {{ forms.textField({
+        label: "Event Name",
+        id: 'title',
+        name: 'title',
+        value: event.title,
+        errors: event.getErrors('title'),
+        first: true,
+        autofocus: true,
+        required: true,
+        maxlength: 255
+    }) }}
+
+    <div>
+        {%  if event %}
+	        {% for tab in event.getFieldLayout().getTabs() %}
+	            <div id="{{ tab.getHtmlId() }}"{% if not loop.first %} class="hidden"{% endif %}>
+	                {% include "_includes/fields" with {
+	                    fields:  tab.getFields(),
+	                    element: event
+	                } only %}
+	            </div>
+	        {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block details %}
+
+    <div class="meta">
+        {{ forms.textField({
+            label: "Slug"|t('app'),
+            id: 'slug',
+            name: 'slug',
+            autocorrect: false,
+            autocapitalize: false,
+            value: event.slug,
+            placeholder: "Enter slug"|t('app'),
+            errors: (event.getErrors('slug')|merge(event.getErrors('uri')))
+        }) }}
+
+        <div class="field" id="groupHandle-field">
+            <div class="heading">
+                <label id="groupHandle-label" class="required" for="groupHandle">Link</label>
+            </div>
+            <div class="input ltr">
+                <a href="{{ event.url }}"><i data-icon="world"></i> {{ event.title }}</a>
+            </div>
+        </div>
+
+        <div class="field first" id="apiId-field">
+            <div class="heading">
+                {#<label id="apiId-label" class="required" for="apiId">Rezdy Event</label>#}
+                <label id="apiId-label" for="apiId">Rezdy Event</label>
+            </div>
+            <div class="input ltr">
+                {{ rezdyField.getInputHtml(event.apiId)|raw }}
+            </div>
+        </div>
+
+        <input type="hidden" name="groupId" value="{{ event.groupId }}">
+
+{#        TODO: this should be hidden?#}
+        {{ forms.textField({
+            label: "Group Handle",
+            id: 'groupHandle',
+            name: 'groupHandle',
+            value: event.groupHandle,
+            errors: event.getErrors('groupHandle'),
+            first: true,
+            disabled:true,
+            autofocus: true,
+            required: true,
+            maxlength: 255
+        }) }}
+
+        {{ forms.textField({
+            label: "Event Price",
+            id: 'price',
+            name: 'price',
+            value: (event.price == '0' ? '0'|number : (event.price ? event.price|number ?: '')),
+            errors: event.getErrors('price'),
+            first: true,
+            autofocus: true,
+            required: true,
+            maxlength: 255
+        }) }}
+
+    </div>
+{% endblock %}
+
+{% set settings = {
+    elementType: className(event),
+}
+%}
+
+{% js %}
+    window.eventEditor = new Craft.Events.EventEdit({{ settings|json_encode|raw }})
+{% endjs %}
+
+{% if not event.slug %}
+    {% js %}
+        window.slugGenerator = new Craft.SlugGenerator('#title', '#slug', {
+        charMap: {{ craft.cp.getAsciiCharMap(event.site.language)|json_encode|raw }}
+        });
+    {% endjs %}
+{% endif %}

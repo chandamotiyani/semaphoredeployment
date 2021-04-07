@@ -1,0 +1,15 @@
+{% embed '_cards/_card.twig' with { type: 'collage-bright', openInNewTab: openInNewTab|default, url: url|default } %}
+	{% block details %}
+		<div class="{{ class }}__wrap">
+			{% if super is defined %}<h3 class="{{ class }}__super">{{ super }}</h3>{% endif %}
+			{% if title is defined %}<h4 class="{{ class }}__title">{{ title | typogrify }}</h4>{% endif %}
+			{% if cta is defined %}
+				<div class="{{ class }}__buttons">
+					<div class="{{ class }}__button">
+						<div>{{ cta }}</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	{% endblock %}
+{% endembed %}

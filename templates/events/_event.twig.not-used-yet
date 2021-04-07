@@ -1,0 +1,25 @@
+{% extends "_layouts/_layout.twig" %}
+
+{% block content %}
+	<h1>{{event.title}}</h1>
+	<p>This is an event page.</p>
+
+	<form method="POST">
+        <input type="hidden" name="action" value="/commerce/cart/update-cart">
+        {{ redirectInput('shop/cart') }}
+        <input type="hidden" name="qty" value="1">
+        {{ csrfInput() }}
+
+        <select name="options[schedule]">
+            <option>Please Select a Date/Time</option>
+            {% for scheduleDate in event.schedule %}
+                <option value="{{ scheduleDate.id }}">{{ scheduleDate.startDateTime }} - {{ scheduleDate.endDateTime }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="hidden" name="purchasableId" value="{{event.id}}" />
+        <div class="buttons">
+            <input type="submit" value="{{ "Add to cart"|t }}" class="button"/>
+        </div>
+    </form>
+{% endblock %}

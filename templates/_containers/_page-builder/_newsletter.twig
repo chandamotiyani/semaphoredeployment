@@ -1,0 +1,36 @@
+{# {% set component = { textWithImage: component.newsletter.one } | merge(newsletter.newsletter) %} #}
+
+{% set localNewsletter = localNewsletter|default ? localNewsletter|default : component.newsletter.one|default %}
+{% set globalNewsletter = newsletter.newsletter|default %}
+{% set globalNewsletterMembers = members.newsletter|default %}
+
+{%
+  set fields = {
+    constrainImageTo: 'square',
+    image: localNewsletter.image.one | default(globalNewsletter.image.one|default),
+    imagePosition: 'right',
+    buttons: [],
+    textAlign: 'left',
+    heading: localNewsletter.heading | default(globalNewsletter.heading|default),
+    text: localNewsletter.copy | default(globalNewsletter.copy|default),
+    colourScheme: 'white-on-black'
+  }
+%}
+
+{# If a user is already signed in, display global newsletter in 'Members section' #}
+{% if currentUser %}
+  {%
+    set fields = {
+      constrainImageTo: 'square',
+      image: globalNewsletterMembers.image.one|default,
+      imagePosition: 'right',
+      buttons: [],
+      textAlign: 'left',
+      heading: globalNewsletterMembers.heading|default,
+      text: globalNewsletterMembers.copy|default,
+      colourScheme: 'white-on-black'
+    }
+  %}
+{% endif %}
+
+{% include '_views/_newsletter' with { header: header|default, fields: fields } only %}

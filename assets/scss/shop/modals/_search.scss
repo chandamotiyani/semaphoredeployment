@@ -1,0 +1,143 @@
+.search {
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+    max-width: 640px;
+    justify-self: flex-end;
+    margin-left: auto;
+    position: relative;
+    z-index: 10;
+    background: $white;
+    margin-left: auto;
+
+    @include media-breakpoint-up(sm) {
+      flex-direction: row;
+    }
+  }
+
+  &__col {
+    flex: 1;
+    flex-basis: 40%;
+    max-width: 640px;
+    height: 100vh;
+  }
+
+  &__heading-group {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: em(30);
+  }
+
+  &__heading {
+    margin-bottom: 0;
+    margin-top: 0;
+    color: $black;
+  }
+
+  &__text {
+    @extend .body-text;
+  }
+
+  &__close {
+    left: -35px;
+    top: 0;
+    height: 45px;
+    pointer-events: none;
+  }
+
+  &__results {
+    margin-bottom: em(30);
+  }
+
+  &__results-heading {
+    @extend .heading-secondary-sm;
+    @extend .heading-secondary-sm--underlined;
+
+    display: inline-block;
+    margin-bottom: em(25);
+  }
+
+  &__results-sub-heading {
+    @extend .body-text;
+
+    color: $black;
+    font-weight: 900;
+    display: block;
+    margin-bottom: em(5);
+  }
+
+  &__results-result {
+    @extend .body-text;
+
+    display: block;
+    margin-bottom: em(5);
+  }
+
+  &__results-container {
+    margin-top: 5rem;
+  }
+
+  &__form-input {
+    height: em(46);
+    font-weight: 500;
+    color: $black;
+
+    &::placeholder {
+      font-weight: 100;
+    }
+  }
+
+  /*********************
+  * Search Select box
+  **********************/
+  .choices {
+    margin-top: 0;
+    border: none;
+    min-width: 150px;
+    font-size: inherit;
+    margin-bottom: -0.65em;
+
+    @include media-breakpoint-up(xs) {
+      min-width: 300px;
+      margin-bottom: -0.23em;
+    }
+
+    &::after {
+      right: -35px;
+      top: auto;
+      bottom: 5px;
+    }
+
+    &__inner {
+      font-size: inherit;
+      white-space: nowrap;
+    }
+
+    &[data-type*="select-one"].is-open:after {
+      margin-top: -10px;
+    }
+
+    &__list--single {
+      display: flex;
+      margin-top: -5px;
+    }
+
+    &__list--single .choices__item--selectable {
+      @extend .heading-primary-lg;
+      @include text-decoration-underline($active: true, $color: $black );
+
+      width: auto;
+      text-transform: none;
+      letter-spacing: 0;
+      color: $black;
+      text-align: left;
+      display: flex;
+
+      &:before {
+        height: 3px;
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{% set blockModifier = blockModifier|default('') %}
+
+{% if item.purchasable is not null %}
+  {% set event = craft.events().with('bannerImage').relatedTo(item.purchasable).one() %}
+  {%
+    set product = {
+      id: item.id,
+      title: event.title,
+      qty: item.qty|default(0),
+      price: item.subtotal ? item.subtotal|default('0')|currency('AUD', stripZeros = true) : 'FREE',
+      options: item.options|default,
+      imageUrl: event.bannerImage[0].getUrl()|default,
+      note: item.note|default,
+      adjustments: item.adjustments|default,
+      url: item.purchasable.url|default('#'),
+      isOnSale: item.purchasable.sales|promotions|length,
+      sales: item.purchasable.sales|promotions,
+      membershipsDiscounts: item.purchasable.sales|memberships,
+      rrpPrice: item.purchasable.price|currency('AUD', stripZeros = true)|replace('$'),
+      startDateTime: item.purchasable.startDateTime|default,
+      endDateTime: item.purchasable.endDateTime|default,
+    }
+  %}
+
+  {% if item.purchasable.product.id|default(0) %}
+    {% set product = product|merge([{productId: item.purchasable.product.id }]) %}
+  {% endif %}
+  {% embed "shop/_cart/line-item-product" with { event: event, product: product, blockModifier: blockModifier } only %}
+    {% block formInputs %}
+      <input type="hidden" name="action" value="/commerce/cart/update-cart">
+      <input type="hidden" name="lineItemId" value="{{ product.id }}">
+      {% if(product.productId|default(0)) %}
+      <input type="hidden" name="productId" value="{{ product.productId }}">
+      {% endif %}
+    {% endblock %}
+    {% block productDescription %}
+
+      <ul class="cart-item__options-list">
+        <li>No. of Tickets: {% include "shop/_partials/input-qty" with { name: 'lineItems['~product.id~'][qty]', value: product.qty } %}</li>
+        <li>Date: {{ product.startDateTime|date("d F Y") }}</li>
+        <li>Time: {{ product.startDateTime|date("h:i:a") }}</li>
+      </ul>
+
+    {% for adjustment in product.adjustments %}
+      <strong class="heading-secondary-sm">{{ adjustment.name }} ({{ adjustment.amount|currency('AUD', stripZeros = true) }})</strong>
+      <br>
+    {% endfor %}
+
+    {% endblock %}
+    {% block options %}
+      <div class="cart-item__right">
+        <div class="cart-item__price">{{ product.price }}</div>
+        <label class="cart-item__remove js-product-cart-summary-remove">Remove <input type="checkbox" name="lineItems[{{ product.id }}][remove]" style="display: none"></label>
+
+
+        <a href="{{ event.url }}" class="cart-item__remove">Change Booking</a></div>
+
+
+    {% endblock %}
+  {% endembed %}
+{% endif %}

@@ -1,0 +1,13 @@
+.card-date {
+	@include card;
+
+	text-align: center;
+	
+	&__heading h3 {
+		@extend .heading-primary-xs;
+	}
+
+	&__text {
+		@extend .body-text;
+	}
+}

@@ -1,0 +1,35 @@
+{% set component = component.quote %}
+
+{%
+  set fields = {
+    text: component.text,
+    person: component.person,
+    role: component.role,
+    image: component.image.one()
+  }
+%}
+
+{% if fields.image %}
+  {% embed '_layouts/_section.twig' with { bleed: false, sideHeading: sideHeading | default } %}
+    {% block body %}
+      {% embed "_cards/_card-text-with-image.twig" with { 
+        fields: fields,
+        image: fields.image,
+        colourScheme: 'white-on-black',
+        constrainImageTo: 'narrow',
+        imagePosition: 'right'
+      } only %}
+          {% block details %}
+            <blockquote class="quote">
+              <div class="quote__content">
+                <p>{{ fields.text }}</p>
+                <footer class="quote__footer">{{ fields.person }}<cite title="Source Title" class="quote__cite">{{ fields.role }}</cite></footer>
+              </div>
+            </blockquote>
+          {% endblock %}
+      {% endembed %}
+    {% endblock %}
+  {% endembed %}
+{% else %}
+  {% include '_views/_quote' with fields only %}
+{% endif %}

@@ -1,0 +1,46 @@
+{% extends "_layouts/cp" %}
+{% set title = "Event Groups"|t('app') %}
+
+{% block actionButton %}
+    <a href="{{ url('events/groups/new') }}" class="btn submit add icon">{{ "New event group"|t('app') }}</a>
+{% endblock %}
+
+{% set crumbs = [
+    { label: "Settings"|t('app'), url: url('settings') }
+] %}
+
+
+{% block content %}
+    <div id="noeventgroups"{% if eventGroups|length %} class="hidden"{% endif %}>
+        <p>{{ "No event groups exist yet."|t('app') }}</p>
+    </div>
+
+    {% if eventGroups|length %}
+        <table id="eventgroups" class="data fullwidth collapsible">
+            <thead>
+                <th scope="col">{{ "Name"|t('app') }}</th>
+                <th scope="col">{{ "Handle"|t('app') }}</th>
+                <td class="thin"></td>
+            </thead>
+            <tbody>
+                {% for eventGroup in eventGroups %}
+                    <tr data-id="{{ eventGroup.id }}" data-name="{{ eventGroup.name|t('site') }}">
+                        <th scope="row" data-title="{{ 'Name'|t('app') }}"><a href="{{ url('events/groups/' ~ eventGroup.id) }}">{{ eventGroup.name|t('site') }}</a></th>
+                        <td data-title="{{ 'Handle'|t('app') }}"><code>{{ eventGroup.handle }}</code></td>
+                        <td class="thin"><a class="delete icon" title="{{ 'Delete'|t('app') }}" role="button"></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+
+{% js %}
+    new Craft.AdminTable({
+        tableSelector: '#eventgroups',
+        noItemsSelector: '#noeventgroups',
+        deleteAction: 'events/events/delete-event-group',
+        confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}” and all its events?"|t('app') }}',
+    });
+{% endjs %}

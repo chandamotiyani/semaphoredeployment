@@ -1,0 +1,83 @@
+<div class="card-text-with-image{% if colourScheme is defined %} t-{{ colourScheme }}{% endif %}{% if imagePosition is defined %} card-text-with-image--image-on-{{ imagePosition }}{% endif %}{% if constrainImageTo is defined %} card-text-with-image--image-{{ constrainImageTo }}{% endif %}{% if textAlign is defined %} card-text-with-image--text-align-{{ textAlign }}{% endif %}{% if fixedText is defined and fixedText %} card-text-with-image--fixed-text{% endif %}{% if fullHeight is defined and fullHeight %} card-text-with-image--full-height{% endif %}">
+
+	<div class="card-text-with-image__image-mask">
+		{% if imageClickableUrl|default %}
+			<a href="{{ imageClickableUrl|default('#') }}" {{ imageClickableTarget|default }} class="card-text-with-image__image"{% if image | length %} style="background-image: url('{{ image.getUrl('cardImage') }}')"{% endif %}>
+				{% if vimeoVideoId|default %}
+					<div class="vimeo-wrapper js-vimeo" data-id="{{ vimeoVideoId }}">
+						<iframe src="https://player.vimeo.com/video/{{ vimeoVideoId }}?title=0&sidedock=0&controls=0" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+						<div class="video__play-button"></div>
+					</div>
+				{% endif %}
+			</a>
+		{% else %}
+			<div class="card-text-with-image__image"{% if image | length %} style="background-image: url('{{ image.getUrl('cardImage') }}')"{% endif %}>
+				{% if vimeoVideoId|default %}
+					<div class="vimeo-wrapper js-vimeo" data-id="{{ vimeoVideoId }}">
+						<iframe src="https://player.vimeo.com/video/{{ vimeoVideoId }}?title=0&sidedock=0&controls=0" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+						<div class="video__play-button"></div>
+					</div>
+				{% endif %}
+			</div>
+		{% endif %}
+
+		{% if dateFrom is defined and dateFrom %}
+			<div class="{{ class }}__date-tag">
+				<span>{{ dateFrom | date('M') }}</span>
+				<span>{{ dateFrom | date('d') }}</span>
+			</div>
+		{% endif %}
+	</div>
+	<div class="card-text-with-image__details">
+		{% block details %}
+			{% if super is defined and super | length %}
+			<div class="card-carousel-event__header">
+				<div class="card-text-with-image__super">{{ super | typogrify }}</div>
+
+				{% if isMembersOnly|default %}
+				<span class="card-carousel-event__members-only">Members Only</span>
+				{% endif %}
+			</div>
+			{% endif %}
+
+
+			{% if icon is defined and icon | length %}<div class="card-text-with-image__icon" style="background-image: url('{{ icon.url | default }}')"></div>{% endif %}
+			{% if heading is defined and heading | length %}<h2 class="card-text-with-image__heading">{{ heading | typogrify }}</h2>{% endif %}
+			{% if text is defined and text | length %}<div class="card-text-with-image__text">{{ text | typogrify }}</div>{% endif %}
+			{% if block('extended') is not empty %}<div class="card-text-with-image__extended">{% block extended %}{% endblock %}</div>{% endif %}
+			{% if iconList is defined and iconList | length %}
+
+				{% set items = [] %}
+
+				{% for item in iconList %}
+					{% set items = items | merge([{
+						icon: item.icon.one(),
+						description: item.text
+					}]) %}
+				{% endfor %}
+
+				{% include '_views/_usp-list' with { items: items, narrow: true } only %}
+
+			{% endif %}
+
+			{% if buttons is defined and buttons | length %}
+				<div class="card-text-with-image__buttons">
+					{% for button in buttons %}
+
+						{% if button.entry.url|default == '#add-to-cart' and  product|default %}	
+							{% set purchasableId = product.defaultVariant.id ? product.defaultVariant.id : product.product.purchasableId %}
+							<add-to-cart productid="{{ product.id }}" purchasableId="{{ product.defaultVariant.id }}" notify="panel"></add-to-cart>
+						{% elseif button.entry.url | default == '#add-to-cart' and button.entry.product|default %}
+							{% set purchasableId = button.entry.product.defaultVariant.id ? button.entry.product.defaultVariant.id : button.entry.product.purchasableId %}
+							<add-to-cart productid="{{ button.entry.product.id }}" purchasableId="{{ purchasableId }}" notify="panel"></add-to-cart>
+						{% else %}
+							<div class="card-text-with-image__button">
+								<a href="{{ button.entry.url | default }}" {{ button.entry['target']|default }}>{{ button.label|default('Learn More') }}</a>
+							</div>
+						{% endif %}
+					{% endfor %}
+				</div>
+			{% endif %}
+		{% endblock %}
+	</div>
+</div>

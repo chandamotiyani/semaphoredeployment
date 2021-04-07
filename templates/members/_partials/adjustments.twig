@@ -1,0 +1,28 @@
+
+{% if order['adjustments'] is defined %}
+  {% for orderAdjustment in order.adjustments %}
+    {% if orderAdjustment.type == "shipping" %}
+      <li class="order-summary__totals-list-item">
+        <h3 class="order-summary__totals-list-item-heading">Delivery</h3>
+        <div class="order-summary__totals-list-item-price">
+          <span>{{ orderAdjustment.name }}</span>
+          {{ orderAdjustment.amount|commerceCurrency(order.currency) }}
+        </div>
+          <!--div class="order-summary__totals-list-item-price">FREE</div-->
+      </li>
+    {% endif %}
+    {% if(orderAdjustment.type == "tax") %}
+      <li class="order-summary__totals-list-item">
+        <h3 class="order-summary__totals-list-item-heading">{{ orderAdjustment.name }} {{ orderAdjustment.included?"included":"" }}</h3>
+        <div class="order-summary__totals-list-item-price">
+          {{ orderAdjustment.amount|commerceCurrency(order.currency) }}
+        </div>
+      </li>
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{#
+{% if cart.couponCode %}
+     <strong>{{ cart.couponCode }}</strong> has been applied to this order.
+{% endif %}
+#}

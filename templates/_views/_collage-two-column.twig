@@ -1,0 +1,9 @@
+{% embed '_layouts/_section.twig' %}
+	{% block body %}
+		{% embed '_partials/_card-list.twig' with { type: 'two-column', items: items, appendJsClass: true } only %}
+			{% block item %}
+				{% include "_cards/_card-collage-bright.twig" with item only %}
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+{% endembed %}

@@ -1,0 +1,59 @@
+
+
+{% embed '_layouts/_section.twig' with { narrow: true } %}
+  {% block body %}
+
+    <form method="post" accept-charset="UTF-8" class="js-checkout-account-create">
+
+
+      {% set signupFormAction = signupFormAction ?? 'users/save-user' %}
+      {{ actionInput(signupFormAction) }}
+
+      {% if craft.request.getParam('errorcode') %}
+        {% if craft.request.getParam('errorcode') == 8 %}
+          <p id="message-notify" class="js-msg js-msg--fail">Looks like your already signed up to our newsletter. Please fill in the form below to become a full member.</p>
+        {% endif %}
+      {% endif %}
+
+
+      <div class="container">
+        <div class="checkout__form-row">
+          {% include "_forms/text-input" with { name: 'firstName', label: 'First Name*', blockClass: 'member', cssClass: 'form__input-wide'  } %}
+          {% include "_forms/text-input" with { name: 'lastName', label: 'Last Name*', blockClass: 'member', cssClass: 'form__input-wide' } %}
+        </div>
+
+        <div class="checkout__form-row">
+          {% include "_forms/text-input" with { type: 'email', name: 'email', label: 'Email*', blockClass: 'member', cssClass: 'form__input-wide' } %}
+
+          {% include "_forms/state-dropdown" %}
+        </div>
+
+        <div class="checkout__form-row">
+          {% include "_forms/dob-input" with { 
+            name: 'fields[dateOfBirth]',
+            label: 'Date of Birth*', 
+            blockClass: 'checkout', 
+            value: '',
+            type: 'text',
+            hint: 'dd/mm/yyyy',
+            placeholder: 'dd/mm/yyyy',
+          } %}
+
+          {% include "_forms/text-input" with { 
+            type: 'password', 
+            name: 'password', 
+            label: 'Create Password*', 
+            blockClass: 'member', 
+            cssClass: 'form__input-wide', 
+            subText: 'Use letters numbers and symbols for a stronger password. Password should be at least 6 characters.'  } %}
+        </div>
+
+        <div class="js-msg"></div>
+
+        <div class="checkout__form-row--center">
+          <input type="submit" value="Create Account" class="signin-submit modal-panel-sign-in__button modal-panel-sign-in__button--submit">
+        </div>
+      </div>
+    </form>
+  {% endblock %}
+{% endembed %}

@@ -1,0 +1,17 @@
+{% embed "_layouts/_section.twig" with { sideHeading: sideHeading | default 
+} %}
+	{% block body %}
+		{% embed "_layouts/_carousel.twig" with { items: wines, hijackScrolling: true, class: 'homepage-featured-wines'  } %}
+			{% block item %}
+				{% include "_cards/_" ~ item.template ~ ".twig" with { product: item, hideCartButtons: true } only %}
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+	{% block footer %}
+		{% include "_layouts/_carousel-controls.twig" with {
+			buttons: [
+				{ label: 'Shop all wines', url: '/shop/wines'  },
+				] }
+		%}
+	{% endblock %}
+{% endembed %}

@@ -1,0 +1,13 @@
+.card-carousel-page {
+	@include card;
+	@include card-with-image;
+	@include card-with-image-at-top;
+	@include card-with-image-that-scales-on-hover;
+	@include card-with-title;
+	@include card-with-cta;
+	@include card-with-white-background-on-hover;
+	@include card-with-image-height-locked-to-aspect-ratio;
+
+	top: 0;
+	bottom: 0;
+}

@@ -1,0 +1,20 @@
+{% embed 'emails/layout' with { 
+  title: 'Stock Level Alert', 
+  heading: 'Stock Level' 
+} %}
+
+  {% block content %}
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        Please review stock levels for the following products (current stock level under 10).<br>
+
+        {% embed 'emails/_components/heading' with { style: 'text-align: center' } %}
+          {% block text %}{{ lineItem.description }} {{ lineItem.purchasable.sku }} {% endblock %}
+        {% endembed %}
+
+      {% endblock %}
+    {% endembed %}
+
+    {#{% include 'emails/_components/button' with { text:Update stock level, link:  }  %}#}
+  {% endblock %}
+{% endembed %}

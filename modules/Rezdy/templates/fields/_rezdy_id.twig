@@ -1,0 +1,23 @@
+{%- set class = [
+    'select',
+    (class is defined ? class : null),
+    (field['disabled'] is defined and field['disabled'] ? 'disabled' : null),
+]|filter|join(' ') %}
+{%- set options = (options is defined ? options : []) %}
+{%- set value = (value is defined ? value : null) %}
+{%- set hasOptgroups = false -%}
+
+<div style="max-width:100%;" class="{{ class }}"
+        {%- if block('attr') is defined %} {{ block('attr') }}{% endif %}>
+    <select style="max-width:100%;"
+            {%- if field['id'] is defined %} id="{{ field['id'] }}"{% endif %}
+            {%- if field['toggle'] is defined and field['toggle'] %} class="fieldtoggle" data-target-prefix="{{ targetPrefix ?? '' }}"{% endif %}
+            {%- if field['name'] is defined %} name="{{ field['name'] }}"{% endif %}
+            {%- if field['autofocus'] is defined and field['autofocus'] and not craft.app.request.isMobileBrowser(true) %} autofocus{% endif %}
+            {%- if field['disabled'] is defined and field['disabled'] %} disabled{% endif %}>
+            <option value="">Please Select</option>
+        {% for key, option in options %}
+            <option value="{{ key }}"{% if (key~'') is same as (value~'') %} selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+    </select>
+</div>

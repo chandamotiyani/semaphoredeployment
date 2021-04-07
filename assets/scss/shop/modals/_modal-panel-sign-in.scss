@@ -1,0 +1,96 @@
+.modal-panel-sign-in {
+
+  &__form-input {
+    @extend .form__input;
+
+    width: 100%;
+  }
+
+  &__form-label {
+    @extend .form__label;
+
+    color: $white;
+
+    &:first-child {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+  }
+
+  &__button {
+    @extend .boxed-button;
+    @extend .boxed-button--on-dark;
+    min-width: 110px;
+    margin: 0;
+    @include media-breakpoint-up(sm) {
+      min-width: 140px;
+    }
+    &--submit {
+      background: transparent;
+    }
+  }
+
+  &__list {
+    @extend .list;
+  }
+
+  &__link {
+    display: block;
+    text-decoration: underline;
+    color: $white;
+    margin-top: em(20);
+    margin-bottom: em(20);
+  }
+
+  &__form-label {
+    color: $white;
+  }
+
+  &__text {
+    color: $white;
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.5;
+  
+    @include media-breakpoint-up(sm) {
+      font-size: 18px;  
+    }
+
+    &--wide {
+      margin-top: 6rem;
+
+      @include media-breakpoint-up(sm) { 
+        margin-right: -3rem;
+        margin-top: 6rem;
+        margin-bottom: 2.5rem;
+      }
+    }
+
+    &--small {
+      font-weight: 100;
+      font-size: 14px;
+
+      @include media-breakpoint-up(sm) {
+        font-size: 17px;
+      }
+    }
+
+    &--smaller {
+      font-weight: 100;
+      margin-right: 0;
+      font-size: 12px;
+
+      @include media-breakpoint-up(sm) {
+        font-size: 14px;
+      }
+    }
+  }
+}

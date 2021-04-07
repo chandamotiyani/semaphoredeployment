@@ -1,0 +1,101 @@
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% embed "_page-builder-components/hero.twig" with {
+		textPosition: "center",
+		restrictWidth: true,
+		component: {
+			heading: entry.title,
+			image: entry.articleBanner.image,
+			overlay: entry.articleBanner.overlay
+		}
+	} %}
+		{% block extended %}
+			{% set table = entry.articleRecipeInfo ? [
+				{
+					heading: "Serves",
+					description: entry.articleRecipeInfo.serves ~ ( entry.articleRecipeInfo.recipeType == 'side' ? " (as a side)" : "" )
+				}, {
+					heading: "Preparation",
+					description: entry.articleRecipeInfo.preparationTime
+				}, {
+					heading: "Cooking",
+					description: entry.articleRecipeInfo.cookingTime
+				}
+			] : false %}
+			<div class="hero-table">
+				{% for cell in table %}
+					<div class="hero-table__cell">
+						<div class="hero-table__heading">{{ cell.heading }}</div>
+						<div class="hero-table__description">{{ cell.description }}</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% endblock %}
+	{% endembed %}
+{% endblock %}
+
+{% block content %}
+	{% embed '_layouts/_section.twig' %}
+		{% block body %}
+			{% embed '_layouts/_long-form.twig' %}
+				{% block left %}
+					{% include '_partials/_sidebar.twig' with {
+						partial: entry,
+						backRoute: 'archives',
+						backLabel: 'Back to Library',
+						fields: [
+							{ label: 'Category', value: entry.articleCategory.one().title | default('Article'), url: entry.articleCategory.one().url  },
+							{ label: 'Published', value: entry.postDate | date("mm d, Y"), url: '' }
+						]
+					} %}
+				{% endblock %}
+				{% block right %}
+				{% endblock%}
+				{% block body %}
+					{% for component in entry.articleContent %}
+						{% include "_containers/_page-builder/_" ~ component.type.handle|kebabCase with { component: component } only %}
+					{% endfor %}
+
+					{% if entry.articleRecipeInfo %}
+						<div class="recipe">
+							<div class="recipe__ingredients">
+								<h3 class="recipe__heading">Ingredients</h3>
+								<ul class="recipe__ingredients-list">
+									{% for item in entry.articleRecipeInfo.ingredients %}
+										<li>{{ item.ingredient }}</li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="recipe__method">
+								<h3 class="recipe__heading">Method</h3>
+								<div class="recipe__method-text">
+									{{ entry.articleRecipeInfo.method }}
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				{% endblock %}
+			{% endembed %}
+		{% endblock %}
+	{% endembed %}
+
+	{# TODO Re-enable when working #}
+	{% if entry.articleFeaturedWines|default %}
+		{% include "_containers/_page-builder/_featured-wines-carousel.twig" with { component: entry.articleFeaturedWines.one() } only %}
+	{% endif %}
+
+	{% if entry.featuredEvents %}
+		{% include "_containers/_page-builder/_featured-events-carousel.twig" with { component: { featuredEvents: entry.featuredEvents } } only %}
+	{% endif %}
+
+	{% if entry.newsletter %}
+		{% include "_containers/_page-builder/_newsletter.twig" with { component: { newsletter: entry.newsletter }, header: entry.sectionHeader.one()|default } only %}
+	{% endif %}
+
+	{# TODO - restore related articles field #}
+	{% if entry.relatedArticles %}
+		{% include "_containers/_page-builder/_related-articles.twig" with { component: { relatedArticles: entry.relatedArticles } } only %}
+	{% endif %}
+
+{% endblock %}

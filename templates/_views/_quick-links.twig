@@ -1,0 +1,9 @@
+{% embed '_layouts/_section.twig' with { colourScheme: 'black-on-white', padBottom: true, bleedMobile: true, class: 'quicklinks' } %}
+	{% block body %}
+		{% embed '_partials/_card-list.twig' with { type: 'quick-link', items: items } only %}
+			{% block item %}
+				{% include "_cards/_card-quick-link.twig" with item only %}
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+{% endembed %}

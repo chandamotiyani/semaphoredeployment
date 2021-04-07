@@ -1,0 +1,219 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+    {% block featured %}
+        <div class="boxed-layout__header boxed-layout__header--search container-fluid search">
+            <div class="search-header__col search-header__col--large">
+                <h1 class="search-header__heading">Search Results for: &lsquo;{{ searchQuery }}&rsquo;</h1>
+                {#<p class="search-header__result-indicator">There are 28 Search results for ‘{{ searchQuery }}’.</p>#}
+            </div>
+            <div class="search-header__col search-header__col">
+                <a href="#search" class="search-header__link">Try another Search</a>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% set searchQuery = craft.app.request.getParam('search') %}
+    {% set state = craft.app.request.getParam('state') %}
+    {#{% set suggestions = craft.entries().section('searchSuggestions').search('title:'~'*'~searchQuery).all() %}#}
+    {#{% set specialReleasesOptions = craft.fields.getFieldbyHandle('specialReleases') %}
+    {% for option in specialReleasesOptions.settings.options %}
+        {{ option.label }} {{ option.value }}
+    {% endfor %}#}
+    {% set stateMessage = (state == 'shop') or (state == 'archives') ? ' in the '~state~' ' : '' %}
+    {% if(state == 'website' or state == 'shop') %}
+        {# start get products for the search term #}
+        {# Chanda - search by breaking down the searchQuery in words by space specifically for products #}
+        {% set wines = craft.products().type('not giftOptions').search(searchQuery|getProductSearchKeywords).withPermission().with([
+            'productInfo',
+            ['variants.productImageFront', {
+                withTransforms: ['productListingImage']
+            }],
+            'variants.bottleSizes',
+            'variants',
+            'regionsCategory',
+            'wineType',
+            'collections',
+            'varieties',
+            'vintage',
+        ]).orderBy('defaultPrice desc') %}
+
+        {#{% paginate winesQuery.limit(3) as paginationWines, wines %}#}
+        {% set winesOfTheMonth = getWOMSales() %}
+        {# end get products for the search term #}
+
+        {# start get events for the search term #}
+        {#{% set eventsQuery = craft.events().search(searchQuery).withPermission().orderBy('price desc') %}#}
+
+        {% set eventsQuery = craft.events().search('title:'~'*'~searchQuery~'* OR eventShortDescription:*'~searchQuery~'*').withPermission() %}
+
+        {% paginate eventsQuery.limit(3) as paginationEvents, events %}
+        {# end get events for the search term #}
+    {% endif %}
+
+    {% if(state == 'website' or state == 'archives') %}
+        {% set query = craft.entries().section('blogPosts').search('title:'~'*'~searchQuery~'* OR articleAbstract:*'~searchQuery~'*').withPermission() %}
+        {% paginate query.limit(2) as paginationInfo, entries %}
+
+        {% set pageQuery = craft.entries().section(['pages', 'contact']).search(searchQuery).withPermission() %}  {# 'seoDescription:'~'*'~searchQuery~'* OR title:*'~searchQuery~'*' #}
+        {% paginate pageQuery.limit(4) as PaginationPages, pages %}
+
+        {% set backVintageProducts = craft.entries().section('backVintages').search('fullTitle:'~'*'~searchQuery~'*').level(2) %}
+        {% paginate backVintageProducts.limit(4) as PaginationbackVintage, backVintages %}
+    {% endif %}
+
+    {% block list %}
+
+        {% embed '_layouts/_section.twig' %}
+            {% block body %}
+                <div class="js-product-listing card-list card-list--search">
+                    {% if wines|default %}
+                        <hr class="seperator">
+                        {% embed "_partials/_card-list.twig" with { className: 'card-large', items: wines, type: 'product', colourScheme: 'black-on-white', winesOfTheMonth: winesOfTheMonth|default, jsPaginateSelector: 'js-paginate-wines' } only %}
+                            {% block title %}<h2 class="heading-primary-sm list-heading">Wine Shop</h2>{% endblock %}
+                            {% block item %}
+                                {% if(item.typeId == '4' or item.typeId == '1') %}
+                                    {% include "_containers/_shop/_product-wine-card" with { wine: item, winesOfTheMonth: winesOfTheMonth|default } only %}
+                                {% endif %}
+                                {% if(item.typeId == '5' or item.typeId == '3') %}
+                                    {% include "_containers/_shop/_product-gifts-card" with { wine: item, winesOfTheMonth: winesOfTheMonth|default } only %}
+                                {% endif %}
+                                {% if(item.typeId == '2') %}
+                                    {% include "_containers/_shop/_product-merchandise-card" with { wine: item, winesOfTheMonth: winesOfTheMonth|default } only %}
+                                {% endif %}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+
+                    {% if events|default %}
+                        <hr class="seperator">
+                        {% embed "_partials/_card-list.twig" with { items: events, type: 'event', ref: true, jsPaginateSelector: 'js-paginate-events', pageInfo: paginationEvents } only %}
+                            {% block title %}<h2 class="heading-primary-sm list-heading">Events</h2>{% endblock %}
+                            {% block item %}
+
+                                {% if item.groupHandle == 'tours' %}
+                                    {% set normalisedItem = {
+                                        url: item.url,
+                                        image: item.bannerImage.one,
+                                        location: item.eventLocation[0].title,
+                                        title: item.title,
+                                        duration: 'Duration: ' ~ item.eventDuration,
+                                        description: item.eventShortDescription,
+                                        price: item.price,
+                                        event: item,
+                                        schedule: item,
+                                    } %}
+                                    {% include '_cards/_card-tour.twig' with normalisedItem only %}
+                                {% endif %}
+
+                                {% if item.groupHandle == 'events' %}
+                                    {% set normalisedItem = {
+                                        url: item.url,
+                                        bannerImage: item.bannerImage,
+                                        location: item.eventLocation[0].title,
+                                        title: item.title,
+                                        duration: 'Duration: ' ~ item.eventDuration,
+                                        description: item.eventShortDescription,
+                                        price: item.price,
+                                        event: item,
+                                        schedule: item,
+                                    } %}
+
+                                    {% include "_cards/_card-event.twig" with { schedule: [], event: normalisedItem } only %}
+                                {% endif %}
+
+                                {% if item.groupHandle == 'tastings' %}
+                                    {% include '_cards/_card-tasting.twig' with item only %}
+                                {% endif %}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+                    {% if entries|default %}
+                        {% set blogPosts = [] %}
+
+                        {% for entry in entries %}
+                            {% set blogPosts = blogPosts | merge([{
+                                image: entry.articleBanner.image.one().url,
+                                title: entry.title,
+                                description: entry.articleAbstract,
+                                entryType: entry.articleCategory.one().title | default('Article'),
+                                date: entry.postDate,
+                                cta: 'Read more',
+                                entry: entry,
+                                url: entry.url
+                            }]) %}
+                        {% endfor %}
+                        <hr class="seperator">
+
+
+
+                        {% embed "_partials/_card-list.twig" with { additionalClass: 'card-list-mixed--items-2', type: 'mixed', items: blogPosts, appendJsClass: true, pageInfo: paginationInfo, jsPaginateSelector: 'js-paginate-articles' } only %}
+                            {% block title %}<h2 class="heading-primary-sm list-heading">Library</h2>{% endblock %}
+                            {% block item %}
+                                {% include "_cards/_card-article-small.twig" with item only %}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+
+
+
+                    {% if pages|default %}
+                        {% set pagesArray = [] %}
+                        {% for page in pages %}
+                            {% set pagesArray = pagesArray | merge([{
+                                title: page.title,
+                                url: page.url,
+                                image: page.bannerImage.one.url|default ? page.bannerImage.one.url|default : page.banner.image.one.url|default,
+                                description: page.seoDescription,
+                                date: page.postDate,
+                                cta: 'Read more',
+                                entry: page,
+                            }]) %}
+                        {% endfor %}
+                        <hr class="seperator">
+                        {% embed "_partials/_card-list.twig" with { additionalClass: 'card-list-mixed--items-2', type: 'mixed', items: pagesArray, appendJsClass: true, pageInfo: PaginationPages, jsPaginateSelector: 'js-paginate-pages' } only %}
+                            {% block title %}<h2 class="heading-primary-sm list-heading">Pages</h2>{% endblock %}
+                            {% block item %}
+                                {% include "_cards/_card-article-small.twig" with item only %}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+
+
+                    {% if backVintages|default %}
+                        {% set backVintagesArray = [] %}
+                        {% for bv in backVintages %}
+                            {% set backVintagesArray = backVintagesArray | merge([{
+                                title: bv.fullTitle,
+                                url: bv.url~'/#main',
+                                image: bv.backVintages.productImage.one.url|default,
+                                description: bv.backVintages.notes,
+                                pdfLink:bv.backVintages.tastingNotePDF.one().getUrl(),
+                                date: bv.postDate,
+                                cta: 'Read more',
+                                entry: bv,
+                            }]) %}
+                        {% endfor %}
+                        <hr class="seperator">
+                        {% embed "_partials/_card-list.twig" with { additionalClass: 'card-list-mixed--items-2', type: 'mixed', items: backVintagesArray, appendJsClass: true, pageInfo: PaginationbackVintage, jsPaginateSelector: 'js-paginate-bv' } only %}
+                            {% block title %}<h2 class="heading-primary-sm list-heading">Back
+                                Vintages</h2>{% endblock %}
+                            {% block item %}
+                                {% include "_cards/_card-article-small.twig" with item only %}
+                            {% endblock %}
+                        {% endembed %}
+                    {% endif %}
+
+                    {% if ((not wines|default) and (not events|default) and (not backVintageProducts|default) and (not pages|default) and (not entries|default)) %}
+                        <h1 class="text-center search--no-results">Unfortunately, there are no results{{ stateMessage }}
+                            that match your search. Please check your spelling or <a href="#search"
+                                                                                     class="search-header__link">Try
+                                another Search</a></h1>
+                    {% endif %}
+                </div>
+            {% endblock %}
+        {% endembed %}
+    {% endblock %}
+{% endembed %}

@@ -1,0 +1,121 @@
+<div class="checkout__form-row">
+    <div class="form__input-wrap checkout__input-wrap">
+        <label for="checkout-form-firstName" class="checkout__form-label form__label">Full Name</label>
+        {#<div id="custom-error-fullname" style="color: #d1a377; background: #f9f2ec; padding: 10px; margin-bottom: 12px; font-weight: 400;"></div>#}
+        <div class="form__input-error-msg"></div>
+        <input id="checkout-form-fullName"
+               type="text"
+               class="checkout__form-input form__input"
+               name="fullName"
+               placeholder=""
+               value="{{ paymentForm.firstName }} {{ paymentForm.lastName }}"
+               autocomplete="off"
+               maxlength="70"/>
+    </div>
+    {#<div class="form__input-wrap checkout__input-wrap">
+        <label for="checkout-form-firstName" class="checkout__form-label form__label">First Name</label>
+        <div class="form__input-error-msg"></div>#}
+    <input id="checkout-form-firstName-"
+           type="hidden"
+           name="firstName"
+           value="{{ paymentForm.firstName }}"
+           maxlength="70"/>
+    {#</div>
+
+    <div class="form__input-wrap checkout__input-wrap">
+        <label for="checkout-form-lastName" class="checkout__form-label form__label">Last Name</label>
+        <div class="form__input-error-msg"></div>#}
+    <input id="checkout-form-lastName-"
+           type="hidden"
+           name="lastName"
+           value="{{ paymentForm.lastName }}"
+           maxlength="70"/>
+    {#</div>#}
+</div>
+
+<div class="checkout__form-row">
+
+    <div class="form__input-wrap checkout__input-wrap">
+        <label for="checkout-form-number" class="checkout__form-label form__label">Card Number</label>
+        <div class="form__input-error-msg"></div>
+        <input id="checkout-form-number"
+               type="text"
+               class="checkout__form-input form__input"
+               name="number"
+               placeholder="e.g. 0000 0000 0000 0000"
+               value="{{ paymentForm.number }}"
+               autocomplete="off"
+               maxlength="19"/>
+    </div>
+
+</div>
+
+<div class="checkout__form-row">
+    <div class="form__input-wrap checkout__input-wrap">
+        <label for="checkout-form-expiry" class="checkout__form-label form__label">Expiry Date</label>
+        <div class="form__input-error-msg" id="short-expiry"></div>
+        <input id="checkout-form-expiry"
+               type="text"
+               class="checkout__form-input form__input"
+               name="short_expiry"
+               placeholder="01/21"
+               value="{{ paymentForm.expiry }}"
+               autocomplete="off"
+               maxlength="7"/>
+        <div class="form__hint">MM/YY</div>
+        <input type="hidden"
+               id="spreedly-card-expiry"
+               name="expiry"
+               value="{{ paymentForm.expiry }}"
+               maxlength="7"/>
+    </div>
+
+    <div class="form__input-wrap checkout__input-wrap">
+        <label for="checkout-form-cvv" class="checkout__form-label form__label">CVV</label>
+        <div class="form__input-error-msg"></div>
+        <input id="checkout-form-cvv"
+               type="tel"
+               class="checkout__form-input form__input"
+               name="cvv"
+               placeholder="CVV"
+               value="{{ paymentForm.cvv }}"
+               autocomplete="off"
+               maxlength="4"/>
+    </div>
+    {% set errors = [] %}
+    {% for attributeKey in ['number', 'month', 'year', 'cvv'] %}
+        {% set errors = errors|merge(paymentForm.getErrors(attributeKey)) %}
+    {% endfor %}
+    {% js %}
+    function checkFullName() {
+        var fullname = document.getElementById('checkout-form-fullName').value;
+        fullname = fullname.trim()
+        if(fullname) {
+        var fullname_array = fullname.split(/\s/);
+        if(fullname_array.length >= 1 && fullname_array[0]) {
+        document.getElementById('checkout-form-firstName-').value = fullname_array[0]
+        if(fullname_array.length > 1 && fullname_array[1]) {
+        document.getElementById('checkout-form-lastName-').value = fullname_array[1]
+        }
+        }
+        }
+        var short_expiry = document.getElementById('checkout-form-expiry').value;
+        if(short_expiry) {
+        var expiry_array = short_expiry.split('/');
+        if(expiry_array.length > 1) {
+        document.getElementById('spreedly-card-expiry').value = expiry_array[0]+"/20"+expiry_array[1]
+        }
+        }
+        }
+    {% endjs %}
+</div>
+
+
+{#<fieldset class="card-data">#}
+{#    <legend>{{ 'Use for Member payment'|t('commerce') }}</legend>#}
+{#    <div class="grid" data-cols="2">#}
+{#        <div class="item" data-colspan="2">#}
+{#            <label><input type="checkbox" value=true name="useForMemberPayment" />Use for membership</label>#}
+{#        </div>#}
+{#    </div>#}
+{#</fieldset>#}

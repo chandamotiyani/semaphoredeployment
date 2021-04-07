@@ -1,0 +1,34 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{# @var metaBundle \nystudio107\seomatic\models\MetaBundle #}
+
+{% requirePermission "seomatic:content-meta" %}
+
+{% extends 'seomatic/_layouts/seomatic-cp.twig' %}
+{% import '_includes/forms' as forms %}
+
+{% block contextMenu %}
+    {% include "seomatic/settings/_includes/sites-menu.twig" %}
+{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+
+{% block foot %}
+    {{ parent() }}
+    {{ seomatic.manifest.registerJsModules([
+        'content-seo.js',
+    ]) }}
+{% endblock %}
+
+{% set content %}
+<div class="readable">
+    <div id="cp-nav-content">
+        <content-seo-table
+                :site-id="{{ currentSiteId }}"
+                :api-url="'{{ actionUrl('seomatic/content-seo/meta-bundles') }}'"
+        >
+        </content-seo-table>
+    </div>
+</div>
+{% endset %}

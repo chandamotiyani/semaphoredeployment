@@ -1,0 +1,79 @@
+{% block primaryNavigation %}
+    
+{% set nodes = craft.navigation.nodes().handle('primaryNavigation').level(1).all() %}
+
+
+    {% if nodes %}
+        <nav class="primary-navigation headroom--pinned has-pinned">
+            {% set splitMenu = chunkByProperty(nodes, { property: 'classes', value: 'divider' } ) %}
+
+
+                <ul class="primary-navigation__list primary-navigation__list--left">
+                    {% for node in splitMenu.first %}
+                        {% if node.level == 1 %}
+                        <li class="primary-navigation__item {{ node.classes }}">
+                            <a href="{{ node.url }}" class="primary-navigation__link {{ node.active or node.hasActiveChild ? 'primary-navigation__link--active' }}">{{ node.title }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+
+            <a href="{{ siteUrl }}" class="primary-navigation__logo-container">
+                <div class="primary-navigation__logo primary-navigation__logo--small">
+                    <img src="{{ alias('@assetBaseUrl/img/mobile-logo.png') }}" alt="logo">
+                </div>
+                <div class="primary-navigation__logo primary-navigation__logo--large">
+                    <img src="{{ alias('@assetBaseUrl/img/logo.png') }}" alt="logo">
+                </div>
+                <div class="primary-navigation__logo primary-navigation__logo--sticky">
+                    <img src="{{ alias('@assetBaseUrl/img/sticky-logo.png') }}" alt="logo">
+                </div>
+            </a>
+
+            <ul class="primary-navigation__list primary-navigation__list--right">
+
+
+                    {% for node in splitMenu.last %}
+                        {% if node.level == 1 %}
+                        <li class="primary-navigation__item {{ node.classes }}">
+                            <a href="{{ node.url }}" class="primary-navigation__link {{ node.active or node.hasActiveChild ? 'primary-navigation__link--active' }}">{{ node.title }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+             
+                <li class="primary-navigation__item primary-navigation__item--icons">
+                    <ul class="primary-navigation__icons">
+
+                        <li>
+                            <a href="#wishlist" class="">
+                                {% include 'shop/_cart/wishlist-item-count' %}
+                                <svg class="primary-navigation__icon primary-navigation__icon--user"><use xlink:href="#user-icon"></use></svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#cart-summary" class="">
+                                {% include 'shop/_cart/cart-item-count' %}
+                                <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#cart-icon"></use></svg>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#search" class="">
+
+                                <svg class="primary-navigation__icon primary-navigation__icon--search"><use xlink:href="#search-icon"></use></svg>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="" id="data-menu-open">
+                                <svg class="primary-navigation__icon primary-navigation__icon--menu"><use xlink:href="#menu-icon"></use></svg>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+           
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}

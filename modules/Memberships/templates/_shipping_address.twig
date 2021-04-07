@@ -1,0 +1,54 @@
+{% if(address) %}
+    <table class="data fullwidth collapsible">
+        <tr>
+            <th>Attention</th>
+            <td>{{ address.attention }}</td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td>{{ address.title }}</td>
+        </tr>
+        <tr>
+            <th>First Name</th>
+            <td>{{ address.firstName }}</td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td>{{ address.lastName }}</td>
+        </tr>
+        <tr>
+            <th>Address 1</th>
+            <td>{{ address.address1 }}</td>
+        </tr>
+        <tr>
+            <th>Address 2</th>
+            <td>{{ address.address2 }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ address.city }}</td>
+        </tr>
+        <tr>
+            <th>Zip Code</th>
+            <td>{{ address.zipCode }}</td>
+        </tr>
+        <tr>
+            <th>phone</th>
+            <td>{{ address.phone }}</td>
+        </tr>
+        <tr>
+            <th>Alternative Phone</th>
+            <td>{{ address.alternativePhone }}</td>
+        </tr>
+        <tr>
+            <th>Business Name</th>
+            <td>{{ address.businessName }}</td>
+        </tr>
+        <tr>
+            <th>State Name</th>
+            <td>{{ address.stateName }}</td>
+        </tr>
+    </table>
+{% else %}
+    <p>No subscription shipping address set</p>
+{% endif %}

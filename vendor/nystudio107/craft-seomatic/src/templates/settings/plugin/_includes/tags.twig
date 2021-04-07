@@ -1,0 +1,94 @@
+{% import "_includes/forms" as forms %}
+{% from "seomatic/settings/_includes/macros.twig" import configWarning %}
+
+<div id="tags" class="hidden">
+    {% namespace "settings" %}
+
+        {{ forms.lightswitchField({
+            label: "Add `hreflang` Tags"|t("seomatic")|md,
+            instructions: "Controls whether SEOmatic will automatically add `hreflang` and `og:locale:alternate` tags. [Learn More](https://support.google.com/webmasters/answer/189077)"|t("seomatic"),
+            id: "addHrefLang",
+            name: "addHrefLang",
+            on: settings.addHrefLang,
+            warning: configWarning("addHrefLang", "seomatic"),
+            errors: settings.getErrors("addHrefLang"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Include `x-default` `hreflang` Tag"|t("seomatic")|md,
+            instructions: "Controls whether SEOmatic will automatically include an `x-default` `hreflang` tag. [Learn More](https://webmasters.googleblog.com/2013/04/x-default-hreflang-for-international-pages.html)"|t("seomatic"),
+            id: "addXDefaultHrefLang",
+            name: "addXDefaultHrefLang",
+            on: settings.addXDefaultHrefLang,
+            warning: configWarning("addXDefaultHrefLang", "seomatic"),
+            errors: settings.getErrors("addXDefaultHrefLang"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Include Paginated `hreflang` Tags"|t("seomatic")|md,
+            instructions: "Controls whether SEOmatic will automatically include `hreflang` tags on paginated pages. [Learn More](https://moz.com/community/q/hreflang-alternate-pagination)"|t("seomatic"),
+            id: "addPaginatedHreflang",
+            name: "addPaginatedHreflang",
+            on: settings.addPaginatedHreflang,
+            warning: configWarning("addPaginatedHreflang", "seomatic"),
+            errors: settings.getErrors("addPaginatedHreflang"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Generator Enabled"|t("seomatic"),
+            instructions: "Controls whether SEOmatic will include the meta `generator` tag and `X-Powered-By` header."|t("seomatic"),
+            id: "generatorEnabled",
+            name: "generatorEnabled",
+            on: settings.generatorEnabled,
+            warning: configWarning("generatorEnabled", "seomatic"),
+            errors: settings.getErrors("generatorEnabled"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "HTTP Headers Enabled"|t("seomatic"),
+            instructions: "Controls whether SEOmatic will automatically add `X-Robots-Tag`, `canonical`, & `Referrer-Policy` to the http response headers."|t("seomatic"),
+            id: "headersEnabled",
+            name: "headersEnabled",
+            on: settings.headersEnabled,
+            warning: configWarning("headersEnabled", "seomatic"),
+            errors: settings.getErrors("headersEnabled"),
+        }) }}
+
+        {{ forms.selectField({
+            label: "Nonces for `<script>` tags"|md|t("seomatic"),
+            instructions: "Whether SEOmatic should automatically add `script-src` [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) nonces to `<script>` tags (including JSON-LD)."|md|t("seomatic"),
+            id: "cspNonce",
+            name: "cspNonce",
+            value: settings.cspNonce,
+            options: {
+                "": "None"|t("seomatic"),
+                "tag": "Meta Tags"|t("seomatic"),
+                "header": "Response Headers"|t("seomatic"),
+            },
+            warning: configWarning("cspNonce", "seomatic"),
+            errors: settings.getErrors("cspNonce"),
+        }) }}
+
+        {{ forms.editableTableField({
+            label: "Fixed `script-src` Content Security Policies"|md|t("seomatic"),
+            instructions: "Fixed [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src) `script-src` policies that should be added before the Nonces"|md|t("seomatic"),
+            id: 'cspScriptSrcPolicies',
+            name: 'cspScriptSrcPolicies',
+            required: false,
+            defaultValues: {
+                policy: "",
+            },
+            cols: {
+                policy: {
+                    heading: "Content Security Policy"|t("seomatic"),
+                    type: "singleline",
+                    width: "100%",
+                    code: true,
+                },
+            },
+            rows: settings.cspScriptSrcPolicies,
+            errors: settings.getErrors("cspScriptSrcPolicies"),
+        }) }}
+
+    {% endnamespace %}
+</div>

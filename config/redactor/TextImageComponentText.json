@@ -1,0 +1,10 @@
+{
+	"toolbarFixed": false,
+	"replaceDivs": false,
+	"linebreaks": true,
+	"breakline": true,
+	"pastePlainText": true,
+	"source": true,
+	"linkNewTab": true,
+	"buttons": ["bold", "italic", "link"]
+}

@@ -1,0 +1,58 @@
+{% cache unless craft.commerce.customers.customer.user|default %}
+
+	{% set bannerFocalPoint = component.image.one().focalPoint|isNumeric ? component.image.one().focalPoint : 1 %}
+	{% set bannerImageUrl = component.image.one().getUrl('banner')|default('') %}
+	{% set bannerVideoId = component.video|default('') %}
+	{% set bannerPosition = textPosition is defined ? " hero--position-#{ textPosition }" : '' %}
+	{% set bannerOverlay = component.overlay is defined ? " hero--#{ component.overlay }" : '' %}
+	{% set bannerSize = small is defined and small ? " hero--small" : '' %}
+	{% set bannerHeading = component.heading is defined ? component.heading : heading|default(false) %}
+	{% set bannerSuper = component['bannerSuper']|default %}
+	{% set buttonTarget = component.externalUrl ? 'target=__blank' : '' %}
+	{% set buttonUrl = component.buttonLink.one and component.buttonLink.one.url ? component.buttonLink.one.url : component.buttonUrl %}
+	
+
+	<header class="hero container-fluid{{ bannerPosition }}{{ bannerOverlay }}{{ bannerSize }} t-white-on-black js-hero" style="background-image: url('{{ bannerImageUrl }}'); background-position: {{ bannerFocalPoint|first * 100 }}% {{ bannerFocalPoint|last * 100 }}%">
+		{% if bannerVideoId | length %}
+			<div class="hero__video js-vimeo" data-id="{{ bannerVideoId }}" data-background="true"></div>
+		{% endif %}
+		<summary class="hero__content">
+			<div class="hero__maxwidth">
+				{% if bannerSuper %}
+					<div class="hero__sub-title">{{ bannerSuper }}</div>
+				{% endif %}
+				{% if bannerHeading %}
+				<h1 class="hero__title">{{ bannerHeading | typogrify(true) }}</h1>
+				{% endif %}
+				{% if component.text is defined and component.text %}
+					<div class="hero__text">{% block text %}{{ component.text | typogrify(true) }}{% endblock %}</div>
+				{% endif %}
+			</div>
+			{% if block('extended') is not empty %}
+				<div class="hero__extended">{% block extended %}{% endblock %}</div>
+			{% endif %}
+			{% if component.buttonText is defined and component.buttonText | length %}
+				{% if buttonUrl | default | length %}
+					{% if 'members/sign-in' in buttonUrl and craft.commerce.customers.customer.user|default %}
+						<a href="/logout" class="hero__button" {{ buttonTarget }}>Sign Out</a>
+					{% else %}
+						<a href="{{ buttonUrl }}" class="hero__button" {{ buttonTarget }}>{{ component.buttonText }}</a>
+					{% endif %}
+				{% else %}
+					<a class="hero__button js-scroll-to-content">{{ component.buttonText }}</a>
+				{% endif %}
+			{% endif %}
+		</summary>
+
+		{% if bigScrollCTA is defined and bigScrollCTA %}
+			<a href="#" class="hero__scroll-big" id="hero__scroll">
+				<div class="hero__scroll-cta">Scroll to discover</div>
+				<svg class="hero__scroll-icon"><use xlink:href="#chev-down"></use></svg>
+			</a>
+		{% else %}
+			<a href="#" class="hero__scroll" id="hero__scroll">
+				<svg class="hero__scroll-icon"><use xlink:href="#chev-down"></use></svg>
+			</a>
+		{% endif %}
+	</header>
+{% endcache %}

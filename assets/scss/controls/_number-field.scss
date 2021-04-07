@@ -1,0 +1,47 @@
+.number-field {
+	display: flex;
+	align-items: center;
+	min-width: 84px;
+	justify-content: flex-end;
+
+	&__plus,
+	&__minus {
+		background: none;
+		border: none;
+		font-size: 12px;
+		font-weight: 600;
+		cursor: pointer;
+		font-family: inherit;
+		color: $black;
+		padding-bottom: 0;
+		padding: 2px;
+	}
+
+	&__plus {}
+
+	&__minus {
+		margin-top: -2px;
+	}
+
+	&__input {
+		width: 48px;
+		height: 20px;
+		font-size: 15px;
+		font-weight: 900;
+		background: $background-secondary;
+		border: none;
+		text-align: center;
+		cursor: pointer;
+		font-family: $font-primary;
+		color: $text-color-primary;
+
+		@at-root .cart-sticky-header & {
+			color: $white;
+		}
+	}
+
+	span {
+		margin-top: 3px;
+    margin-right: 13px;
+	}
+}

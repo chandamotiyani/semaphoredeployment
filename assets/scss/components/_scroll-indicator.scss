@@ -1,0 +1,116 @@
+// Note that the array is zero-based, and the first item ('Introduction' on the Heritage page) is explicitly hidden by client request. '.' will never be seen.
+$roman-numerals: '.', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X';
+
+.scroll-indicator {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: $scroll-indicator-width;
+	height: 100vh;
+	z-index: $z-scroll-indicator;
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	justify-items: center;
+	padding-right: 1em;
+
+	color: $white;
+	@extend .heading-secondary-sm;
+
+	@include media-breakpoint-down($single-column-breakpoint) {
+		display: none;
+	}
+	
+	&__items {
+		// background-color: #f00;
+		display: flex;
+		flex-direction: column;
+		border-right: 1px solid transparentize($grey, 0.75);
+		padding-right: 2em;
+		min-height: 1/3*100vh;
+
+		& > li {
+			width: 2em;
+			text-align: right;
+			transition-duration: 0.25s;
+			transition-property: color;
+			cursor: pointer;
+
+			// First child ('Introduction' on the Heritage page) is explicitly hidden by client request
+			&:first-child {
+				display: none;
+			}
+
+			&:not(:last-child) {
+				margin-bottom: 2em;
+			}
+
+			&.is-active {
+				color: $brand-primary;
+			}
+		}
+
+		@each $numeral in $roman-numerals {
+			$i: index($roman-numerals, $numeral);
+	
+			& > li:nth-child(#{$i}):after {
+				display: block;
+				// border: 2px solid #0FF;
+				content: $numeral;
+			}
+		}
+	}
+
+	&__stepper {
+		display: flex;
+		position: fixed;
+		bottom: $scroll-indicator-width / 2;
+		left: $scroll-indicator-width;
+		z-index: $z-section-stepper;
+	}
+
+	&__previous, &__next {
+		position: relative;
+		// padding: 1em;
+		// background-color: #F00;
+		font-size: 2em;
+		width: 1em;
+		height: 1em;
+		opacity: 0.5;
+		cursor: pointer;
+
+		&:after
+		{
+			content: '';
+			display: block;
+			border-bottom: 1.5px solid $white;
+			border-right: 1.5px solid $white;
+			width: 1em;
+			height: 1em;
+			transform-origin: center;
+			
+			transition-property: opacity;
+			transition-duration: 0.25s;
+			transition-timing-function: easeOutQuad;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+
+		&.is-disabled {
+			opacity: 0.1;
+			pointer-events: none;
+		}
+	}
+
+	&__previous:after {
+		transform: rotate(135deg) scale(0.75);
+	}
+	
+	&__next:after {
+		transform: rotate(-45deg) scale(0.75);
+	}
+}

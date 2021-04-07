@@ -1,0 +1,119 @@
+.cart-summary {
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-self: flex-end;
+    margin-left: auto;
+    position: relative;
+    z-index: 10;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      width: 1440px;
+
+      @at-root .modal--signed-in & {
+        width: 900px;
+      }
+    }
+  }
+
+  &__col {
+    flex: 1;
+    flex-basis: 43%;
+
+    @include media-breakpoint-down(sm) {
+      max-width: 100%;
+      margin-left: 0px;
+      padding: 3.5rem 3rem;
+    }
+
+    &--right {
+      background: $background-primary;
+      flex-basis: 57%;
+      max-width: 57%;
+      margin-left: auto;
+
+      @at-root .modal--signed-in & {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
+
+      @include media-breakpoint-down(sm) {
+        max-width: 100%;
+        margin-left: 0px;
+      }
+    }
+
+    &--left {
+      background: $background-tertiary;
+      flex-basis: 43%;
+      color: $white;
+
+      @include media-breakpoint-down(sm) {
+        padding: 3.5rem;
+      }
+    }
+  }
+
+  &__heading {
+    @extend .heading-primary-lg;
+
+    color: $black;
+    margin-top: 0;
+    line-height: 0.8;
+    margin-bottom: 6rem;
+    position: relative;
+
+    @at-root .cart-summary__col--left & {
+      color: $white;
+      margin-bottom: 0;
+      cursor: pointer;
+
+      @include media-breakpoint-up(md) {
+        cursor: default;
+      }
+    }
+  }
+
+  &__text {
+    @extend .body-text;
+  }
+
+  &__cart-items {
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-right: 30px;
+    margin-right: -30px;
+    list-style: none;
+    overflow: hidden;
+//    border-bottom: solid 1px $brand-tertiary;
+  }
+
+  .product-form__button.product-form__cart-add-btn {
+    @extend .body-text;
+
+    color: $text-color-primary;
+    text-decoration: underline;
+    font-weight: normal;
+    font-style: normal;
+    padding: 0;
+    text-transform: capitalize;
+    cursor: pointer;
+
+    &:hover {
+      color: lighten($text-color-primary, 0.5);
+      text-decoration: none;
+    }
+  }
+}
+
+.cart-summary--add-to-cart {
+  @extend .modal--signed-in;
+
+  .cart-summary__col--left {
+    display: none;
+  }
+}

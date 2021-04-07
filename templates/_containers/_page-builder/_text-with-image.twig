@@ -1,0 +1,39 @@
+
+	{% set textWithImage = component.textWithImage %}
+
+	{% set buttons = [] %}
+
+	{% for button in textWithImage.buttons.all() %}
+		{% set buttons = buttons | merge([{
+			label: button.label,
+			entry: button.type.handle == 'entryButton' ? button.entry.one()
+			: (button.type.handle == 'externalUrl') ? {
+				url: button.linkUrl,
+				target: button.buttonAttributes.options[0].selected ? 'target=_blank' : ''
+			}
+			: (button.type.handle == 'buttonAddAsAGift') ? { url: '#add-gift', product: button.product.one() }
+			: (button.type.handle == 'addToCartButton') ? { url: '#add-to-cart', product: button.product.one(), addCurrentProduct: addCurrentProductToCart|default }
+		}]) %}
+	{% endfor %}
+
+	{%
+		set fields = {
+			constrainImageTo: textWithImage.imageAspectRatio | default,
+			icon: textWithImage.icon.one() | default,
+			image: textWithImage.image.one() | default,
+			imagePosition: textWithImage.imagePosition,
+			buttons: buttons,
+			textAlign: textWithImage.textAlignment | default,
+			super: textWithImage.super | default,
+			heading: textWithImage.heading | default,
+			text: textWithImage.copy | default,
+			colourScheme: textWithImage.colourScheme | kebabCase,
+			vimeoVideoId: textWithImage.vimeoVideoId | default,
+			imageClickableUrl: textWithImage.imageClickable | default ? buttons[0].entry.url,
+			imageClickableTarget: textWithImage.imageClickable | default ? buttons[0].entry.target,
+			product:product|default,
+			removeTopPadding: textWithImage.removeTopPadding | default
+		}
+	%}
+
+	{% include '_views/_text-with-image' with { header: header | default, fields: fields, buttons: buttons, sideHeading: component.sideHeading.one.heading|default } only %}

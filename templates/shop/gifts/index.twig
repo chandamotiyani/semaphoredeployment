@@ -1,0 +1,67 @@
+{% set tabs = [
+	{
+		name: 'Wines',
+		url: '/shop/wines',
+		active: craft.app.request.segments|last == 'wines',
+	},
+	{
+		name: 'Wine Packs and Gifts',
+		url: '/shop/gifts',
+		active: craft.app.request.segments|last == 'gifts',
+	},
+	{
+		name: 'Merchandise',
+		url: '/shop/merchandise',
+		active: craft.app.request.segments|last == 'merchandise'
+	},
+] %}
+
+{% set cart = craft.commerce.getCarts().getCart() %}
+{% set wishList = craft.wishlist.lists().default(true).one() %}
+{% if wishList is null %}
+  {# Forces creation of a new wishlist. A new list doesn't get created until you start interacting with it, but we need the wishlist ID. #}
+	{% set wishList = craft.wishlist.lists(true, true) %}
+{% endif %}
+
+{% embed "_layouts/_listing-page.twig" with { title: 'Wine Packs and Gifts', image: alias('@assetBaseUrl/img/wine-listing-cover.jpg'), tabs: tabs } %}
+
+{% set items = craft
+	.products()
+	.withPermission()
+	.type(['gifts']).with([
+		'productinfogift',
+		['productinfogift.productImageFront', {
+			withTransforms: ['packsListingImage']
+    }],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		])
+%}
+
+  {% block list %}
+			{% embed '_layouts/_section.twig' %}
+				{% block body %}
+					<div class="js-product-listing card-list">
+						{% if items|default %}
+              {% embed "_partials/_card-list.twig" with { cart: cart, items: items, type: 'product--gift', wishList: wishList } only %}
+        				{% block item %}
+									{% include "_containers/_shop/_product-gifts-card" with { wine: item, cart: cart, wishList: wishList } only %}
+								{% endblock %}
+							{% endembed %}
+            {% else %}
+              <div class="card-list-product card-list-product--empty">
+                <h2 class="heading">Sorry - no items exist.</h2>
+              </div>
+            {% endif %}
+
+					</div>
+				{% endblock %}
+			{% endembed %}
+
+  {% endblock %}
+{% endembed %}

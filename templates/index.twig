@@ -1,0 +1,11 @@
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% include "_page-builder-components/hero.twig" with { component: entry.banner } %}
+{% endblock %}
+
+{% block content %}
+	{% for component in entry.homepagePageBuilder.all() %}
+		{% include [ "_containers/_home/_" ~ component.type.handle | kebabCase, "_containers/_page-builder/_unsupported" ]  with { component: component | default } only %}
+	{% endfor %}
+{% endblock %}

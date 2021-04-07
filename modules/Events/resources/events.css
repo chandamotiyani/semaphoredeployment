@@ -1,0 +1,7 @@
+.filter-buttons a.active{
+    text-decoration: underline;
+}
+
+.data-row.past{
+    background: #f8f8f8;
+}

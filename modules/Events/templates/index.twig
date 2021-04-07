@@ -1,0 +1,14 @@
+{% extends '_layouts/elementindex' %}
+{% set title = 'Events' %}
+{% set elementType = 'modules\\Events\\Elements\\Event' %}
+
+{% js %}
+	Craft.Events.editableEventTypes = [
+        {% for eventType in craft.eventgroups().all() %}
+            {id: "{{ eventType.uid }}", name: "{{ eventType.name|e('js') }}", handle: "{{ eventType.handle|e('js') }}"}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+    {% if eventGroupHandle is defined %}
+	    window.defaultEventTypeHandle = '{{ eventGroupHandle }}';
+	{% endif %}
+{% endjs %}

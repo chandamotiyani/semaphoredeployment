@@ -1,0 +1,12 @@
+{% set image = image ?? component.image | default(alias('@assetBaseUrl/img/cover.jpg')) %}
+
+{% set bannerFocalPointX = focalPoint|default ? focalPoint|first * 100 : '50%' %}
+{% set bannerFocalPointY = focalPoint|default ? focalPoint|last * 100 : '50%' %}
+
+<div class="hero hero--small container-fluid {{ tabs|default|length ? 'hero--has-tabs' }}" style="background-image: url('{{ image }}'); background-position: {{ bannerFocalPointX }}% {{ bannerFocalPointY }}%">
+  <div class="hero__content">
+    <h1 class="hero__title">{{ title|default('') | typogrify(true) }}</h1>
+  </div>
+</div>
+
+<div id="app"></div>

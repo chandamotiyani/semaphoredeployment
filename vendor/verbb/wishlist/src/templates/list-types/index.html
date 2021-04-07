@@ -1,0 +1,60 @@
+{% extends 'wishlist/_layouts' %}
+{% import '_includes/forms' as forms %}
+
+{% do view.registerAssetBundle('craft\\web\\assets\\admintable\\AdminTableAsset') -%}
+
+{% set title = 'List Types' | t('wishlist') %}
+{% set selectedSubnavItem = 'listTypes' %}
+
+{% set crumbs = [
+    { label: craft.wishlist.getPluginName() | t('wishlist'), url: url('wishlist') },
+    { label: 'List Types' | t('wishlist'), url: url('wishlist/list-types') },
+] %}
+
+{% set editable = craft.app.config.general.allowAdminChanges %}
+
+{% block actionButton %}
+    {% if editable %}
+        <a href="{{ url('wishlist/list-types/new') }}" class="btn submit add icon">{{ 'New list type' | t('wishlist') }}</a>
+    {% endif %}
+{% endblock %}
+
+{% block blockContent %}
+    <div id="types-vue-admin-table"></div>
+{% endblock %}
+
+{% set tableData = [] %}
+
+{% for type in listTypes %}
+    {% set tableData = tableData | merge([{
+        id: type.id,
+        title: type.name | t('site'),
+        url: editable ? type.cpEditUrl : '',
+        handle: type.handle | e,
+        default: type.default ? true : false,
+        _showDelete: editable,
+    }]) %}
+{% endfor %}
+
+{% js %}
+    var columns = [
+        { name: '__slot:title', title: Craft.t('app', 'Name') },
+        { name: '__slot:handle', title: Craft.t('app', 'Handle') },
+        { name: 'default', title: Craft.t('wishlist', 'Default?'),
+            callback: function(value) {
+                if (value) {
+                    return '<span data-icon="check" title="' + Craft.t('app', 'Yes') + '"></span>';
+                }
+            }
+        },
+    ];
+
+    new Craft.VueAdminTable({
+        columns: columns,
+        container: '#types-vue-admin-table',
+        deleteAction: 'wishlist/list-types/delete-list-type',
+        deleteConfirmationMessage: Craft.t('wishlist', "Are you sure you want to delete “{name}” and all its lists?"),
+        emptyMessage: Craft.t('wishlist', 'No list types exist yet.'),
+        tableData: {{ tableData | json_encode | raw }},
+    });
+{% endjs %}

@@ -1,0 +1,34 @@
+.card-list-usp-six-up {
+	@include list;
+	@include list-gutters-horizontal;
+	@include list-gutters-vertical(0.5);
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+
+	&__item {
+		justify-content: center;
+		// align-content: center;
+	}
+
+	// Optical adjustments
+	@include media-breakpoint-down(md) {
+		padding: 0 $padding-large / 2;
+	}
+
+	&__item {
+		max-width: 1/2*100%;
+		flex-basis: 1/2*100%;
+
+		@include media-breakpoint-up(xs) {
+			flex-basis: 1/3*100%;
+		}
+
+		@include media-breakpoint-up(xl) {
+			flex-basis: 1/6*100%;
+		}
+	}
+}

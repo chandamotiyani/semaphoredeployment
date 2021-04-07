@@ -1,0 +1,50 @@
+<div class="order-summary">
+  <div class="order-summary__items">
+
+    {% if hideOrderStatus|default(false) == false %}
+      {% set orderStatus = {
+        'new': 'New',
+        'confirmed': 'Confirmed',
+        'shipped': 'On its way',
+        'completed': 'Completed',
+      } %}
+{# Where is the cancelled? #}
+{# What is the default? #}
+
+      {% set activeStatus = order.order.orderStatus.handle %}{# example #}
+
+      {% if activeStatus == 'canceled' %}
+        <div class="order-status">
+          <span class="" style="padding: 5px 20px; background: red; color: white; margin: 2rem;">Cancelled</span>
+        </div>
+      {% else %}
+        <div class="order-status">
+          {% for key, status in orderStatus %}
+            <div class="order-status__status {{ key == activeStatus ? 'order-status__status--active' : '' }}">
+              <span class="order-status__text">{{ status }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    {% endif %}
+    <ul class="order-summary__list">
+
+      {% if order.couponCode and hasDiscountApplied(order) %}
+         <span class="order-summary__coupon-text">Coupon <strong class="order-summary__coupon-code">{{ order.couponCode }}</strong> has been applied to this order.</span>
+      {% endif %}
+
+      {% if items|default %}
+        {% for item in items|sort((a, b) => b.dateCreated <=> a.dateCreated) %}
+          {% include "members/_partials/"~lineItemTemplate|default('line-item') with { item: item, showLink: showProductLink|default } %}
+        {% endfor %}
+
+        {% include "members/_partials/adjustments" with { order: orderDetail } %}
+      {% endif %}
+
+    </ul>
+  </div>
+
+  {% include "members/_partials/order-summary-total" with { order: order } %}
+
+</div>

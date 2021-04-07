@@ -1,0 +1,132 @@
+<div class="search-header-container">
+  <div class="search-header">
+    <div class="filters__container">
+      <div class="filters__show-filter-buttons hidden-desktop">
+        <strong class="filters__show-filter-buttons-button js-toggle-target" data-toggle-target-class="filters">Filter
+          By:</strong>
+        <strong class="filters__show-filter-buttons-button js-toggle-target" data-toggle-target-class="sort">Sort
+          By:</strong>
+      </div>
+      <form class="filters js-product-filters" action="/shop/wines/">
+        <div class="search-header__col search-header__col">
+          <strong class="filters__list-title hidden-desktop">Search Wines</strong>
+          <strong class="filters__list-title hidden-mobile">Filter By:</strong>
+          <a href="#" class="filters__list-close hidden-desktop js-toggle-target" data-toggle-target-class="filters">
+            <svg class="exceptions-list__icon--close">
+              <use xlink:href="#close"></use>
+            </svg>
+          </a>
+
+          <ul class="filters__list">
+            {# Category Filters #}
+            {% for filterTitle, filterName in categoryFilters %}
+              {% set wineTypeIds = craft.app.request.getParam(filterName) | split(',') %}
+
+              {% if craft.productService.category() %}
+                {% set wineTypeIds = craft.productService.category() %}
+              {% endif %}
+
+              <li class="filters__list-item filters__list-item--dropdown collapsible">
+                <span class="filters__list-item-text collapsible__trigger">{{ filterTitle }}</span>
+                {% set wineCategoryQuery = craft.categories().group(filterName).level(1) %}
+                {% if wineCategoryQuery %} {# get category from ID level 1 only #}
+                  {% set filters = [] %}
+                  {% for node in wineCategoryQuery.all %}
+                    {% set children = [] %}
+                    {% for child in node.children.all %}
+                      {% set children = children|merge([{
+                        name: filterName,
+                        value: child.id,
+                        label: child.title,
+                        blockClass: 'checkout',
+                        checked: (child.id in wineTypeIds|default(0)),
+                        id: 'tag-'~child.id
+                      }]) %}
+
+                    {% endfor %}
+
+                    {% set filters = filters|merge([{
+                      title : node.title,
+                      children : children,
+                      hasChildren : true,
+                    }]) %}
+                  {% endfor %}
+                {% endif %}
+
+                {# Checkboxes #}
+                {% include 'shop/_partials/product-filter-group' with { filters: filters } %}
+              </li>
+            {% endfor %}
+
+            {# Custom Field Filters #}
+            {% for filterTitle, filterName in customFieldFilters %}
+              {% set fieldValues = craft.app.request.getParam(filterName) | split(',') %}
+
+              <li class="filters__list-item filters__list-item--dropdown collapsible">
+                <span class="filters__list-item-text collapsible__trigger">{{ filterTitle }}</span>
+
+                {% set field = craft.app.fields.getFieldByHandle(filterName) %}
+
+                {# Select boxes #}
+                {% if field.options|default %}
+                  {% set filters = [] %}
+                  {% set children = [] %}
+                  {% for option in field.options %}
+                    {% set children = children|merge([{
+                      name: filterName,
+                      value: option.value,
+                      label: option.label,
+                      blockClass: 'checkout',
+                      checked: (option.value in fieldValues|default(0)),
+                      id: 'tag-'~option.value
+                    }]) %}
+                  {% endfor %}
+
+                  {% set filters = filters|merge([{
+                    title : filterTitle,
+                    children : children,
+                    hasChildren : true,
+                  }]) %}
+
+                  {% include 'shop/_partials/product-filter-group' with { filters: filters } %}
+                {% endif %}
+
+                {# Checkboxes #}
+              </li>
+            {% endfor %}
+
+          </ul>
+
+        </div>
+        <div class="search-header__col search-header__col--sort hidden-mobile">
+          <span class="filters__list-title">Sort By:</span>
+          {% include "_forms/select-group" with { name: 'sort', label: 'Sort By', blockClass: 'filter', options: sortFields } %}
+        </div>
+
+        <div class="sort hidden-desktop">
+          <strong class="filters__list-title hidden-desktop">Sort Wines</strong>
+          <a href="#" class="filters__list-close hidden-desktop js-toggle-target" data-toggle-target-class="sort">
+            <svg class="exceptions-list__icon--close">
+              <use xlink:href="#close"></use>
+            </svg>
+          </a>
+					<ul class="filters__dropdown-list filters__dropdown-list--sort">
+						<li class="filters__dropdown-list-item">
+							{% include "_forms/radio" with { name: 'sort', value: 'defaultPrice|DESC', label: 'Price Highest', blockClass: 'checkout' } %}</li>
+						<li class="filters__dropdown-list-item">
+							{% include "_forms/radio" with { name: 'sort', value: 'defaultPrice|ASC', label: 'Price Lowest', blockClass: 'checkout' } %}</li>
+					</ul>
+        </div>
+
+
+        <div class="filters__dropdown-panel-row hidden-desktop">
+          <a href="#" class="boxed-button filters__dropdown-panel-button filters__dropdown-panel-button--mobile js-toggle-target" data-toggle-target-class="filters">View Results</a>
+        </div>
+      </form>
+    </div>
+    <div class="filters__filter-list">
+      <label for="" class="tag tag--tmp" style="display: none">All red wines</label>
+    </div>
+    <!--button href="#" class="filters__dropdown-clear-btn">Clear All</button-->
+  </div>
+</div>

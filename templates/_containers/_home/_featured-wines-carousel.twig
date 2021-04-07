@@ -1,0 +1,65 @@
+{% set wines = [] %}
+
+{% set introFields = {
+	template: 'card-carousel-text',
+	title: '',
+	copy: ''
+} %}
+
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+
+
+{% for wine in component.featuredWines.one.wines.withPermission.with([
+	'productInfo',
+	['variants.productImageFront', {
+		withTransforms: ['carouselWineBottle']
+	}],
+	'variants.bottleSizes',
+	'variants',
+	'regionsCategory',
+	'wineType',
+	'collections',
+	'varieties',
+	'vintage',
+	]).all() %}
+
+	{% set purchasable = wine.defaultVariant %} {# use the default variation for cart listings #}
+		{% set lineItem = null %}
+		{% for item in cart.lineItems %}
+			{% if item.purchasableId is defined and purchasable.id == item.purchasableId  %}
+				{% set lineItem = item %}
+			{% endif %}
+		{% endfor %}
+
+		{% set wines = wines | merge([{
+				template: 'card-product',
+				id: wine.id,
+				title: wine.title,
+				image: wine.defaultVariant.productImageFront[0].url ?? '',
+				subtitleHover: wine.collections|joinCategoryTitle(2),
+				subtitle: wine.regionsCategory[1]|default ? wine.regionsCategory|joinCategoryTitle(2),
+				description: wine.productInfo[0].shortDescription|default,
+				variety: wine.varieties[1]|default ? wine.varieties|joinCategoryTitle(2),
+				vintage: wine.productInfo[0].vintage|default('non vintage'),
+				height: wine.variants[0].bottleSizes|join(' ') | default(13),
+				price: purchasable.salePrice|currency('AUD', stripZeros = true)|replace('$'),
+				rrpPrice: purchasable.price|currency('AUD', stripZeros = true)|replace('$'),
+				qtyInCart: lineItem.qty|default(0),
+				lineItemId: lineItem.id|default(0),
+				purchasableId: purchasable.id,
+				outOfStock:  purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false,
+				url: wine.url,
+				premiseOnly: wine.premiseOnly.options|default ? wine.premiseOnly.options[0].selected : false,
+				disableBuyButton: (purchasable.getIsAvailable() == false) or (wine.premiseOnly.options|default and wine.premiseOnly.options[0].selected) or (purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false)|default(false),
+				isMembersOnly: wine|isMembersOnly,
+				imageSrcSet: [120, 200],
+				imageSizes: ['(max-width: 1200px) 120px', '200px'],
+		}]) %}
+{% endfor %}
+
+{% set sideHeading = component.sideHeading.one.heading | default %}
+
+{% include '_views/_homepage-featured-wines-carousel' with { wines: wines, sideHeading: sideHeading } only %}

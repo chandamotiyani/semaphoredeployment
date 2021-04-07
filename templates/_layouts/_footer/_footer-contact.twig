@@ -1,0 +1,31 @@
+<div class="footer__contact">
+    <div class="footer__contact-row">
+        <div class="footer__contact-col">
+            <h4 class="footer__sub-heading">Visit</h4>
+            <div class="footer__contact-content">
+                {{ businessInformation.businessAddress|default('') }}
+            </div>
+        </div>
+        <div class="footer__contact-col">
+            <h4 class="footer__sub-heading">Hours</h4>
+            <div class="footer__contact-content">
+                {{ businessInformation.openingHours|default('') }}
+            </div>
+        </div>
+        <div class="footer__contact-col">
+            <h4 class="footer__sub-heading">Contact</h4>
+            <div class="footer__contact-content">
+                    {{ businessInformation.contactInformation|default('') }}
+                <ul class="footer__social-list">
+                  {% for network in businessInformation.social %}
+                    <li class="footer__social-list-item">
+                        <a href="{{ network.socialUrl }}" target="_blank">
+                            <svg><use xlink:href="#{{ network.socialType }}"></use></svg>
+                        </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

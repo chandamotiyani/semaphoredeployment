@@ -1,0 +1,25 @@
+
+
+
+{# Update Payment Source #}
+<form method="POST" class="js-update-cart-payment-source">
+  <input type="hidden" name="action" value="/commerce/cart/update-cart">
+  {{ csrfInput() }}
+  {% set storedCards = craft.commerce.paymentSources.allPaymentSourcesByUserId(currentUser.id ?? null) %}
+  {% if(storedCards|length > 0) %}
+  <div class="form__input-wrap {{ blockClass|default('') }}__input-wrap">
+      <label for="paymentSourceId">Stored Cards:</label>
+      <select name="paymentSourceId" id="paymentSourceId" class="select__select form__select select js-update-cart-payment-source">
+        <option value="">Add New Card</option>
+        {% for storedCard in storedCards %}
+          <option value="{{ storedCard.id }}" {% if storedCard.id == cart.paymentSourceId %}selected{% endif %}>{{ storedCard.description }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  {% endif %}
+  <div class="form__input-wrap checkout__input-wrap checkout__form-payment-options js-payment-form">
+    {% for id,name in craft.commerce.gateways.allCustomerEnabledGateways %}
+      <input name="gatewayId" type="hidden" value="{{ id }}" {% if id == cart.gatewayId %}checked{% endif %} />
+    {% endfor %}
+  </div>
+</form>

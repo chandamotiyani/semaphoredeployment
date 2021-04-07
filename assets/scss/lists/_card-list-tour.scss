@@ -1,0 +1,12 @@
+.card-list-tour {
+	@include list;
+	@include list-gutters-horizontal(0.25);
+	@include list-gutters-vertical;
+	// @include list-hover-fade-effect;
+	@include list-focus-dim-effect;
+	@include list-columns($columns: 3, $breakpoint: $single-column-breakpoint, $gutterBorders: true);
+
+	&__item:hover {
+		z-index: 99999;
+	}
+}

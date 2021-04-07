@@ -1,0 +1,42 @@
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+bootstrap: _bootstrap.php
+settings:
+params:
+    - tests/.env
+modules:
+    config:
+        \craft\test\Craft:
+            configFile: 'tests/_craft/config/test.php'
+            entryUrl: 'https://www.yalumba.local:8080/index.php'
+            projectConfig: {}
+            migrations: []
+            plugins: []
+            cleanup: true
+            transaction: true
+            dbSetup: {clean: false, setupCraft: false}
+            timeouts: {
+                script: 60000,
+                "page load": 6000,
+                implicit: 300
+            }
+extensions:
+    enabled:
+    - Codeception\Extension\SlackExtension
+    config:
+        Codeception\Extension\SlackExtension:
+            webhook: '%SLACK_WEBHOOK%'
+            messagePrefix: '*Yaluma Staging Test*'
+            strategy: always
+            extended: true
+            extendedMaxLength: 150
+            channel: yalumba-tests
+            icon: :ghost:
+            username: Yalumba Testing
+            messageSuffix: <https://automation.lambdatest.com/logs|See Recording>
+            messageSuffixOnFail: <!channel>

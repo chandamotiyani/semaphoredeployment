@@ -1,0 +1,9 @@
+<div class="form__input-wrap {{ blockClass|default('') }}__input-wrap">
+  <select class="{{ blockClass|default('select') }}__select form__select choices" name="{{ name|default('') }}">
+    {% if options|length %}
+      {% for optionName, optionValue in options %}
+        <option value="{{ optionValue }}">{{ optionName }}</option>
+      {% endfor %}
+    {% endif %}
+  </select>
+</div>

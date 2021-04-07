@@ -1,0 +1,55 @@
+
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+{% if wishList is not defined %}
+  {% set wishList = craft.wishlist.lists().default(true).one() %}
+{% endif %}
+
+{% set purchasable = wine.defaultVariant %} {# use the default variation for cart listings #}
+
+{# Check if the user has this item in their cart - this will be used for showing QTY #}
+{% set lineItem = null %}
+{% for item in cart.lineItems %}
+	{% if item.purchasableId is defined and purchasable.id == item.purchasableId  %}
+		{% set lineItem = item %}
+	{% endif %}
+{% endfor %}
+
+{%
+	set wine = {
+		id: wine.id,
+		title: wine.title,
+		image: wine.variants[0].productImageFront[0].getUrl('productListingImage')|default,
+		subtitleHover: wine.collections|joinCategoryTitle(2),
+		subtitle: wine.regionsCategory[1]|default ? wine.regionsCategory|joinCategoryTitle(2),
+		description: wine.productInfo[0].shortDescription|default,
+		variety: wine.varieties[1]|default ? wine.varieties|joinCategoryTitle(2),
+		vintage: wine.productInfo[0].vintage|default('non vintage'),
+		price: purchasable.salePrice|currency('AUD', stripZeros = true)|replace('$'),
+		rrpPrice: purchasable.price|currency('AUD', stripZeros = true)|replace('$'),
+		qtyInCart: lineItem.qty|default,
+		lineItemId: lineItem.id|default(0),
+		purchasableId: purchasable.id,
+		url: wine.url,
+		hasVariants: wine.variants|length > 1,
+		variants: wine.variants,
+		outOfStock:  purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false,
+		isAvailable: purchasable.getIsAvailable(),
+		premiseOnly: wine.premiseOnly.options|default ? wine.premiseOnly.options[0].selected : false,
+    disableBuyButton: (purchasable.getIsAvailable() == false) or (wine.premiseOnly.options|default and wine.premiseOnly.options[0].selected) or (purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false)|default(false),
+		isOnSale: purchasable.sales|promotions|length,
+		isWineOfTheMonth: purchasable.id in winesOfTheMonth|default([]),
+		wishlistToggleUrl: '/index.php?p=actions/wishlist/items/toggle&elementId='~wine.id~'&listId='~wishList.id|default,
+		height: wine.variants[0].bottleSizes | join(''),
+		type: 'card',
+		imageSrcSet: [96, 81],
+		imageSizes: ['(max-width: 1200px) 96px', '81px'],
+	}
+%}
+
+{# 		height: wine.variants[0].bottleSizes | join(''), // kills devbar #}
+{# 		isWineOfTheMonth: isWineOfTheMonth(purchasable), #}
+{# 		isOnSale: purchasable.sales|promotions|length, #}
+{% include "_cards/_card-product.twig" with { product: wine, wineBadge: wineBadge|default } only %}

@@ -1,0 +1,45 @@
+{% if event.schedule[0]|default %}
+  <h2 class="event-single__book-heading">Start Booking Now</h2>
+{% else %}
+  <h2 class="event-single__book-heading">This event is no longer available to book</h2>
+{% endif %}
+
+{% if event.schedule[0]|default %}
+  <form method="POST" class="event-action {{ event.schedule | length < 1 ? 'disabled' }}">
+    <input type="hidden" name="action" value="/commerce/cart/update-cart">
+    {{ redirectInput('shop/cart') }}
+    {{ csrfInput() }}
+    {% if event.schedule[0]|default  %}
+      <input type="hidden" name="purchasableId" value="{{event.schedule[0].id}}" />
+      <input type="hidden" name="productId" value="{{event.schedule[0].id}}" />
+    {% endif %}
+    <!--span class="event-single__form-heading">Enter Number of Participants*</span-->
+
+    <div class="event-single__qty-select">
+      <div class="event-single__select-price">
+        <span class="event-single__label">Adult</span>
+        {{ event.price }}
+      </div>
+  
+    </div>
+
+    <span class="event-single__form-heading">When would you like to book? *</span>
+    <div class="js-date-picker" data-schedule="{{ event.schedule | json_encode(constant('JSON_PRETTY_PRINT')) }}" data-event-id={{ event.id }} data-purchasable-id={{ event.schedule[0].id }}></div>
+    <span class="event-single__form-heading">What time would you like to book for? *</span>
+    <div class="js-event-time-select"></div>
+
+    <!--div class="event-single__totals">TOTAL <span class="js-event-totals"></span></div-->
+    {% if(event.schedule[0]|default) %}
+    <div class="event-single__actions">
+      <p>You can choose the number of guests after adding to your cart.</p>
+      <!--input class="event-actions__button" type="submit" value="{{ "Book This "~event.section|trim('s') }}" class="button"/-->
+      <add-to-cart v-bind:productid="{{ event.id }}" purchasableId="{{ event.schedule[0].id }}" schedule="{{ event.schedule[0].start }}" notify="panel" btnclass="event-actions__button event-single__qty-add-btn"></add-to-cart>
+
+    </div>
+
+    <p class="event-single__note">
+      To confirm your booking, please complete this purchase through checkout.
+    </p>
+    {% endif %}
+  </form>
+{% endif %}

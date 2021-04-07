@@ -1,0 +1,26 @@
+<div class="long-form">
+	{% if block('header') is not empty %}
+		<div class="long-form__header">{% block header %}{% endblock %}</div>
+	{% endif %}
+	{% if block('left') is not empty %}
+		<div class="long-form__left">
+			{% block left %}{% endblock %}
+		</div>
+	{% endif %}
+	{% if block('body') is not empty %}
+		<div class="long-form__body">
+			{% block body %}{% endblock %}
+		</div>
+	{% endif %}
+	
+	{% if block('right') is not empty %}
+		<div class="long-form__right">
+			{% block right %}{% endblock %}
+		</div>
+	{% endif %}
+	{% if block('footer') is not empty %}
+		<div class="long-form__footer">
+			{% block footer %}{% endblock %}
+		</div>
+	{% endif %}
+</div>

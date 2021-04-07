@@ -1,0 +1,117 @@
+.carousel-controls {
+	position: relative;
+
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: flex-start;
+	align-items: stretch;
+
+	justify-content: stretch;
+	justify-items: stretch;
+	margin-top: 2rem;
+	margin-left: 1rem;
+	margin-right: 1rem;
+	margin-bottom: 2rem;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		justify-content: space-between;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	&__chevron-buttons {
+		display: none;
+		margin-left: $padding-large;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			display: flex;
+		}
+	}
+
+	&__chevron-button {
+		color: rgba($text-color-primary, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: color 0.4 ease;
+		min-width: 0;
+		padding: 0;
+
+		@include on-event() {
+			color: $text-color-primary;
+		}
+
+		svg {
+			width: 2rem;
+			height: 2rem;
+		}
+
+		&:nth-child(2) {
+			transform: scaleX(-1);
+		}
+
+		&:not(:last-child) {
+			margin-right: 1rem;
+		}
+	}
+
+	&__scrollbar {
+		display: block;
+		height: 1px;
+		background-color: transparentize($black, 0.9);
+		width: 100%;
+		position: relative;
+		flex-grow: 1;
+		position: relative;
+
+		overflow: hidden;
+		margin-top: 4rem;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			display: none;
+		}
+
+		&-handle {
+			height: 3px;
+			background: $black;
+			position: realative;
+			position: absolute;
+			top: -1px;
+			border-radius: 3px;
+		}
+	}
+
+
+	// &__link {
+	// 	@extend .text-button;
+
+	// 	@include media-breakpoint-up(md) {
+	// 		display: none;
+	// 	}
+	// }
+
+	&__buttons {
+		display: flex;
+		flex-direction: column;
+		margin-top: $padding-small;
+		
+		& > :not(:last-child) {
+			margin-bottom: 1rem;
+		}
+		
+		@include media-breakpoint-up($single-column-breakpoint) {
+			& > :not(:last-child) {
+				margin-right: 1rem;
+			}
+
+			margin-top: 0.5rem;
+			margin-right: $padding-large;
+			margin-left: $padding-small;
+			flex-direction: row;
+		}
+	}
+
+	&__button {
+		@extend .boxed-button;
+	}
+}

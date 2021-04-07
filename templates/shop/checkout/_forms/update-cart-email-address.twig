@@ -1,0 +1,19 @@
+<form method="post" accept-charset="UTF-8" class="js-update-cart-email-address">
+  <input type="hidden" name="action" value="/commerce/cart/update-cart">
+  {{ csrfInput() }}
+  <div class="checkout__form-row">
+      {% include "_forms/text-input" with {
+          name: 'email',
+          label: 'Email Address*',
+          blockClass: 'checkout',
+          value: cart.email,
+          disabled: user.email|default
+      } %}
+  </div>
+
+  {% if user %}
+    <p>Not you? <a href="/logout">Sign out</a></p>
+  {% endif %}
+
+  <input type="submit" value="Next Step" class="checkout__continue-link">
+</form>

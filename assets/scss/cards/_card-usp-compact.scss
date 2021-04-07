@@ -1,0 +1,53 @@
+.card-usp-compact {
+	position: relative;
+
+	display: flex;
+	// flex-direction: row;
+
+	// align-items: flex-start;
+	// text-align: left;
+
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	max-width: 12rem;
+	justify-self: center;
+
+	&__icon {
+		// @include media-breakpoint-up(xxl) {
+		// 	margin-right: $flexboxgrid-gutter-width / 2;
+		// }
+		
+		flex-grow: 0;
+
+		& > span {
+			display: block;
+			position: relative;
+			height: 6em;
+			width: 6em;
+			border: 1px solid currentColor;
+			border-radius: 50%;
+			
+			display: flex;
+			justify-content: center;
+			
+			& > svg {
+				display: block;
+				position: absolute;
+				top: 25%;
+				left: 25%;
+				width: 50%;
+				height: 50%;
+				flex-basis: 40%;
+				max-width: 40%;
+				opacity: 0.5;
+			}
+		}
+	}
+
+	&__description {
+		@extend .body-text-sm;
+		overflow-x: hidden;
+		margin-top: 1em; // Pseudo vertical centring for smaller text blocks, but still top-aligned in case of overflow
+	}
+}

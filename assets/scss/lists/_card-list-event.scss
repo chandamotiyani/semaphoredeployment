@@ -1,0 +1,18 @@
+.card-list-event {
+	@include list;
+	@include list-gutters-vertical;
+	@include list-gutters-horizontal(0.25);
+	// @include list-columns($columns: 2, $breakpoint: sm, $gutterBorders: true);
+	@include list-columns($columns: 3, $breakpoint: $single-column-breakpoint, $gutterBorders: true);
+
+	flex-wrap: wrap;
+}
+
+.events-list-container {
+	padding-left: $padding-small;
+	padding-right: $padding-small;
+
+	.card-list__pagination {
+		margin-top: 5rem;
+	}
+}

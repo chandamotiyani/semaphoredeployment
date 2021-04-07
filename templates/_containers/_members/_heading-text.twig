@@ -1,0 +1,8 @@
+{% if craft.request.getParam('thx') %}
+  {% include '_views/_heading-with-text' with { 
+    heading: 'Thank you for signing up to the mailing list', 
+    copy: 'Add your name, state and a password to create an account and become a Yalumba Insider. As an Insider, you receive exclusive monthly wine offers designed to inspire your curiosity, and our newsletter with new releases, special events, recipes, and more.' 
+  } only %}
+{% else %}
+  {% include "_containers/_page-builder/_heading-with-text" %}
+{% endif %}

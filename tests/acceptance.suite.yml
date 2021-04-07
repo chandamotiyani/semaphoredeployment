@@ -1,0 +1,20 @@
+actor: AcceptanceTester
+modules:
+    enabled:
+#        - \craft\test\Craft
+        - WebDriver
+        - \Helper\Acceptance
+    step_decorators: ~
+    config:
+        WebDriver:
+            window: maximize
+            url: '%WEBDRIVER_URL%'
+            host: '%WEBDRIVER_HOST%'
+            browser: '%WEBDRIVER_BROWSER%'
+            port: '%WEBDRIVER_PORT%'
+            capabilities:
+                console: true
+                platform: 'MacOS Catalina'
+                acceptInsecureCerts: true
+                chromeOptions: 
+                    args: ["allow-insecure-localhost", "start-maximized"]

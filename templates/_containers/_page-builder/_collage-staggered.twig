@@ -1,0 +1,21 @@
+{# {% set component = component.collage %} #}
+
+{% set items = [] %}
+
+{% for item in component.collageStaggered %}
+	{% set items = items | merge(
+		[
+			{
+				image: item.image.one() | default,
+				title: item.heading | default,
+				description: item.copy | default,
+				cta: item.buttonLabel | default('Learn More'),
+				entry: item.buttonLink.one() | default
+			}
+		]
+	) %}
+{% endfor %}
+
+{% set buttons = component.sectionFooterButtons.all() %}
+
+{% include '_views/_collage-staggered' with { header: header | default, items: items, buttons: buttons } only %}

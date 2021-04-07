@@ -1,0 +1,59 @@
+.card-quick-link {
+	@include card;
+	@include card-with-image;
+	@include card-with-image-height-locked-to-aspect-ratio($w: 16, $h: 9);
+	@include card-with-image-that-scales-on-hover;
+	@include card-with-cta;
+
+	padding-top: $card-list-gutter-width-small / 2;
+	padding-bottom: $card-list-gutter-width-small / 2;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		@include card-with-image-at-top;
+	}
+
+	&__cta {
+		display: none;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			display: flex;
+		}
+	}
+	
+
+	&__title {
+		@extend .heading-primary-sm;
+	}
+
+	&__cta {
+		display: inline;
+		// @extend .heading-secondary-sm;
+		// margin-block-start: 1.75em;
+		overflow: hidden;
+	}
+
+
+	&__image-mask {
+		display: none;
+		
+		@include media-breakpoint-up($single-column-breakpoint) {
+			display: block;
+		}
+	}
+}
+
+.quicklinks.section {
+	@include media-breakpoint-down($single-column-breakpoint) {
+		padding-top: 3rem;
+	}
+
+	.section__wrap {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}

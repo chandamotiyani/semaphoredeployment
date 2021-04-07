@@ -1,0 +1,92 @@
+.sidebar {
+	$vertical-spacing: 2em;
+	position: sticky;
+	top: 0;
+	display: flex;
+	flex-direction: column;
+	margin-top: -1rem; // Optical adjustment
+	
+	@include media-breakpoint-down($single-column-breakpoint) {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+    &__back {
+		display: flex;
+		align-content: center;
+		align-items: center;
+		height: 1em;
+		
+		margin: $vertical-spacing 0;
+		
+		flex-basis: 100%;
+
+		@include media-breakpoint-down($single-column-breakpoint) {
+			flex-basis: 100%;
+		}
+    }
+
+    &__back-icon {
+        width: 1em;
+        height: 1em;
+        margin-right: 0.6em;
+        color: currentColor;
+        vertical-align: middle;
+	}
+	
+	&__back-icon-label {
+		@extend .heading-secondary-md;
+	}
+
+    &__group, &__share {
+		margin-top: $vertical-spacing;
+		
+		& > h3, & > p {
+			@extend .heading-secondary-md;
+			color: $black;
+			// letter-spacing: em(3);
+			flex-basis: 100%;
+			margin-bottom: 1em;
+		}
+
+		& > p {
+			@extend .heading-secondary-md;
+			color: $text-light;
+			line-height: 2.8;
+			letter-spacing: em(3);
+		}
+	}
+	
+	&__group {
+		@include media-breakpoint-down($single-column-breakpoint) {
+			margin-right: 4em;
+			// order: 1;
+		}
+	}
+
+    &__share {
+		display: flex;
+		flex-wrap: wrap;
+        color: $text-light;
+    }
+
+    &__icons {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		& > li {
+			@include hover-on(light);
+			display: inline-block;
+			
+			&:not(:last-child) {
+				margin-right: 1em;
+			}
+	
+			svg {
+				width: 1.5em;
+				height: 1.5em;
+			}
+		}
+    }
+}

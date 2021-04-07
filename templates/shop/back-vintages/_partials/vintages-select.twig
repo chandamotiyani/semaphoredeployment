@@ -1,0 +1,19 @@
+<div class="product__vintages-selection js-vintage-select">
+  <select class="select no-bg js-vintages-family">
+    <option value="">Select Family</option>
+    {% for variants in backVintageProducts %}
+      {% if variants.showInBackvintage|default %}
+        <option value="{{ variants.url }}" {{ parent|default and parent.url|trim('/') == variants.url|trim('/') ? 'selected' }} class="js-vintages-family-link">{{ variants.title }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+
+  <select class="select no-bg js-vintages-years js-select-url">
+    {% if backVintageYears is defined %}
+      <option value="">Select Year</option>
+      {% for variants in backVintageYears %}
+        <option value="{{ variants.url }}/#main" class="js-vintages-family-link" {{ craft.app.request.absoluteUrl|trim('/') == variants.url|trim('/') ? 'selected' }}>{{ variants.title }}</option>
+        {% endfor %}
+      {% endif %}
+  </select>
+</div>

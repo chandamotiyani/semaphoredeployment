@@ -1,0 +1,92 @@
+{
+  "_from": "vue-sweet-calendar",
+  "_id": "vue-sweet-calendar@0.3.1",
+  "_inBundle": false,
+  "_integrity": "sha512-ZHZYz+Fe/O1xKwerR37SHD3F789KJaTUuNipt5GaVwU2hD8RHy9ImnQgdi6n38sMEnlr/W1nY6psIgxg7GCg7A==",
+  "_location": "/vue-sweet-calendar",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-sweet-calendar",
+    "name": "vue-sweet-calendar",
+    "escapedName": "vue-sweet-calendar",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-sweet-calendar/-/vue-sweet-calendar-0.3.1.tgz",
+  "_shasum": "650b486b51ca463951ccc71c8883bab3c499e2a2",
+  "_spec": "vue-sweet-calendar",
+  "_where": "/Users/aaronmccaffery/Sites/yalumba",
+  "author": {
+    "name": "Mahdi Aryayi",
+    "email": "mahdiaryayi@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/maryayi/vue-sweet-calendar/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Mahdi Aryayi",
+      "email": "mahdiaryayi@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "core-js": "^2.6.5",
+    "vue": "^2.6.6"
+  },
+  "deprecated": false,
+  "description": "A simple and sweet calendar for Vue.js",
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-plugin-unit-jest": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/eslint-config-standard": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.12.0",
+    "npm-run-all": "^4.1.5",
+    "sass-lint": "^1.12.1",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "files": [
+    "dist/*",
+    "src/*",
+    "public/*",
+    "*.json",
+    "*.js"
+  ],
+  "homepage": "https://github.com/maryayi/vue-sweet-calendar",
+  "keywords": [
+    "vue",
+    "vue.js",
+    "vuejs",
+    "component",
+    "calendar"
+  ],
+  "license": "MIT",
+  "main": "./dist/SweetCalendar.umd.min.js",
+  "name": "vue-sweet-calendar",
+  "scripts": {
+    "build": "npm-run-all build:*",
+    "build:main": "vue-cli-service build --target lib --name SweetCalendar ./src/components/buildComponents.js",
+    "build:web": "vue-cli-service build --dest docs",
+    "lint": "vue-cli-service lint",
+    "prepublishOnly": "npm run build",
+    "serve": "vue-cli-service serve",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "version": "0.3.1"
+}

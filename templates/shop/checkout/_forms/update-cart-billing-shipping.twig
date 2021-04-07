@@ -1,0 +1,34 @@
+<form method="POST" class="js-update-cart-billing-shipping">
+  <input type="hidden" name="action" value="/commerce/cart/update-cart">
+  {{ csrfInput() }}
+
+  <div class="checkout__form checkout__form--small js-checkout-address" data-address-type="shipping">
+    <h3 class="checkout__col-sub-heading">Shipping Address</h3>
+    <p class="checkout__col-text">Yalumba online orders are currently available for Australian addresses only.</p>
+
+    {# A customer will be created during checkout if they are a guest. If the user is logged in, the customer related to the logged in user will be used. #}
+    {% set addresses = user ? craft.commerce.customers.customer.addresses|default %}
+    {% if addresses|length %}
+      {% include "shop/checkout/_includes/addresses-select.twig" with { addresses: addresses, selected: cart.shippingAddress.id|default, addressType: 'shipping', disableInputs: true } %}
+    {% endif %}
+
+
+    {% include "shop/checkout/_includes/addresses-form.twig" with { context: 'checkout', addressType: 'shipping', address: cart.shippingAddress, firstName: user|default ? user.firstName|default : cart.firstName|default, lastName: user|default ? user.lastName|default : cart.lastName|default } %}
+  </div>
+  <div class="js-checkout-address" data-address-type="billing">
+    <h3 class="checkout__col-sub-heading">Billing Address</h3>
+    <p class="checkout__col-text">Yalumba online orders are currently available for Australian addresses only.</p>
+    <div class="checkout__form-row">
+        {% set checked = (cart.billingAddress|default and cart.billingAddress|default) ? cart.billingAddress.id == cart.shippingAddress.id %}
+        {% include "_forms/checkbox" with { name: 'billingAddressSameAsShipping', value: "1", label: 'Same as shipping address', blockClass: 'checkout', checked: checked } %}
+    </div>
+    <div class="js-toggle-address panel-collapse {{ checked == false ? 'active' : '' }}">
+      {% if addresses|length %}
+        {% include "shop/checkout/_includes/addresses-select.twig" with { addresses: addresses, selected: cart.billingAddress.id|default, addressType: 'billing', disableInputs: true } %}
+      {% endif %}
+
+      {% include "shop/checkout/_includes/addresses-form.twig" with { addressType: 'billing', address: cart.billingAddress, firstName: user|default ?  user.firstName|default : cart.firstName|default, lastName: user|default ? user.lastName|default : cart.lastName|default } %}
+    </div>
+  </div>
+  <input type="submit" value="Next Step" class="checkout__continue-link">
+</form>

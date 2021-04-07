@@ -1,0 +1,64 @@
+You have received a new website order on {{ order.dateCompleted|date('DD M YYYY at HH:MM') }}.
+
+Customer: {{ order.firstName|default }} {{ order.lastName|default }}
+Website order number: {{ order.shortNumber }}
+Yalumba order number: <Yalumba Order number>
+
+<table>
+  <tr><th>Item</th><th>Qty</th><th>Price</th><th>Tax</th><th>Total</th></tr>
+
+  {% for item in order.lineItems %}
+    <tr><td>{{ item.purchasable.description|default }}</td><td>{{ order.qty|default }}</td><td>{{ item.purchasable.price|default }}</td><td>{{ item.adjustments|default }}</td> <td>{{ item.total|currency('AUD', stripZeros = true) }}</td></tr>
+  {% endfor %}
+
+</table>
+
+
+{{ dump(order)}}
+ITEM
+QTY
+PRICE
+TAX
+TOTAL
+<Vintage> <ProductName> - <BottleSize>
+1
+28.00
+2.55
+$28.00
+NV Rare Aged Tawny 50 Years Old - 500mL
+ <Gift Option name>
+  <note>
+
+
+2
+$189.05
+$34.37
+$378.10
+SHIPPING
+$1.27
+$14.00
+TOTAL
+$38.19
+$420.10
+
+Customer Details
+Name: <firstName> <lastName>
+Email: <email>
+Phone: <phone_number>
+Yalumba Wine Club: <UserGroup> (HIDE if guest checkout)
+
+Billing Address
+Name: <firstName> <lastName>
+Company: <company Name> (HIDE if left blank)
+Address: <BillingAddress>
+City: <BillingCity>
+State <BillingState>
+Postcode <BillingPostcode>
+
+Delivery Address
+Name: <firstName> <lastName>
+Company: <company Name> (HIDE if left blank)
+Address: <ShippingAddress>
+City: <ShippingCity>
+State <ShippingState>
+Postcode <ShippingPostcode>

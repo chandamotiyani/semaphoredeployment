@@ -1,0 +1,44 @@
+{
+  "name": "isev-ltd/contact-form-validation",
+  "description": "Enhanced Validation for Craft CMS Contact Form Plugin",
+  "version": "0.0.1",
+  "type": "craft-plugin",
+  "minimum-stability": "dev",
+  "keywords": [
+    "cms",
+    "craftcms",
+    "yii2"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "isev ltd",
+      "homepage": "https://isev.co.uk/"
+    }
+  ],
+  "require": {
+      "craftcms/cms": "^3.0.0-beta.20",
+      "wixel/gump": "~v1.5.4",
+      "craftcms/contact-form": "~2.0"
+  },
+  "autoload": {
+      "psr-4": {
+          "Isev\\ContactFormValidation\\": "src/"
+      }
+  },
+  "repositories": [
+      {
+          "type": "composer",
+          "url": "https://asset-packagist.org"
+      }
+  ],
+  "support": {
+    "email": "mitch@isev.co.uk"
+  },
+  "extra": {
+    "handle": "contact-form-validation",
+    "name": "Contact Form Validation",
+    "developer": "isev",
+    "developerUrl": "https://isev.co.uk"
+  }
+}

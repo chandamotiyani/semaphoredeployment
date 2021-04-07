@@ -1,0 +1,166 @@
+<h1>Profile</h1>
+<style>
+    #profile {
+        width: 30rem;
+    }
+
+    #profile .group + .group {
+        margin-top: 2em;
+    }
+
+    #profile label {
+        display: block;
+        font-weight: bold;
+    }
+
+    #profile input[type="text"],
+    #profile input[type="password"] {
+        margin: 0.5em 0;
+        padding: 0.5em;
+        width: 100%;
+        font-size: 1em;
+    }
+
+    #profile .instruction {
+        font-size: 0.75em;
+        margin: 0.25em;
+    }
+
+    #profile .group .error-message,
+    #profile .group .error-symbol{
+        display: none;
+    }
+
+    #profile .group.has-error label,
+    #profile .group.has-error .error-message {
+        display: block;
+        color: darkred;
+        font-size: .75em;
+        margin: .25em;
+    }
+
+    #profile .error-list {
+        color: darkred;
+        padding: 0 1em;
+        border: 1px solid darkred;
+        margin-bottom: 2em;
+    }
+
+    #profile .group.has-error .error-symbol {
+        display: inline;
+        font-size: 1.25em;
+    }
+
+    #profile .group.has-error input {
+        border: 1px solid darkred;
+    }
+</style>
+
+<form id="profile" method="post" accept-charset="UTF-8" enctype="multipart/form-data">
+
+    {% set notice = craft.app.session.getFlash('notice') %}
+    {% if notice %}
+        <p>{{ notice }}</p>
+    {% endif %}
+
+    {% set formUser = user is defined ? user : currentUser  %}
+
+    {% if formUser.hasErrors() %}
+        <div class="error-list">
+            <p>Unable to save user. Please check for errors.</p>
+
+            <ul>
+                {% for error in formUser.getFirstErrors() %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {{ csrfInput() }}
+
+    {# {{ redirectInput('users/'~currentUser.username) }} #}
+
+    <input type="hidden" name="action" value="users/save-user">
+
+    <input type="hidden" name="userId" value="{{ formUser.id }}">
+
+    <div class="group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="firstName" value="{{ formUser.firstName }}">
+    </div>
+
+    <div class="group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" name="lastName" value="{{ formUser.lastName }}">
+    </div>
+
+    {% if formUser.photo %}
+        <div class="group">
+            <label>Photo</label>
+            <img id="user-photo" src="{{ formUser.photo.url({width: 150}) }}" alt="">
+        </div>
+
+        <div class="group">
+            <label for="delete-photo">
+                <input id="delete-photo" type="checkbox" name="deletePhoto">
+                Delete photo
+            </label>
+            <p class="instruction">If a new photo is selected, this checkbox has no effect.</p>
+        </div>
+    {% endif %}
+
+    <div class="group">
+        <label for="photo">Select photo</label>
+        <input id="photo" type="file" name="photo" accept="image/png,image/jpeg">
+    </div>
+
+    {% if not craft.app.config.general.useEmailAsUsername %}
+        {% set error = formUser.getFirstError('username')  %}
+        {% set class = error ? 'has-error' : '' %}
+        <div class="group {{  class }}">
+            <label for="username">Username <span class="error-symbol">&#9888;</span></label>
+            <p class="instruction">If left blank, this will become the email address.</p>
+
+            <p class="error-message">{{ error }}</p>
+            <input type="text" id="username" name="username" value="{{ formUser.username }}">
+        </div>
+    {% endif %}
+
+    {% set error = formUser.getFirstError('email')  %}
+    {% set class = error ? 'has-error' : '' %}
+    <div class="group {{  class }}">
+        <label for="email">Email <span class="error-symbol">&#9888;</span></label>
+
+        {% if craft.app.projectConfig.get('users.requireEmailVerification') %}
+            <p class="instruction">New email addresses need to be verified.</p>
+        {% endif %}
+
+        <p class="error-message">{{ error }}</p>
+        <input type="text" id="email" name="email" value="{{ formUser.email }}">
+    </div>
+
+    {% set error = formUser.getFirstError('newPassword')  %}
+    {% set class = error ? 'has-error' : '' %}
+    <div class="group {{ class }}">
+        <label for="new-password">New Password  <span class="error-symbol">&#9888;</span></label>
+        <p class="error-message">{{ error }}</p>
+        <input type="password" id="new-password" name="newPassword" value="{{ formUser.newPassword }}">
+    </div>
+
+    {% set error = formUser.getFirstError('currentPassword')  %}
+    {% set class = error ? 'has-error' : '' %}
+    <div class="group {{ class }}">
+        <label for="current-password">Current Password <span class="error-symbol">&#9888;</span></label>
+        <p class="instruction">Required to change Password and Email</p>
+        <p class="error-message">{{ error }}</p>
+        <input type="password" id="current-password" name="password" value="">
+    </div>
+
+
+
+    <div class="group">
+        <input type="submit" value="Save Profile">
+        <a href="{{ craft.request.url }}">Reset</a>
+    </div>
+</form>

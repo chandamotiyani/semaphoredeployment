@@ -1,0 +1,20 @@
+.vertical-list {
+	@include list;
+	@include list-vertical;
+	@include list-hover-fade-effect;
+
+	display: flex;
+	flex-direction: column;
+	align-content: stretch;
+	align-items: stretch;
+
+	margin-top: -3rem;
+
+	&__item {
+		&:not(:last-child) {
+			border-bottom: 1px solid transparentize($black, 0.9);
+		}
+
+		padding: 3rem 0;
+	}
+}

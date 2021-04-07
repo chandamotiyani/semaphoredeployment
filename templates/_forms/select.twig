@@ -1,0 +1,25 @@
+<div class="form__input-wrap {{ blockClass|default('') }}__input-wrap {{ cssClass|default }}">
+  {% if label %}
+    <label for="{{ id|default }}" class="{{ blockClass}}__form-label form__label">{{ label }}{% if required|default %}*{% endif %}</label>
+  {% endif %}
+  <select id="{{ id|default }}" class="{{ blockClass|default('select') }}__select form__select {{ selectClass|default('select') }}" name="{{ name|default('') }}" {% if dataErrorName|default %} data-error-name="{{ dataErrorName }}" {% endif %}>
+    {% if hidePlaceholder|default(false) == false %}
+      <option placeholder>Please Select</option>
+    {% endif %}
+    {% if options|length %}
+      {% if optgroup|default %}
+        <optgroup>
+      {% endif %}
+      {% for optionValue, option in options %}
+        <option {{ value|default == optionValue ? 'selected' : '' }} value="{{ option.value|default(optionValue|trim) }}">{{ option }}</option>
+      {% endfor %}
+      {% if optgroup|default %}
+        </optgroup>
+      {% endif %}
+    {% endif %}
+  </select>
+  <div class="form__input-error-msg"></div>
+  {% if subText|default %}
+    <p class="form__sub-text">{{ subText }}</p>
+  {% endif %}
+</div>

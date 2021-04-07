@@ -1,0 +1,26 @@
+.cart-totals {
+  display: flex;
+  flex-direction: row;
+  padding-top: 1.8rem;
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid darken($brand-tertiary, 30);
+  border-top: 1px solid darken($brand-tertiary, 30);
+
+  &__totals {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    flex: 1;
+  }
+
+  &__totals-heading,
+  &__totals-price {
+    @extend .body-text;
+
+    margin: 0;
+    font-family: $font-primary;
+    font-weight: 800;
+    color: $black;
+  }
+}

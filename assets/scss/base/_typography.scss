@@ -1,0 +1,244 @@
+@mixin text-with-italics {
+	& em {
+		font-style: italic;
+	}
+}
+
+@mixin text-with-underlines {
+	& u {
+		text-decoration-line: none;
+		border-bottom: 1px solid currentColor;
+	}
+}
+
+/**
+ * Basic typography style for copy text
+ */
+body {
+	color: $text-color-primary;
+	font-family: $font-primary;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	font-size: #{$default-font-size / 1.28}px;
+
+	@include media-breakpoint-up(sm) {
+		font-size: #{$default-font-size / 1.2}px;
+	}
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		font-size: #{$default-font-size / 1.1}px;
+	}
+
+	@include media-breakpoint-up(xl) {
+		font-size: #{$default-font-size}px;
+	}
+
+	p {
+		line-height: 1.6;
+		font-size: em(14);
+		line-height: em(29);
+
+		@include media-breakpoint-up(md) {
+			font-size: em(16);
+			line-height: em(29);
+		}
+	}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: $font-secondary;
+	line-height: 1;
+}
+
+.heading-primary-xl {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-secondary;
+	font-size: em(52);
+	font-weight: normal;
+	line-height: 1.2;
+
+	@include media-breakpoint-up(xxs) {
+		font-size: em(60);
+	}
+
+	@include media-breakpoint-up(xs) {
+		font-size: em(76);
+	}
+
+	@include media-breakpoint-up(sm) {
+		font-size: em(88);
+		letter-spacing: -1.76px;
+	}
+}
+
+.heading-primary-lg {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-secondary;
+	font-size: em(46);
+	font-weight: normal;
+	line-height: 1.2;
+	max-width: 14em;
+
+	@include media-breakpoint-up(xs) {
+		font-size: em(62);
+	}
+}
+
+.heading-primary-md {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-secondary;
+	// font-size: em(40);
+	font-weight: normal;
+	line-height: 1.2;
+
+	font-size: em(48);
+
+	@include media-breakpoint-up(xl) {
+		font-size: em(56);
+	}
+}
+
+.heading-primary-sm {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-secondary;
+	font-size: em(35);
+	font-weight: normal;
+	line-height: 1.2;
+
+	@include media-breakpoint-up(xs) {
+		font-size: em(40);
+	}
+}
+
+.heading-primary-xs {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-secondary;
+	font-size: em(30);
+	font-weight: normal;
+	line-height: 1.2;
+	letter-spacing: -0.25px;
+}
+
+.heading-primary-xxs {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-secondary;
+	font-size: 26 / 16 * 1rem;
+	font-weight: normal;
+	line-height: 1.2;
+}
+
+.heading-secondary-xl-bold {
+	font-family: $font-primary;
+	font-size: 1rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: em(2);
+}
+
+.heading-secondary-xl {
+	font-family: $font-primary;
+	font-size: 1rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: em(2);
+}
+
+.heading-secondary-lg {
+	font-family: $font-primary;
+	font-size: 15 / 16 * 1rem;
+	font-weight: 500;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+}
+
+
+.heading-secondary-md {
+	font-family: $font-primary;
+	font-size: 1rem;
+	font-weight: 500;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+}
+
+.heading-secondary-md-bold {
+	@extend .heading-secondary-md;
+	font-weight: bold;
+}
+
+.heading-secondary-sm {
+	@include text-with-italics;
+	@include text-with-underlines;
+	font-family: $font-primary;
+	//   font-size: 10px;  // em(12);
+	font-size: 0.666rem;
+	font-weight: normal;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+
+	&--underlined {
+		@extend .heading-secondary-sm;
+		border-bottom: 1px solid $brand-primary;
+		padding-bottom: 5px;
+		display: inline;
+	}
+}
+
+.body-text {
+	font-family: $font-primary;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	letter-spacing: em(0.32);
+
+	@include wysiwyg;
+}
+
+.body-text-bold {
+	@extend .body-text;
+	font-weight: bold;
+}
+
+.body-text-tall {
+	@extend .body-text;
+	line-height: 1.8;
+}
+
+.body-text-max-width {
+	max-width: 48em;
+}
+
+.body-text-sm {
+	font-size: 14 / 16 * 1rem;
+	font-weight: 400;
+	line-height: 1.45;
+	letter-spacing: em(0.24);
+	//   color: $text-color-primary;
+}
+
+.body-text-xs {
+	font-size: 12 / 16 * 1rem;
+	font-weight: 400;
+	line-height: 1.45;
+	letter-spacing: em(0.24);
+	//   color: $text-color-primary;
+}
+
+.body-text-sm-max-width {
+	max-width: 56em;
+}
+
+// Added this to override reset-css.
+i {
+	font-style: italic;
+}

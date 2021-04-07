@@ -1,0 +1,18 @@
+{% set featuredItem = library.featuredArticle.one %}
+
+{% if featuredItem | length %}
+	{%
+		set featuredItem = {
+			entryType: featuredItem.articleCategory.one().title | default('Article'),
+			date: featuredItem.postDate,
+			contentHeading: featuredItem.title,
+			contentText: featuredItem.articleAbstract,
+			url: featuredItem.url,
+			linkLabel: 'Read the Article',
+			image: featuredItem.articleBanner.image.one,
+			entry: featuredItem
+		}
+	%}
+{% endif %}
+
+{% include 'archives/_list.twig' with { section: 'blogPosts', featuredItem: featuredItem, type: 'library' } %}

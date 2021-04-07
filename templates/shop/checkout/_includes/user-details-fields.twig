@@ -1,0 +1,55 @@
+<div class="checkout__form-row">
+    {#name: 'fields[firstName]',#}
+    {#value: user.firstName|default ? user.firstName : cart.firstName|default,#}
+    {#disabled: user.firstName|default(''),#}
+  {% include "_forms/text-input" with {
+    name: firstName.name|default,
+    value: firstName.value|default,
+    label: 'First Name*',
+    blockClass: 'checkout',
+    disabled: firstName.disabled|default(''),
+  } %}
+
+  {% include "_forms/text-input" with { 
+    name: lastName.name|default,
+    label: 'Last Name*', 
+    blockClass: 'checkout',
+    value: lastName.value|default,
+    disabled: lastName.disabled|default(''),
+  } %}
+</div>
+
+<div class="checkout__form-row">
+  {#
+    name: 'fields[phoneNumber]', 
+    disabled: user.phoneNumber|default,
+    value: user.phoneNumber|default ? user.phoneNumber : cart.phoneNumber|default,
+  #}
+  {% include "_forms/text-input" with { 
+    name: phoneNumber.name|default,
+    value: phoneNumber.value|default,
+    label: 'Phone*', 
+    blockClass: 'checkout', 
+    instruction: 'Please provide a valid Australian phone number in case we need to contact you about your order.',
+} %}
+</div>
+
+<div class="checkout__form-row">
+  {#
+    name: 'fields[dateOfBirth]',
+    disabled: user.dateOfBirth|default,
+    value: user.dateOfBirth|default ? user.dateOfBirth|date("yy-m-d") : cart.dateOfBirth|default ? cart.dateOfBirth|date("yy-m-d"),
+  #}
+  {% include "_forms/dob-input" with { 
+    name: dateOfBirth.name|default,
+    disabled: dateOfBirth.disabled|default(''),
+    value: dateOfBirth.value|default,
+    label: 'Date of Birth*', 
+    blockClass: 'checkout', 
+    instruction: 'You must be 18 or older to purchase alcohol.',
+    type: 'text',
+    hint: 'dd/mm/yyyy',
+    placeholder: 'dd/mm/yyyy',
+
+  } %}
+</div>

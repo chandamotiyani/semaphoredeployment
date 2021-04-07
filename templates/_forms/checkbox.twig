@@ -1,0 +1,14 @@
+<div class="form__input-wrap {{ blockClass|default('') }}__input-wrap {{ cssClass|default }}">
+  <label class="form__checkbox">
+    <span class="form__checkout-label">{{ label|default('') }}</span>
+    <input type="checkbox"
+    {% if value is defined %}
+      value="{{ value }}" 
+    {% endif %}
+    name="{{ name|default('') }}" {{ checked|default(false) ? 'checked' : ''}} 
+    id="{{ id|default('') }}"
+    class="{{ class|default('') }}">
+    <div class="form__input-error-msg"></div>
+    <span class="form__checkmark"></span>
+  </label>
+</div>

@@ -1,0 +1,37 @@
+{% set tabs = [
+	{
+		name: 'Sign In',
+		url: '/members/sign-in',
+		active: craft.app.request.segments|last == 'sign-in',
+	},
+	{
+		name: 'Sign Up',
+		url: '/members/sign-up',
+		active: craft.app.request.segments|last == 'sign-up',
+	},
+] %}
+{% set navbar = 'small' %}
+
+{% extends "_layouts/_layout.twig" %}
+
+{% if title is not defined %}
+  {% set title = 'Reset Password' %}
+{% endif %}
+
+{% block hero %}
+  {% embed "_page-builder-components/hero-small.twig" with {
+      component: {
+        image: entry.heroImage.one.getUrl() ?? alias('@assetBaseUrl/img/members-banner.jpg'),
+      }, title: title|default('') } %}
+  {% endembed %}
+{% endblock %}
+
+{% block content %}
+
+  {% embed '_layouts/_section.twig' with { narrow: true } %}
+    {% block body %}
+      {# Block for this layout #}
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% embed '_cards/_card.twig' with { type: 'carousel-tasting' }%}
+	{% block details %}
+		<h3 class="card-tasting__title">{{ title | typogrify }}</h3>
+		<div class="card-tasting__description">{{ text | typogrify }}</div>
+		<div class="card-tasting__price">
+			<span>$</span>
+			<span>{{ price|currency('AUD', stripZeros = true)|trim('$') }} </span>
+			<span>&nbsp;{{ ticketTypeText|default('per person') }}</span>
+		</div>
+		<div class="card-tasting__button">Book this Tasting</div>
+	{% endblock %}
+{% endembed %}

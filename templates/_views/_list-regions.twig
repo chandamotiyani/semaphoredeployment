@@ -1,0 +1,14 @@
+{% embed '_layouts/_section.twig' with { component: { sectionHeader: component.sectionHeader | default } } %}
+	{% block body %}
+		{% embed '_partials/_card-list.twig' with { type: 'region', items: items, appendJsClass: true } only %}
+			{% block item %}
+				{% include "_cards/_card-region.twig" with item only %}
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+	{% if buttons | length %}
+		{% block footer %}{% spaceless %}
+			{% if buttons is defined and buttons | length %}{% include '_partials/_section-footer.twig' with { buttons: buttons } only %}{% endif %}
+		{% endspaceless %}{% endblock %}
+	{% endif %}
+{% endembed %}

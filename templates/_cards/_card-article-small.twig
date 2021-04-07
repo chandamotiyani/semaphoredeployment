@@ -1,0 +1,18 @@
+{% if pdfLink|default %}
+{% set link = pdfLink %}
+{% else %}
+{% set link = url %}
+{% endif %}
+<a class="card-library" href="{{ link|default }}" target="_blank">
+    <div class="card-library__image-container">
+        <div class="card-library__image-mask">
+            <div class="card-library__image" style="background-image: url('{{ image }}')">
+            </div>
+        </div>
+    </div>
+    <div class="card-library__content">
+        <h3 class="card-library__title">{{ title | typogrify }} </h3>
+        <p class="card-library__text">{{ description | typogrify }}</p>
+
+    </div>
+</a>

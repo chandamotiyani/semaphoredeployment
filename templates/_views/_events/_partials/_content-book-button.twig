@@ -1,0 +1,23 @@
+{% if not event.bookingUrl %}
+  {% if 0 in event.schedule|keys %}
+    <form method="POST" class="event-action">
+
+      <input type="hidden" name="options[schedule]" value="{{ event.schedule[0].start }}">
+
+      <input type="hidden" name="purchasableId" value="{{ event.schedule[0].id }}" />
+
+      <div class="event-single__add-to-cart">
+
+        {% if event.multipleSchedule %} {# Open in a modal if multiple schedule #}
+          <span class="event-actions__button event-single__qty-add-btn" data-for-product-list-modal="{{ event.id }}">Add to cart</span>
+        {% else %}
+        <add-to-cart v-bind:productid="{{ event.id }}" purchasableId="{{ event.schedule[0].id }}" schedule="{{ event.schedule[0].start }}" notify="panel" btnclass="event-actions__button event-single__qty-add-btn"></add-to-cart>
+        {% endif %}
+      </div>
+    </form>
+  {% endif %}
+{% else %}
+  <div class="event-single__add-to-cart">
+    <a class="event-actions__button" href="{{ event.bookingUrl }}" target="_blank">Book Now</a>
+  </div>
+{% endif %}

@@ -1,0 +1,370 @@
+.carousel {
+	min-height: auto;
+	flex-direction: column;
+	position: relative;
+	width: 100%;
+	user-select: none;
+	overflow: hidden;
+	
+	@at-root .featured-events {
+		padding-top: 7px;
+		margin-top: -7px;
+	}
+
+	&__items {
+		flex: 1;
+		display: block;
+		width: 100%;
+
+		&:focus {
+			outline: 0;
+		}
+
+		& .flickity-slider {
+			display: flex;
+			align-content: stretch;
+			align-items: stretch;
+		}
+		@include media-breakpoint-down(xs) {
+			.flickity-viewport{
+				max-height: 500px;
+			}
+		}
+	}
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+		justify-content: stretch;
+		justify-items: stretch;
+		position: absolute;
+		width: 100%;
+		position: relative;
+		max-width: 100%;
+		align-self: stretch;
+
+		&:last-child {
+			border-right: 0;
+		}
+
+		@at-root .featured-events & {
+
+			padding-left: 1rem;
+			padding-right: 1rem;
+
+			@include media-breakpoint-up(xs) {
+				padding-left: 2rem;
+				padding-right: 2rem;
+			}
+		}
+
+		@include media-breakpoint-down(xs) {
+			width: 85%;
+			padding-right: 0;
+			border-right: 0 !important;
+
+			.card-product__image-container {
+				width: 50%;
+			}
+			.card-product__content{
+				width: 60%;
+				padding-right: 0;
+				/*margin-top: 50% !important;*/
+			}
+			.card-product__image{
+				padding-right: 1rem;
+				padding-left: 1rem;
+			}
+		}
+
+		@include media-breakpoint-up(sm) {
+			width: 66%;
+
+/*
+			&--large {
+				width: 85%; // override above percentages
+				
+				.card-product__image-container {
+					width: 55%;
+				}
+			}
+			*/
+
+		}
+
+		/**TODO: Clean this up a bit. **/
+		@include media-breakpoint-up(lg) {
+			width: calc(33.33% + 1px);
+
+			@at-root .homepage-featured-wines & {
+				width: 40%; // cause the wine carousel to cut off 3rd product
+			}
+
+
+			&--large {
+				width: 50%; // override above percentages
+
+				// card text similar size to regular cards but image larger
+				.card-product__image-container {
+					width: 62%;
+				}
+				.card-product__content {
+					width: 38%;
+				}
+			}
+
+
+		}
+
+		@include media-breakpoint-up(xxl) {
+			width: calc(33.33% + 1px);
+
+			&--large {
+				width: 40%;
+			}
+
+		}
+
+		@at-root .featured-wines--has-two & {
+			padding-right: 0;
+
+
+			@include media-breakpoint-up(md) {
+				width: 50%;
+			}
+		}
+
+		@at-root .featured-wines--has-many & {
+			// no text is the same as standard carousel
+		}
+
+		@at-root .featured-wines--has-text & {
+			@include media-breakpoint-up(md) {
+				width: 75%;
+
+				&--large {
+					width: 100%;
+				}
+			}
+		}
+	
+		@at-root .featured-wines--has-one & {
+			width: 100%;
+		}
+	}
+
+	@at-root .featured-wines--has-text & {
+		@include media-breakpoint-up(md) {
+			width: 65%;
+		}
+	}
+	/* end of TODO: clean this up */
+
+	&__item-inner {
+		display: flex;
+		flex-direction: column;
+		margin-left: 0;
+		margin-right: 0;
+		position: relative;
+		flex: 1;
+
+		@include media-breakpoint-up(sm) {
+			margin-left: 3rem;
+			margin-right: 3rem;
+			margin-top: 3rem;
+		}
+
+		@include media-breakpoint-up(sm) {
+			&:after {
+				content: "";
+				width: 1px;
+				height: 100%;
+				position: absolute;
+				right: -3rem;
+				margin-right: -1px;
+				background: $brand-tertiary;
+				transition: opacity 0.1s ease;
+			}
+		}
+	}
+
+	&__title {
+		@extend .heading-primary-sm;
+
+		margin-top: 2rem;
+	}
+
+	&__sub-title {
+		@extend .heading-secondary-sm;
+		@extend .heading-secondary-sm--underlined;
+	}
+
+	&__description {
+		@extend .heading-secondary-sm;
+
+		font-weight: 600;
+	}
+
+	&__image {
+		@include bg-image-overlay();
+
+		transition: transform 0.4s ease;
+	}
+
+	&__image-container {
+		overflow: hidden;
+		width: 100%;
+		margin-bottom: 27px;
+		height: 0;
+		padding-bottom: 70%;
+		position: absolute;
+
+		@at-root .carousel-cards__item--image-full & {
+			height: 100%;
+
+			&:after {
+				@include overlay(rgba($black, 0.5));
+			}
+		}
+	}
+
+	&__content {
+		padding-top: 70%;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		flex: 1;
+		padding-right: 3rem;
+		padding-left: 0;
+
+		@include media-breakpoint-up(md) {
+			padding-left: 3rem;
+			padding-left: 0;
+			padding-right: 0;
+		}
+
+		@at-root .carousel-cards__item--image-full & {
+			color: $text-color-primary-on-dark;
+			position: relative;
+			z-index: 2;
+			margin-left: 30px;
+			margin-right: 30px;
+		}
+	}
+
+	&__content-container {
+		transition: transform 0.4s ease;
+	}
+
+	&__conditions {
+		display: block;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		font-style: italic;
+		font-family: $font-secondary;
+		font-size: em(16);
+	}
+
+	&__book-button {
+		text-transform: uppercase;
+		display: block;
+		color: rgba($white, 0.6);
+		font-weight: 400;
+		opacity: 0;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		transform: translateX(-100%);
+		transition: all 0.4s ease;
+		transition-property: transform, opacity;
+
+	}
+
+	&__date {
+		background: $background-primary;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: absolute;
+		right: 3rem;
+		top: -1rem;
+		z-index: 2;
+		padding: 26px 28px;
+
+		@include media-breakpoint-up(md) {
+			padding: em(24) em(28);
+		}
+
+		&-month {
+			font-size: 12px;
+			margin-bottom: 8px;
+
+			@include media-breakpoint-up(md) {
+				font-size: em(12);
+				margin-bottom: em(8);
+			}
+		}
+
+		&-day {
+			font-family: $font-secondary;
+			font-weight: 400;
+
+			font-size: 24px;
+
+			@include media-breakpoint-up(md) {
+				font-size: em(24);
+			}
+		}
+	}
+
+	&__cta-buttons {
+		display: flex;
+
+		@include media-breakpoint-down(sm) {
+			flex: 1;
+		}
+
+		&:last-child {
+			margin-left: -1px;
+		}
+	}
+
+	&__button {
+		@extend .boxed-button;
+
+		min-width: 0;
+		padding: 0;
+		flex: 1;
+		max-width: 200px;
+		margin-left: 0;
+
+		@include media-breakpoint-up(sm) {
+			margin-right: 20px;
+			min-width: 160px;
+		}
+	}
+
+	&__carousel-button {
+		@extend .nav-buttons__button;
+	}
+
+	&__link {
+		@extend .text-button;
+
+		@include media-breakpoint-up(md) {
+			display: none;
+		}
+	}
+}
+
+.flickity-resize {
+	.carousel__item {
+		min-height: 100%;
+	}
+}
+
+.carousel-controls {
+	.disabled {
+		opacity: 0.2;
+		pointer-events: none;
+	}
+}

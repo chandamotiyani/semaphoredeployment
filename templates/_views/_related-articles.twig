@@ -1,0 +1,16 @@
+
+{% if articles %}
+	{% if craft.app.request.segments|first != 'archives' %}
+		{% set footer = '' %}
+	{% endif %}
+
+	{% embed "_layouts/_section.twig" with { footer: footer|default, padBottom: 'true' } %}
+		{% block body %}
+			{% embed "_layouts/_"~layoutType|default('card-list') with { items: articles, type: 'mixed', class: 'featured-events' } %}
+				{% block item %}
+					{% include "_cards/_" ~ item.template ~ ".twig" with item only %}
+				{% endblock %}
+			{% endembed %}
+		{% endblock %}
+	{% endembed %}
+{% endif %}

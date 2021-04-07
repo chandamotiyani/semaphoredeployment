@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>{% if title|default %}{{ title }}{% endif %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Lato&family=Suranna&display=swap" rel="stylesheet" type="text/css">
+  <style type="text/css">
+
+
+  /**
+   * Avoid browser level font resizing.
+   * 1. Windows Mobile
+   * 2. iOS / OSX
+   */
+  body,
+  table,
+  td,
+  a {
+    -ms-text-size-adjust: 100%; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+  }
+
+  /**
+   * Remove extra space added to tables and cells in Outlook.
+   */
+  table,
+  td {
+    mso-table-rspace: 0pt;
+    mso-table-lspace: 0pt;
+  }
+
+  /**
+   * Better fluid images in Internet Explorer.
+   */
+  img {
+    -ms-interpolation-mode: bicubic;
+  }
+
+  /**
+   * Remove blue links for iOS devices.
+   */
+  a[x-apple-data-detectors] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+
+  /**
+   * Fix centering issues in Android 4.4.
+   */
+  div[style*="margin: 16px 0;"] {
+    margin: 0 !important;
+  }
+
+  body {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /**
+   * Collapse table borders to avoid space between cells.
+   */
+  table {
+    border-collapse: collapse !important;
+  }
+
+  a {
+    color: #1a82e2;
+  }
+
+  img {
+    height: auto;
+    line-height: 100%;
+    text-decoration: none;
+    border: 0;
+    outline: none;
+  }
+
+  table#table, table#table th, table#table td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  table#table th, table#table td {
+    padding: 15px;
+    text-align: left;
+  }
+
+  </style>
+
+</head>
+<body style="background-color: #f7f7f7;">
+
+  <!-- start preheader -->
+  <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
+    {% if preheader|default %}
+      {{ preheader }}
+    {% endif %}
+  </div>
+  <!-- end preheader -->
+
+  <!-- start body -->
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 40px 0;">
+
+    <!-- start logo -->
+    <tr>
+      <td align="center">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+        <td align="center" valign="top" width="600">
+        <![endif]-->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+          <tr>
+            <td align="center" valign="top" style="padding: 0; border-bottom: 1px solid #c88242;">
+              <a href="#" target="_blank" style="display: inline-block;">
+                <img src="{{ siteUrl('assets/img/email-header.jpg') }}" alt="Logo" border="0" width="240" style="display: block; width: 100%; min-width: 600px;">
+              </a>
+            </td>
+          </tr>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+      </td>
+    </tr>
+    <!-- end logo -->
+
+    <!-- start hero -->
+    <tr>
+      <td align="center" bgcolor="#f7f7f7">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+        <td align="center" valign="top" width="600">
+        <![endif]-->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+          <tr>
+            <td bgcolor="#ffffff" height="52"></td>
+          </tr>
+          <tr>
+            <td align="left" bgcolor="#ffffff" style="padding: 0 24px 0; font-family: Times New Roman, sans-serif; border-top: 1px solid border-top: 1px solid #c88242;;">
+              <h1 style="text-align: center; margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -1px; color:#4a4a4a;">{{ heading|default }}</h1>
+            </td>
+          </tr>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+      </td>
+    </tr>
+    <!-- end hero -->
+
+    <!-- start copy block -->
+    <tr>
+      <td bgcolor="#f7f7f7" align="center">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+        <td align="center" valign="top" width="600">
+        <![endif]-->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+          <tr>
+            <td align="left" bgcolor="#ffffff" style="padding: 20px 0; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+            {% block content %}
+              <!-- start copy -->
+              {% if copy|default %}
+                <tr>
+                  <td align="left" bgcolor="#ffffff" style="padding: 20px 0; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+                    <p style="margin: 0;">{{ copy }}</p>
+                  </td>
+                </tr>
+              {% endif %}
+              <!-- end copy -->
+
+
+            {% endblock %}
+
+            <!-- start copy -->
+            {% if footerText|default %}
+              <tr>
+                <td align="left" bgcolor="#ffffff" style="padding: 20px 0; font-size: 14px; color: #4a4a4a; line-height: 24px; border-bottom: 3px solid #d4dadf; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px;">
+                  <p style="margin: 0;">{{ footerText }}</p>
+                </td>
+              </tr>
+            {% endif %}
+            <!-- end copy -->
+            </td>
+          </tr>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+      </td>
+    </tr>
+    <!-- end copy block -->
+
+    <!-- start footer -->
+    <tr>
+      <td align="center" bgcolor="#f7f7f7" style="padding: 20px 0;">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+        <tr>
+        <td align="center" valign="top" width="600">
+        <![endif]-->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+
+          <!-- start address -->
+          <tr>
+            <td align="center" bgcolor="#f7f7f7" style="padding: 12px 24px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+              <p style="margin: 0;">The Yalumba Wine Company, 40 Eden Valley Road, Angaston SA 5353, Australia</p>
+            </td>
+          </tr>
+          <!-- end address -->
+
+          <!-- start abn -->
+          <tr>
+            <td align="center" bgcolor="#f7f7f7" style="padding: 12px 24px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
+              <p style="margin: 0;">ABN. 17 007 871 427</p>
+            </td>
+          </tr>
+          <!-- end abn -->
+
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+      </td>
+    </tr>
+    <!-- end footer -->
+
+  </table>
+  <!-- end body -->
+
+</body>
+</html>

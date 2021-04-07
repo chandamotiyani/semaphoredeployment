@@ -1,0 +1,13 @@
+.t-black-on-transparent {
+	// This is just a reminder that this exists as an option in the CMS.
+	background-color: $background-secondary;
+}
+
+.t-black-on-white {
+	background-color: $white;
+}
+
+.t-white-on-black {
+	background-color: $background-tertiary;
+	color: white;
+}

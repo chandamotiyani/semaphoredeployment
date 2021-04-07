@@ -1,0 +1,7 @@
+{% set cartQty = cart.totalQty|default %}
+
+<span class="js-cart-items primary-navigation__cart-items">
+  {% if cartQty %}
+    {{ cartQty }}
+  {% endif %}
+</span>

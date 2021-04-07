@@ -1,0 +1,12 @@
+<div class="footer-bottom-navigation">
+    <ul class="footer-bottom-navigation__list primary-navigation__list--right">
+        <li class="footer-bottom-navigation__item footer-bottom-navigation__item--small">
+            <a href="" class="footer-bottom-navigation__link">&copy; {{ "now"|date("Y") }} Yalumba</a>
+        </li>
+        {% for link in footerGlobals.footerLinks %}
+            <li class="footer-bottom-navigation__item footer-bottom-navigation__item--small">
+                <a href="{{ link.footerLink }}" {{ link.openInNewTab ? 'target="_blank"' }} class="footer-bottom-navigation__link">{{ link.text}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

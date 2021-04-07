@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+#    certbot:
+#        image: certbot/certbot
+    web:
+        image: nginx:latest
+        ports:
+            - "8080:80"
+#            - "8090:443"
+#        build:
+#            context: ./nginx
+        volumes:
+            - app-sync:/app
+            - ./nginx/site.conf:/etc/nginx/conf.d/site.conf
+#            - ./nginx/self-signed.key:/usr/local/etc/ssl/private/self-signed.key
+#            - ./nginx/self-signed.crt:/usr/local/etc/ssl/certs/self-signed.crt
+    php:
+        build:
+            context: ./php-fpm
+        volumes:
+            - app-sync:/app
+    db:
+        build:
+            context: ./mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: "yalumba"
+            MYSQL_USER: "yalumba"
+            MYSQL_PASSWORD: "password"
+            MYSQL_ROOT_PASSWORD: "password"
+        ports:
+            # <Port exposed> : < MySQL Port running inside container>
+            - "3306:3306"
+        expose:
+            # Opens port 3306 on the container
+            - "3306"
+        security_opt:
+            # need to find out about this vv
+            - seccomp:unconfined
+        volumes:
+            # Where our data will be persisted
+            - "my-db:/var/lib/mysql"
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+        container_name: elasticsearch
+        environment:
+            - cluster.name=docker-cluster
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - esdata1:/usr/share/elasticsearch/data
+        ports:
+            - 9200:9200
+volumes:
+    my-db:
+        driver: local
+    esdata1:
+        driver: local
+    app-sync:
+        external: true
+

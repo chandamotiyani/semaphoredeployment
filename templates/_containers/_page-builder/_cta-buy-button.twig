@@ -1,0 +1,43 @@
+{% set component = component.ctaProduct %}
+
+{% set buttons = [] %}
+
+
+{% embed '_layouts/_section.twig' with { constrained: true } %}
+	{% block body %}
+		<div class="cta">
+			{% if component.super is defined and component.super | length %}
+				<div class="cta__super">{{ component.super | typogrify(true) }}</div>
+			{% endif %}
+
+			{% if component.heading is defined and component.heading | length %}
+				<h2 class="cta__heading">{{ component.heading | typogrify(true) }}</h2>
+			{% endif %}
+
+			{% if component.copy is defined and component.copy | length %}
+				<div class="cta__copy">{{ component.copy | typogrify(true) }}</div>
+			{% endif %} 
+
+			{% if product is defined %}
+				<div class="cta__buttons">
+					{%
+					set buyNowFields = {
+						id: product.id,
+						purchasableID: product.defaultVariant.id,
+					}
+				%}
+		
+					<form method="POST" data-product-id="{{ buyNowFields.id }}">
+						<input type="hidden" name="action" value="/commerce/cart/update-cart">
+						<input type="hidden" name="purchasableId" value="{{ buyNowFields.purchasableID }}">
+						{{ csrfInput() }}
+		
+						<input type="submit" value="{{ component.buttonText }}" class="cta__button">
+						<input type="hidden" name="qty" value="1">
+					</form>
+				</div>
+			{% endif %}
+
+		</div>
+	{% endblock %}
+{% endembed %}

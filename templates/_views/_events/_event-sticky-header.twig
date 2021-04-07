@@ -1,0 +1,57 @@
+
+<nav class="filters event-sticky-header">
+    <div class="event-sticky-header__col">
+        <h3 class="event-sticky-header__item">
+            <div class="event-sticky-header__item--twolines">
+                <div class="event-sticky-header__item--title"><strong>{{ event.title }}</strong></div>
+            </div>
+        </h3>
+        <span class="event-sticky-header__item event-sticky-header__item--price">{{ event.price }}</span>
+        {% if event.multipleSchedule %}
+        <span class="event-sticky-header__item event-sticky-header__item--price">Multiple Dates</span>
+        {% else %}
+            {% if event.startDateString | length > 0 %}
+            <span class="event-sticky-header__item event-sticky-header__item--price">{{ event.startDateString| date('D j F') }}</span>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="event-sticky-header__col event-sticky-header__col--right">
+
+
+
+        {% if event.isBookable %}
+            {% if not event.bookingUrl %}
+                {% if 0 in event.schedule|keys %}
+                    <form method="POST" class="event-action">
+                        <input type="hidden" name="action" value="/commerce/cart/update-cart">
+                        {{ redirectInput('shop/cart') }}
+                        {{ csrfInput() }}
+
+                        <input type="hidden" name="options[schedule]" value="{{ event.schedule[0].start }}">
+
+                        <input type="hidden" name="purchasableId" value="{{ event.id }}" />
+
+                        
+                            {% if event.multipleSchedule %} {# Open in a modal if multiple schedule #}
+                                <span class="event-sticky-header__item event-sticky-header__item--cart-link" data-for-product-list-modal="{{ event.id }}">{{ "Book This "~event.section|trim('s') }}</span>
+                            {% else %}
+                                <input class="event-sticky-header__item event-sticky-header__item--cart-button" type="submit" value="{{ "Book This "~event.section|trim('s') }}"/>
+                            {% endif %}
+                    </form>
+                {% endif %}
+            {% else %}
+                <a class="event-sticky-header__item event-sticky-header__item--cart-link" target="_blank" href="{{ event.bookingUrl }}">Book Now</a>
+            {% endif %}
+        {% endif %}
+
+        <a href="#wishlist" class="event-sticky-header__item event-sticky-header__item--icon">
+            {% include 'shop/_cart/wishlist-item-count' %}
+            <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#user-icon"></use></svg>
+        </a>
+        <a href="#cart-summary" class="event-sticky-header__item event-sticky-header__item--icon">
+            {% include 'shop/_cart/cart-item-count' %}
+            <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#cart-icon"></use></svg>
+        </a>
+    </div>
+</nav>

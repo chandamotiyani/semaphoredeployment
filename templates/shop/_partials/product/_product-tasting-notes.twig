@@ -1,0 +1,12 @@
+<ul class="dropdown product-form__button product-form__button--tasting-notes">
+  <li class="dropdown__title">
+    Tasting Notes
+    <ul class="dropdown__list">
+      {% for note in tastingNotes %}
+        <li class="dropdown__list-item">
+          <a class="dropdown__list-item-link" href="{{ note.url }}" target="_blank">{{ note.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </li>
+</ul>

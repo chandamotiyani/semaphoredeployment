@@ -1,0 +1,51 @@
+{% extends "_layouts/_layout.twig" %}
+
+{% set eventPage = craft.entries()
+	.id('38751').one() %}
+
+{% block hero %}
+	{% include "_page-builder-components/hero.twig" with { component: eventPage.banner } %}
+{% endblock %}
+
+{% block filter %}
+{% endblock %}
+
+{% block content %}
+	{% embed '_layouts/_section.twig' %}
+		{% block body %}
+			<div class="events js-events">
+				<div class="events__picker">
+					<div class="js-events-calendar"></div>
+				</div>
+				<div class="events__list js-events-list-items">
+					<div class="events__list-title"></div>
+						<ul class="events__list-items js-events-list"></ul>
+				</div>
+			</div>
+		{% endblock %}
+	{% endembed %}
+	{% embed '_layouts/_section.twig' %}
+		{% block body %}
+			{% include '_containers/_events/_featured-event' with { component: eventPage } only %}
+		{% endblock %}
+	{% endembed %}
+
+{% endblock %}
+
+
+{% block scripts %}
+	<script>
+		window.props = { events: {{ items | json_encode() | raw }} }
+	</script>
+
+	<script>
+		window.props.eventCategories = [{
+					id: 1,
+					title: 'Events',
+					textColor: 'c88242',
+					backgroundColor: 'white'
+				}
+			];
+		</script>
+	{{ parent()}}
+{% endblock %}

@@ -1,0 +1,103 @@
+{% set countries = craft.commerce.countries.allCountriesAsList %}
+{% set states = craft.commerce.states.allEnabledStatesAsListGroupedByCountryId %}
+
+{% set customer = craft.commerce.customers.customer %}
+
+
+<div class="checkout__form-address checkout__form-address--{{ addressType|default('') }}" >
+
+    <div class="js-msg alert"></div>
+    <div class="checkout__form-row checkout__form-footer">
+        <!---
+        {% include "_forms/checkbox" with { name: 'makePrimaryBillingAddress', value: '', label: 'Primary Billing', blockClass: 'checkout' } %}
+
+
+        {% include "_forms/checkbox" with { name: 'makePrimaryShippingAddress', value: '', label: 'Primary Shipping', blockClass: 'checkout' } %}
+        -->
+    </div>
+
+    <div class="checkout__form-row">
+        {% include "_forms/text-input" with {
+            name: addressType|default('') ? addressType~'Address[firstName]' : 'address[firstName]', 
+            label: 'First Name*', 
+            blockClass: 'checkout', 
+            value: address.firstName|default(firstName|default),
+            disabled: address.id|default and user|default,
+        } 
+        %}
+        {% include "_forms/text-input" with { 
+            name: addressType|default('') ? addressType~'Address[lastName]' : 'address[lastName]', 
+            label: 'Last Name*', 
+            blockClass: 'checkout', 
+            value: address.lastName|default(lastName|default),
+            disabled: address.id|default and user|default,
+        } %}
+    </div>
+
+    <div class="checkout__form-row">
+        {% include "_forms/text-input" with { 
+            name: addressType|default('') ? addressType~'Address[businessName]' : 'address[businessName]', 
+            label: 'Company', 
+            blockClass: 'checkout', 
+            value: address.businessName|default,
+            disabled: address.id|default and user|default,
+        } %}
+    </div>
+
+    <div class="checkout__form-row">
+        {% include "_forms/text-input" with { 
+            name: addressType|default('') ? addressType~'Address[address1]' : 'address[address1]', 
+            label: 'Address', 
+            blockClass: 'checkout', 
+            value: address.address1|default,
+            disabled: address.id|default and user|default,
+        } %}
+    </div>
+
+
+    <div class="checkout__form-row checkout__form-row--large-first">
+        {% include "_forms/text-input" with { 
+            name: addressType|default('') ? addressType~'Address[city]' : 'address[city]', 
+            label: 'City', 
+            blockClass: 'checkout', 
+            value: address.city|default,
+            disabled: address.id|default and user|default,
+        } %}
+        {% set countryId = 13 %}{# Australia #}
+        {% set options = (states[countryId] is defined ? states[countryId] : []) %}
+        {% include "_forms/select" with { 
+            name: addressType|default('') ? addressType~'Address[stateValue]' : 'address[stateValue]', 
+            label: 'State', 
+            blockClass: 'checkout',
+            options: options, 
+            value: address.stateValue|default,
+            disabled: address.id|default and user|default,
+            dataErrorName: addressType|default('') ? addressType~'Address[stateId]' : 'address[stateId]', 
+        } %}
+        {% include "_forms/text-input" with { 
+            name: addressType|default('') ? addressType~'Address[zipCode]' : 'address[zipCode]', 
+            label: 'Postcode', 
+            blockClass: 'checkout', 
+            value: address.zipCode|default,
+            disabled: address.id|default and user|default,
+        } %}
+    </div>
+
+    <div class="checkout__form-row checkout__form-row--large-first">
+        {% include "_forms/select" with { 
+            hidePlaceholder: true, 
+            name: addressType|default('') ? addressType~'Address[countryId]' : 'address[countryId]', 
+            label: 'Country', 
+            blockClass: 'checkout',
+            options: countries, 
+            value: address.countryId|default,
+            disabled: address.id|default and user|default,
+        } %}
+    </div>
+
+    <!--div class="checkout__form-address-actions">
+        {% if address.id|default and user|default %}
+            <a href="/account-details" class="checkout__continue-link ">Update address details</a>
+        {% endif %}
+    </div-->
+</div>

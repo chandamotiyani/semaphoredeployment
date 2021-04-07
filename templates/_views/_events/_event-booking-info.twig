@@ -1,0 +1,68 @@
+<div class="col event-single__col-detail">
+  <ul class="event-single__list">
+    {% if event.duration | length %}
+      <li>
+        <strong>Duration</strong><br/>
+        {{ event.duration }}
+      </li>
+    {% endif %}
+    {% if hideDates|default(false) == false %}
+      {% for schedule in event.schedule %}
+
+      <li>
+            {# If there's no end date, show FROM #}
+            {% if not schedule.end %}
+              <strong>{{ schedule.start|date("D d F") }}</strong><br>from {{ schedule.start|date("h:ia") }}<br/>
+
+            {# If the start/end DATES are the same, show like this: Sun 29 March 12 - 4:30pm #}
+            {% elseif schedule.start|date("d-m-y") == schedule.end|date("d-m-y") %}
+              <strong>{{ schedule.start|date("D d F") }}</strong><br/>
+
+              {# If the start/end times are both am or pm show the am/pm at the end ie. 12:30 - 2:00pm and NOT 12:30pm - 2:00pm #}
+              {% if schedule.start|date("a") == schedule.start|date("a") %}
+                {{ schedule.start|date("h:i") }} - {{ schedule.end|date("h:ia") }}
+              {% else %}
+                {{ schedule.start|date("h:ia") }} - {{ schedule.end|date("h:ia") }}
+              {% endif %}
+
+            {% else %}
+              {# Show like this: 29 Feb - 1 Mar from 2:00pm #}
+              {% if schedule.start|date("d M") == schedule.start|date("d M") %}
+                <strong>{{ schedule.start|date("d") }} - {{ schedule.end|date("d M") }}</strong><br/>
+              {% else %}
+                <strong>{{ schedule.start|date("d M") }} - {{ schedule.end|date("d M") }}</strong><br/>
+              {% endif %}
+              from {{ schedule.end|date("h:ia") }}
+            {% endif %}
+          </li>
+      {% endfor %}
+    {% endif %}
+    {% if not location|default  %}
+        {% if event.location is not null %}
+            {% set location = event.location.one %}
+        {% endif %}
+    {% endif %}
+    {% if location|default  %}
+      <li>
+        <strong>Address</strong><br/>
+        {{ location.title }}<br/>
+        {{ location.locationAddress }}<br/>
+        {{ location.locationSuburb }}, {{ location.locationState }}<br/>
+        {{ location.locationCountry }}
+        {# {% if event.eventVenue | length %}{{ event.eventVenue }}, {% endif %}{{ location.title }} #}
+      </li>
+      <li>
+        <a href="{{ location.locationMapLink }}" target="_blank">Get directions</a></li><br/>
+    {% endif %}
+    {% if event.notes | length %}
+      <li>
+        <strong>Other Details</strong><br/>
+        {{ event.notes }}
+      </li>
+    {% endif %}
+    <li>
+      <strong>Cost</strong><br/>
+      {{ event.price }}
+    </li>
+  </ul>
+</div>

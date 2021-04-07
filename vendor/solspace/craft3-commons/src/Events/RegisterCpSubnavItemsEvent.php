@@ -1,0 +1,67 @@
+<?php
+
+namespace Solspace\Commons\Events;
+
+use yii\base\Event;
+
+class RegisterCpSubnavItemsEvent extends Event
+{
+    /** @var array */
+    private $subnavItems;
+
+    /**
+     * CpNavEvent constructor.
+     *
+     * @param array $subnavItems
+     */
+    public function __construct(array $subnavItems)
+    {
+        $this->subnavItems = $subnavItems;
+
+        parent::__construct();
+    }
+
+    /**
+     * @param string $handle
+     * @param string $label
+     * @param string $url
+     * @param string|null $afterHandle
+     *
+     * @return $this
+     */
+    public function addSubnavItem(
+        string $handle,
+        string $label,
+        string $url,
+        string $afterHandle = null
+    ): RegisterCpSubnavItemsEvent {
+        $item = [
+            'label' => $label,
+            'url'   => $url,
+        ];
+
+        if (null !== $afterHandle && isset($this->subnavItems[$afterHandle])) {
+            $modifiedArray = [];
+            foreach ($this->subnavItems as $key => $value) {
+                $modifiedArray[$key] = $value;
+                if ($key === $afterHandle) {
+                    $modifiedArray[$handle] = $item;
+                }
+            }
+
+            $this->subnavItems = $modifiedArray;
+        } else {
+            $this->subnavItems[$handle] = $item;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSubnavItems(): array
+    {
+        return $this->subnavItems;
+    }
+}

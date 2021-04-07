@@ -1,0 +1,9 @@
+<section class="modal {{ modalID }} {{ modalClass|default('') }}" id="{{ modalID }}">
+	<div class="modal__background modal-close"></div>
+	<div class="modal__slide {{ modalID }}__row">
+		<svg class="modal__close-icon {{ modalID }}__close-icon"><use xlink:href="#close"></use></svg>
+
+		{% block content %}{% endblock %}
+
+	</div>
+</section>

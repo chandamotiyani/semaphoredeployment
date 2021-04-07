@@ -1,0 +1,27 @@
+{% import "_partials/_macros.twig" as macro %}
+
+<aside class="sidebar">
+	{% if backRoute is defined and backLabel is defined %}
+		<a class="sidebar__back js-back-button" href="/{{ macro.getRouteUrl(backRoute) }}">
+			<svg class="sidebar__back-icon"><use xlink:href="#chev-heavy"></use></svg>
+			<div class="sidebar__back-icon-label">{{ backLabel }}</div>
+		</a>
+	{% endif %}
+    {% for field in fields %}
+        <div class="sidebar__group">
+            <h3>{{ field.label }}</h3>
+            {% if field.url %}
+            <p><a href="{{field.url}}">{{ field.value }}</a></p>
+            {% else %}
+            <p>{{ field.value }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <div class="sidebar__share">
+        <h3>Share:</h3>
+        <ul class="sidebar__icons">
+            <li><a href="{{ socialShare('facebook') }}" target="_blank"><svg><use xlink:href="#facebook"></use></svg></a></li>
+            <li><a href="{{ socialShare('twitter') }}" target="_blank"><svg><use xlink:href="#twitter"></use></svg></a></li>
+        </ul>
+    </div>
+</aside>

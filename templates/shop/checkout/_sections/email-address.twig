@@ -1,0 +1,12 @@
+{# A user will always be a customer, but a customer might not be a user #}
+{% if not user  %}
+  {##############################################################
+    Step 1: Not logged in and No email address exists in Cart:
+    Ask for Email Address
+  ###############################################################}
+  <p>To start checkout, please provide your email address.</p>
+  {% include 'shop/checkout/_forms/update-cart-email-address' %}
+
+{% else %}
+  {% include 'shop/checkout/_forms/update-cart-email-address' with { user: user }  %}
+{% endif %}

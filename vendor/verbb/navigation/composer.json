@@ -1,0 +1,43 @@
+{
+    "name": "verbb/navigation",
+    "description": "A Craft CMS plugin to create navigation menus for your site.",
+    "type": "craft-plugin",
+    "version": "1.4.14",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "navigation",
+        "menu"
+    ],
+    "support": {
+        "email": "support@verbb.io",
+        "issues": "https://github.com/verbb/navigation/issues?state=open",
+        "source": "https://github.com/verbb/navigation",
+        "docs": "https://github.com/verbb/navigation",
+        "rss": "https://github.com/verbb/navigation/commits/v2.atom"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Verbb",
+            "homepage": "https://verbb.io"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.4.0",
+        "verbb/base": "^1.0.2"
+    },
+    "autoload": {
+        "psr-4": {
+          "verbb\\navigation\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Navigation",
+        "handle": "navigation",
+        "changelogUrl": "https://raw.githubusercontent.com/verbb/navigation/craft-3/CHANGELOG.md",
+        "class": "verbb\\navigation\\Navigation"
+    }
+}

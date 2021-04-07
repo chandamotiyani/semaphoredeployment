@@ -1,0 +1,23 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Entry Instructions plugin for Craft CMS 3.x
+ *
+ * EntryInstructionsField Field Input
+ *
+ * @author    Superbig
+ * @copyright Copyright (c) 2018 Superbig
+ * @link      https://superbig.co
+ * @package   EntryInstructions
+ * @since     2.0.0
+ */
+#}
+<style type="text/css">
+    /* This one declaration gets hardcoded */
+    #fields-{{ id }}-field .heading label {
+        display: none;
+    }
+
+    /* From Settings (global & field-specific) */
+    {{ renderedCSS|raw }}
+</style>

@@ -1,0 +1,34 @@
+  {##############################################################
+    If user is logged in prefill personal details form and allow them to confirm before next step
+    If user email exists, show sign in form and reload this step.
+    If new customer, collect personal details and show login form.
+  ###############################################################}
+{% if not user  %}
+  {% set userExistsButCantLogin = craft.users.email(cart.email).status(['locked','suspended','pending']).one() %}
+  {% set userExists = null %}
+
+  {% if cart.email %}
+    {% set userExists = craft.users.email(cart.email).one() %}
+  {% endif %}
+
+  {# Email address exists, ask them to sign in. #}
+  {% if userExists and not userExistsButCantLogin %}
+    {% include "shop/checkout/_forms/user-sign-in.twig" %}
+
+    <div class="checkout-guest-form">
+      {% include "shop/checkout/_forms/update-cart-user-details.twig" %}
+    </div>
+
+  {# New Customer - Give them the form and the opportunity to create account #}
+  {% else %}
+    {% include "shop/checkout/_forms/update-cart-user-details.twig" %}
+
+    {# If they already exist but can't login, don't show create account #}
+    {% if not userExistsButCantLogin %}
+      {% include "shop/checkout/_forms/user-create-account.twig" %}
+    {% endif  %}
+  {% endif %}
+
+{% else %}
+  {% include "shop/checkout/_forms/update-cart-user-details.twig" %}
+{% endif %}

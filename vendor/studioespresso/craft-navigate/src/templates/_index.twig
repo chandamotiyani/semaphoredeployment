@@ -1,0 +1,84 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Navigate plugin for Craft CMS 3.x
+ *
+ * Navigate index.twig
+ *
+ * @author    Studio Espresso
+ * @copyright Copyright (c) 2018 Studio Espresso
+ * @link      https://studioespresso.co
+ * @package   Navigate
+ * @since     0.0.1
+ */
+#}
+
+{% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
+
+{# The title of this CP section #}
+{% set title = "Navigate" %}
+{% set createUrl = url('navigate/add') %}
+
+{% block actionButton %}
+    {% if (not currentUser.admin and settings.anyoneCanAdd) or currentUser.admin %}
+        <div id="button-container">
+            <div class="btngroup submit">
+                <a class="btn submit add icon" href="{{ createUrl }}">
+                    {{ 'New navigation'|t('navigate') }}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{# The content of the CP Section#}
+{% block content %}
+    {% if navigations|length %}
+        <table id="navigations" class="data fullwidth collapsible">
+            <thead>
+            <tr>
+                <th scope="col">{{ 'Name'|t('navigate') }}</th>
+                <th scope="col">{{ 'Handle'|t('navigate') }}</th>
+                <th scope="col">{{ 'Settings'|t('navigate') }}</th>
+                <th scope="col">{{ 'Remove'|t('navigate') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for navigation in navigations %}
+                <tr data-id="{{ navigation.id }}" data-name="{{ navigation.title }}">
+                    <th scope="row" data-title="Title"><a
+                                href="{{ url('navigate/edit/'~navigation.id ~ '/' ~ defaultSite.handle) }}">{{ navigation.title }}</a>
+                    </th>
+                    <td data-title="Handle"><code>{{ navigation.handle }}</code></td>
+                    <td data-title="Settings">
+                        {% if not navigation.adminOnly or currentUser.admin %}
+                            <a href="{{ url('navigate/settings/'~navigation.id) }}" role="button"><span
+                                        data-icon="settings"></span></a>
+                        {% endif %}
+                    </td>
+                    <td class="thin">
+                        {% if (not currentUser.admin and settings.anyoneCanAdd) or currentUser.admin %}
+                            <a class="delete icon" title="Delete" role="button"></a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+        <div id="nonavigations">
+            {{ 'No navigations found, click "New navigation" in the top right corner to get started'|t('navigate') }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% js %}
+    var adminTable = new Craft.AdminTable({
+    tableSelector: '#navigations',
+    noItemsSelector: '#nonavigations',
+    deleteAction: 'navigate/default/delete',
+    confirmDeleteMessage: '{{ "Are you sure you want to delete “{name}”?"|t('navigate') }}',
+    });
+{% endjs %}

@@ -1,0 +1,8 @@
+{% if product.varieties %}
+  <strong class="product__detail-heading"></strong>
+    {% for varieties in product.varieties %}
+      {{ varieties.title }}
+    {% endfor %}
+    {{ product.productInfo.vintage }}
+  </strong>
+{% endif %}

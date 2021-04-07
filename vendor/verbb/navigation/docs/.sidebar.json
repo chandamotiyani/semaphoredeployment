@@ -1,0 +1,57 @@
+[
+    {
+        "title": "Get Started",
+        "collapsable": false,
+        "children": [
+            "get-started/installation-setup",
+            "get-started/requirements",
+            "get-started/configuration"
+        ]
+    },
+    {
+        "title": "Feature Tour",
+        "collapsable": false,
+        "children": [
+            "feature-tour/overview",
+            "feature-tour/am-nav-migration",
+            "feature-tour/navee-migration"
+        ]
+    },
+    {
+        "title": "Template Guides",
+        "collapsable": false,
+        "children": [
+            "template-guides/available-variables",
+            "template-guides/rendering-nodes",
+            "template-guides/breadcrumbs",
+            "template-guides/navigation-field",
+            "template-guides/eager-loading"
+        ]
+    },
+    {
+        "title": "Getting Elements",
+        "collapsable": false,
+        "children": [
+            "getting-elements/node-queries"
+        ]
+    },
+    {
+        "title": "Developers",
+        "collapsable": false,
+        "children": [
+            "developers/node",
+            "developers/nav",
+            "developers/events",
+            "developers/extensibility",
+            "developers/graphql"
+        ]
+    },
+    {
+        "title": "Support",
+        "collapsable": false,
+        "children": [
+            "support/get-support",
+            "support/credit-thanks"
+        ]
+    }
+]

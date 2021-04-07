@@ -1,0 +1,11 @@
+{% embed '_cards/_card.twig' with { type: 'article' }%}
+	{% block details %}
+		<div class="{{ class }}__date">
+			<span>{{ entryType }}</span>
+			<span>{{ date | date('F jS, Y') }}</span>
+		</div>
+		<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>
+		<div class="{{ class }}__description">{{ description | typogrify }}</div>
+		<div class="{{ class }}__cta">{{ cta | typogrify }}</div>
+	{% endblock %}
+{% endembed %}

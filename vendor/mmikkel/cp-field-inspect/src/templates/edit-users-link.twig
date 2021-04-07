@@ -1,0 +1,12 @@
+{% if user ?? null and user.id %}
+
+    {% set editUri = 'settings/users/fields' %}
+    {% set label = 'Edit Users Settings'|t('cp-field-inspect') %}
+
+    <div class="data">
+        <p>
+            {% include 'cp-field-inspect/_includes/edit-source-link.twig' %}
+        </p>
+    </div>
+
+{% endif %}

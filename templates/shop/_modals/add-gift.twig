@@ -1,0 +1,29 @@
+{% extends "_layouts/_modal" %}
+
+{% set modalID = 'add-gift' %}
+
+{% block content %}
+
+<gift-options></gift-options>
+{#
+  <div class="add-gift__col add-gift__col modal__col">
+    <h2 class="add-gift__heading add-gift__title modal__heading">Create a <em>beautiful</em> gift</h2>
+
+    <div class="add-gift__product-main">
+      <add-to-cart v-bind:productid="{{ product.id }}" purchasableId="{{ product.purchasableId }}" notify="panel"></add-to-cart>
+      <strong class="add-gift__product-main-title">{{ product.title }}</strong>
+      <span class="add-gift__product-main-price">${{ product.price }}</span>
+    </div>
+
+    <ul class="gift-items">
+      {% for giftOption in product.giftOptions %}
+        {% include "shop/_partials/gift-item" with { item: giftOption } %}
+      {% endfor %}
+    </ul>
+
+    <div class="add-gift__continue">
+      <input type="submit" value="Add to Cart" class="add-gift__continue-button">
+    </div>
+  </div>
+  #}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% embed '_cards/_card.twig' with { type: 'carousel-experience' }%}
+	{% block details %}
+		<div class="{{ class }}__location">{{ location }}</div>
+		<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>
+
+		{% if subtitle %}
+			<h3 class="{{ class }}__subtitle">{{ subtitle | typogrify }}</h3>
+		{% endif %}
+	{% endblock %}
+
+	{% block expanded %}
+		<span class="card-carousel-event__cta">Learn More</span>
+	{% endblock %}
+{% endembed %}

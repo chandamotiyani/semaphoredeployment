@@ -1,0 +1,37 @@
+{% import '_includes/forms' as forms %}
+
+{% set users = [] %}
+
+{% if allGroups is defined %}
+    {% for user in allGroups %}
+        {% set users = users | merge([{ label: user.name, value: user.uid }]) %}
+    {% endfor %}
+{% endif %}
+
+{% if soloAccount is defined %}
+    {% set users = users | merge([{ label: 'Solo Account' | t('cp-nav'), value: 'solo' }]) %}
+{% endif %}
+
+{{ forms.textField({
+    label: 'Name' | t('cp-nav'),
+    instructions: 'Choose what you want this layout to be called' | t('cp-nav'),
+    id: 'name',
+    name: 'name',
+    required: true,
+    autofocus: true,
+    value: layout.name,
+}) }}
+
+<input type="hidden" name="id" value="{{ layout.id }}" style="display: none;" />
+
+{% if users %}
+    {{ forms.checkboxSelectField({
+        label: 'Permissions' | t('cp-nav'),
+        instructions: 'Select which user groups should have this layout assigned to them.' | t('cp-nav'),
+        id: 'permissions',
+        name: 'permissions',
+        options: users,
+        values: layout.permissions,
+        showAllOption: false,
+    }) }}
+{% endif %}

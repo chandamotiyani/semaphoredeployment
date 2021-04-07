@@ -1,0 +1,56 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+
+    {% block content %}
+
+        {% if title is not defined %}
+            {% set title = 'Checkout' %}
+        {% endif %}
+
+
+        {% if cart is not defined %}
+            {% set cart = craft.commerce.carts.cart %}
+        {% endif %}
+
+        {% include "_page-builder-components/hero-small.twig" %}
+
+        {% set cart = craft.commerce.getCarts().getCart()%}
+        {% set number = craft.app.request.param('number') %}
+        {% set user = craft.app.user %}
+        {% set order = craft.yalumbaOrders().getUserYalumbaOrderByOrderId(number, currentUser) %}
+
+        <div class="section section--constrained order">
+            <div class="checkout__row">
+                {% for lineItem in order.lineItems %}
+                    {%  set productName =  lineItem.productName %}
+                    {%  set productUrl =  '' %}
+                <div>
+                    {% if lineItem.phonetic %}
+                        {% set variant = craft.variants.phonetic(lineItem.phonetic).one() %}
+                        {% if variant|default(0) %}
+                            {% set productName =  variant.title %}
+                            {% set productUrl =  variant.url %}
+{#                           TODO:we can now access all variant fields - we should NOT use price though, since this might not be the price they paid in-store.
+                                price shoudl come instead from the lineItem #}
+{#                            TODO: what should we do about events that are ordered out of the system? #}
+{#                            TODO: should we look up the phonetic from the yalumba_products table#}
+                        {% endif %}
+                    {% endif %}
+                    Product name: <a href="{{ productUrl }}">{{ productName }}</a><br />
+                    Quantity: {{ lineItem.quantity }}<br />
+                    Price: ${{ lineItem.price }}
+                    <hr />
+                </div>
+                {% endfor %}
+{#              TODO: probably a special case for freight charge here too. We need a central shipping phonetic place service. #}
+            </div>
+            <div class="checkout__footer">
+                <h2 class="checkout__col-heading">What happens next?</h2>
+                <p>You will receive an order confirmation by email. To track your order, please refer to the tracking number which you will receive shortly in an email from Australia Post.</p>
+                <p>Please allow up to 5 working days for your order to arrive.</p>
+            </div>
+        </div>
+
+    {% endblock %}
+
+{% endembed %}

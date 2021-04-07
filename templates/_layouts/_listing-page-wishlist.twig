@@ -1,0 +1,18 @@
+{% set navbar = 'small' %}
+{% set component = craft.entries.section('wishlist').one() %}
+
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+
+{% embed "_page-builder-components/hero-small.twig" with {
+		component: {
+			image: component.bannerImage.one().url|default,
+			focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+		}, title: title|default('') } %}
+	{% endembed %}
+{% endblock %}
+
+{% block content %}
+	{% include "_containers/_page-builder/_newsletter.twig" with { localNewsletter: component.newsletter.one|default } %}
+{% endblock %}

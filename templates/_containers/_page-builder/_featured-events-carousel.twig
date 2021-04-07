@@ -1,0 +1,265 @@
+
+
+{% set articles = [] %}
+{% set eventCards = [] %}
+{% set tourCards = [] %}
+{% set buttons = [] %}
+
+
+{# Get featured events that are set manually #}
+{% set featuredEvents = component.featuredEvents.one %}
+
+{% if featuredEvents|default %}
+
+	{% if currentUser and featuredEvents.membersOnly.options[0].selected|default %}
+		{% set memberOnlyEvents = craft.schedules.getMembersOnlySchedules().with([
+			'event',
+			['event.bannerImage', {
+				withTransforms: ['productListingImage']
+			}]
+			]) %}
+
+			{% for eventSchedule in memberOnlyEvents.all() %}
+				{% set event = eventSchedule.getEvent()|default  %}
+
+				{% if event %}
+					{% set template = event.groupHandle == 'tours' ? 'card-carousel-experience' : 'card-carousel-event' %}
+					{%
+						set articles = articles | merge([{
+						template: template,
+						title: event.title | default,
+						image: event.bannerImage.one | default,
+						location: event.eventLocation[0].title | default,
+						cta: 'Learn more',
+						url: event.url | default,
+						dateFrom: eventSchedule.startDateTime | default,
+						subtitle: '',
+						super: event.eventLocation[0].title | default,
+						text: event.eventShortDescription | default,
+						isMembersOnly: event|isMembersOnly,
+						ticketTypeText: event.ticketTypeText,
+						nextOn: event.schedule|length,
+					}]) %}
+				{% endif %}
+			{% endfor %}
+	{% endif %}
+
+	{# Get latest events for Categories: Tours / Events #}
+	{% if featuredEvents|default and featuredEvents.autoselection %} {# If the auto select option is checked: #}
+		{% for eventType in featuredEvents.autoselection.options %}
+
+			{% if eventType == 'tours' and eventType.selected|default == true %} {# If the option is checked for tours: #}
+			{# Get Tours #}
+
+				{% set tours = craft.schedules.getEventsWithFirstSchedule([], 'tours').with([
+					'event',
+					['event.bannerImage', {
+						withTransforms: ['productListingImage']
+					}]
+					]) %} {# get all schedules for tours #}
+
+				{# we're pulling out tours #}
+				{% for tour in tours.all %}
+					{% if tour %}
+						{% set event = tour.getEvent()|default  %}
+							{%
+							set tourCards = tourCards | merge([{
+								template: 'card-carousel-experience',
+								title: event.title | default,
+								image: event.bannerImage.one | default,
+								location: event.eventLocation[0].title | default,
+								cta: 'Learn more',
+								url: event.url | default,
+								dateFrom: false,
+								subtitle: '',
+								super: event.eventLocation[0].title | default,
+								text: event.eventShortDescription | default,
+								isMembersOnly: event|isMembersOnly,
+								ticketTypeText: event.ticketTypeText,
+								nextOn: event.schedule|length,
+							}]) %}
+					{% endif %}
+				{% endfor %}
+
+				{% set buttons = buttons | merge ([{
+					label: 'All Tours',
+					url: '/winery-tours'
+				}]) %}
+			{% endif %}
+			{% if eventType == 'events' and eventType.selected|default == true %} 
+				{% set events = craft.schedules.getEventsWithFirstSchedule([], 'events').with([
+					'event',
+					['event.bannerImage', {
+						withTransforms: ['productListingImage']
+					}]
+					]) %}
+				{% for eventSchedule in events.all %}
+
+					{% if eventSchedule %}
+						{% set event = eventSchedule.getEvent()|default  %}
+
+						{%
+							set eventCards = eventCards | merge([{
+							template: 'card-carousel-event',
+							title: event.title | default,
+							image: event.bannerImage.one | default,
+							location: event.eventLocation[0].title | default,
+							cta: 'Learn more',
+							url: event.url | default,
+							dateFrom: eventSchedule.startDateTime | default,
+							subtitle: '',
+							super: event.eventLocation[0].title | default,
+							text: event.eventShortDescription | default,
+							isMembersOnly: event|isMembersOnly,
+							ticketTypeText: event.ticketTypeText,
+							nextOn: event.schedule|length,
+						}]) %}
+					{% endif %}
+
+				{% endfor %}
+					{# show button all tours button only if carousel contains tours, etc #}
+					{% set buttons = buttons | merge ([{
+						label: 'All Events',
+						url: '/events'
+					}]) %}
+			{% endif %}
+		{% endfor %}
+
+		{# Show events in a Sequence of 2 Events 1 Tour card #}
+		{% for eventIndex in 0..3 %}
+			{% if eventCards[eventIndex]|default %}
+				{% set articles = articles | merge([eventCards[eventIndex]]) %}
+			{% endif %}
+			{% if eventIndex + 1 is divisible by(2) %}
+				{% set articleIndex = articleIndex|default(0) + 1 %}
+				{% if tourCards[articleIndex]|default %}
+					{% set articles = articles | merge([tourCards[articleIndex]]) %}
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+
+	{% endif %}
+	{# Get manually selected list of Tours / Events #}
+	{% if featuredEvents|default and featuredEvents.events and featuredEvents.events.withPermission.all %}
+		{% set events = featuredEvents.events.withPermission.with([
+			'eventLocation', ['bannerImage', {
+				withTransforms: ['cardImage']
+			}]
+			]).all() %}
+		{% set hasTours = false %}
+		{% set hasEvents = false %}
+		{% set hasTastings = false %}
+
+		{% for event in events %}
+
+			{% if event.groupHandle == 'tours' %}
+				{% set hasTours = true %}
+			{% endif %}
+
+			{% if event.groupHandle == 'tastings' %}
+				{% set hasTastings = true %}
+			{% endif %}
+
+			{% if event.groupHandle == 'events' %}
+				{% set hasEvents = true %}
+			{% endif %}
+
+			{% if not (event.groupHandle == 'events' and event.schedule.one.startDateTime < date()) %}
+				{% set template = event.groupHandle == 'tours' ? 'card-carousel-experience' : event.groupHandle == 'tastings' ? 'card-carousel-tasting' : 'card-carousel-event' %}
+					{%
+						set articles = articles | merge([{
+						template: template,
+						title: event.title | default,
+						image: event.bannerImage[0] | default,
+						location: event.eventLocation[0].title | default,
+						cta: 'Learn more',
+						url: event.url | default,
+						dateFrom: event.groupHandle == 'events' ? event.schedule.one.startDateTime : false,
+						subtitle: '',
+						super: event.eventLocation[0].title | default,
+						text: event.eventShortDescription | default,
+						isMembersOnly: event|isMembersOnly,
+						price: event.price,
+				        ticketTypeText: event.ticketTypeText,
+				        nextOn: event.schedule|length,
+					}]) %}
+			{% endif %}
+		{% endfor %}
+ 
+		{# Tours and tasting buttons - Show one button if it's got a mix of tours and tastings. #}
+		{% if hasTours|default and hasTastings|default %}
+			{% set buttons = buttons | merge ([{
+				label: 'All Experiences',
+				url: '/winery-tours'
+			}]) %}
+		{% else %}
+			{% if hasTastings|default %}
+				{% set buttons = buttons | merge ([{
+					label: 'All Experiences',
+					url: '/wine-tasting'
+				}]) %}
+			{% endif %}
+
+			{% if hasTours|default %}
+				{% set buttons = buttons | merge ([{
+					label: 'All Tours',
+					url: '/winery-tours'
+				}]) %}
+			{% endif %}
+		{% endif %}
+
+
+
+		{% if hasEvents|default %}
+			{% set buttons = buttons | merge ([{
+				label: 'All Events',
+				url: '/events'
+			}]) %}
+		{% endif %}
+
+	{% endif %}
+
+
+	{% if articles %}
+	{% if articles|length == 1 %}
+		{% set featuredEvent = articles[0]  %}
+
+		{%
+			set fields = {
+				constrainImageTo: 'square',
+				image: featuredEvent.image | default,
+				imagePosition: 'right',
+				buttons: [{ label: 'Learn More', entry: featuredEvent }],
+				super: featuredEvent.super,
+				heading: featuredEvent.title,
+				text: featuredEvent.text,
+				colourScheme: 'black-on-transparent',
+				dateFrom: featuredEvent.dateFrom,
+				class: 'card-event',
+				isMembersOnly: featuredEvent.isMembersOnly,
+				ticketTypeText: event.ticketTypeText,
+				nextOn: event.schedule|length,
+			}
+		%}
+
+		{% include '_views/_text-with-image' with { fields: fields, sideHeading: 'Featured Event' } only %}
+	{% else %}
+
+		{% set sideHeading = component.sideHeading.one.heading | default %}
+
+		{% embed "_layouts/_section.twig" with { sideHeading: sideHeading | default } %}
+			{% block body %}
+				{% embed "_layouts/_"~layoutType|default('card-list') with { items: articles, type: 'mixed', class: 'featured-events', layoutType: 'carousel' } %}
+					{% block item %}
+						{% include "_cards/_" ~ item.template ~ ".twig" with item only %}
+					{% endblock %}
+				{% endembed %}
+			{% endblock %}
+			{% block footer %}
+				{% include "_layouts/_carousel-controls.twig" with { buttons: buttons|default, hideCarouselControls: buttons|default } %}
+			{% endblock %}
+		{% endembed %}
+		{% endif %}
+	{% endif %}
+
+{% endif %}

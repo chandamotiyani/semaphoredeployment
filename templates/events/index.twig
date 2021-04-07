@@ -1,0 +1,53 @@
+{% set filters = craft.getSchedule().getFilters() %}
+{% set sort = 'startDateTime' %}
+{% set schedule = craft
+	.getSchedule()
+	.getEventsWithFirstSchedule(filters, 'events').with([
+		'event',
+		['event.bannerImage', {
+			withTransforms: ['productListingImage']
+		}]
+	])  %}
+
+{# paginate scheduleQuery as pageInfo, schedule #}
+
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% include "_page-builder-components/hero.twig" with { component: entry.banner } %}
+{% endblock %}
+
+{% block filter %}
+	{% include 'events/filters' with { filters: filters, loadAjaxData: true } only %}
+{% endblock %}
+
+{% block content %}
+
+	<div class="js-event-listing">
+		{% include '_containers/_events/_featured-event' with { component: entry } only %}
+
+		{% embed '_layouts/_section.twig' with { padBottom: false, class: 'list-section' } %}
+			{% block body %}
+				<div class="events-list-container">
+					{% if schedule|default %}
+						{% embed "_partials/_card-list.twig" with { items: schedule, type: 'event', ref: true } only %}
+							{% block item %}
+								{% include "_containers/_shop/_product-event-card" with { schedule: item } only %}
+							{% endblock %}
+						{% endembed %}
+					{% else %}
+						<div class="card-list-product card-list-product--empty">
+							<h2 class="heading">Sorry - no items exist with the filters chosen.</h2>
+						</div>
+					{% endif %}
+				</div>
+			{% endblock %}
+		{% endembed %}
+
+		{% if entry is defined %}
+			{% include "_partials/_page-builder.twig" with { components: entry.components } %}
+		{% endif %}
+
+	</div>
+
+{% endblock %}

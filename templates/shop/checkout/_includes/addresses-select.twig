@@ -1,0 +1,31 @@
+{# js-update-cart-address-select #}
+{% if addresses|length %}
+    <div class="form__input-wrap {{ blockClass|default('') }}__input-wrap">
+        {#Use existing Address: #}
+        <select data-name="{{ addressType|default('') }}AddressId" class="{{ blockClass|default('select') }}__select form__select address-select select" {% if disableInputs|default %} data-disable-inputs=true {% endif %}>
+            <option value="">New Address</option>
+            {% for address in addresses %}
+                <option data-address='[{
+                    "id": "{{ address.id }}",
+                    "firstName": "{{ address.firstName }}",
+                    "lastName": "{{ address.lastName }}",
+                    "address1": "{{ address.address1 }}",
+                    "address2": "{{ address.address2 }}",
+                    "city": "{{ address.city }}",
+                    "zipCode": "{{ address.zipCode }}",
+                    "stateValue": "{{ address.stateValue }}",
+                    "countryId": "{{ address.countryId }}",
+                    "phone": "{{ address.phone }}",
+                    "businessName": "{{ address.businessName }}",
+                    "makePrimaryBillingAddress": "{{ primaryBillingAddress.id|default == address.id }}",
+                    "makePrimaryShippingAddress": "{{ primaryShippingAddress.id|default == address.id }}",
+                    "{{ addressType|default('') }}AddressId": {{ address.id }}
+                }]' data-address-id="{{ address.id }}"
+                {{ selected|default == address.id ? 'selected=selected' }}>
+                {{ address.firstName ~' '~  address.lastName ~' - '~ address.address1 }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="hidden" value="{{ selected|default }}" name="{{ addressType|default('') ? addressType~'AddressId' : 'id'  }}">
+    </div>
+{% endif %}

@@ -1,0 +1,58 @@
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+{% set variantId = craft.app.request.getQueryParam('variant')|default %}
+{% if variantId %}
+  {% set purchasable = craft.variants().id(variantId).one %}
+{% else %}
+  {% set purchasable = product.defaultVariant %}
+{% endif %}
+
+{% set lineItem = null %}
+{% for item in cart.lineItems %}
+  {% if item.purchasableId is defined and purchasable.id == item.purchasableId  %}
+    {% set lineItem = item %}
+  {% endif %}
+{% endfor %}
+
+
+{% set wishList = craft.wishlist.lists().default(true).one() %}
+
+{%
+	set productFields = {
+		id: product.id,
+		title: product.title,
+		subtitle: product.productInfoMerchandise.subtitle|default(''),
+		description: product.productInfoMerchandise.description,
+    price: purchasable.salePrice|currency('AUD', stripZeros = true)|replace('$'),
+    rrpPrice: purchasable.price|currency('AUD', stripZeros = true)|replace('$'),
+		qtyInCart: lineItem.qty|default(0),
+		lineItemId: lineItem.id|default(0),
+		purchasableId: purchasable.id,
+    url: product.url,
+    inWishlist: wishList.items().elementId(product.id).one()|default ? true : false,
+    imageFront:  product.productInfoMerchandise.productImageFront.one().getUrl()|default,
+    imageBack: product.productInfoMerchandise.productImageBack.one().getUrl()|default,
+    variants: product.variants(),
+    outOfStock:  purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false,
+    isAvailable: purchasable.getIsAvailable(),
+		premiseOnly: product.premiseOnly.options|default ? product.premiseOnly.options[0].selected : false,
+    disableBuyButton: (purchasable.getIsAvailable() == false) or (product.premiseOnly.options|default and product.premiseOnly.options[0].selected) or (purchasable.stock <= 0 and purchasable.hasUnlimitedStock == false)|default(false),
+		isOnSale: purchasable.sales|promotions|length,
+    membershipsDiscounts: purchasable.sales|memberships,
+    showSaleBadge: purchasable.sales|showbadge,
+    wishlistToggleUrl: craft.wishlist.item(product.id).toggleUrl(),
+    isMembersOnly: product|isMembersOnly,
+	}
+%}
+{% if product is defined %}
+{% include "shop/_cart/cart-sticky-header" with productFields %}
+
+{% embed '_layouts/_section.twig' %}
+	{% block body %}
+    {% embed '_layouts/_product.twig' with { productType: productType } %}
+    {% endembed %}
+  {% endblock %}
+{% endembed %}
+{% endif %}

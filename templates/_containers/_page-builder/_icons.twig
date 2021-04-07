@@ -1,0 +1,11 @@
+{% set component = component.icons %}
+{% set items = [] %}
+
+{% for item in component %}
+	{% set items = items | merge([{
+		icon: item.icon.one(),
+		description: item.copy
+	}]) %}
+{% endfor %}
+
+{% include '_views/_usp-list' with { items: items, narrow: true, class: 'membership-benefits' } only %}

@@ -1,0 +1,26 @@
+.blog-post {
+	& > :not(:first-child) {
+		@include media-breakpoint-down($section-spacing-vertical-small) {
+			margin-top: $section-spacing-vertical-small;
+		}
+
+		@include media-breakpoint-up($section-spacing-vertical-small) {
+			margin-top: $section-spacing-vertical-large;
+		}
+	}
+	
+	&__heading {
+		@extend .heading-primary-sm;
+	}
+
+	&__image {
+		& > img {
+			width: 100%;
+			height: auto;
+		}
+	}
+
+	&__text {
+		@include wysiwyg;
+	}
+}

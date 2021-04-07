@@ -1,0 +1,21 @@
+.event-actions {
+	display: flex;
+	flex-direction: column;
+
+	& > :not(:last-child) {
+		margin-bottom: 2em;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			margin-bottom: 0;
+			margin-right: 2em;
+		}
+	}
+	
+	@include media-breakpoint-up($single-column-breakpoint) {
+		flex-direction: row;
+	}
+
+	&__button {
+		@extend .boxed-button;
+	}
+}

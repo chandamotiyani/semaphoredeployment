@@ -1,0 +1,114 @@
+{% if entry|default and entry.backVintages|length %}
+  {%
+    set backVintageFields = {
+      super: entry.backVintages.super,
+      title: entry.backVintages.productTitle,
+      subTitle: entry.backVintages.subTitle,
+      images: entry.backVintages.productImage,
+      vintageQuality: entry.backVintages.vintageQuality,
+      cellarGuide: entry.backVintages.cellarGuide,
+      lastTested: entry.backVintages.lastTested,
+      notes: entry.backVintages.notes,
+      tastingNotePDF: entry.backVintages.tastingNotePDF,
+    }
+  %}
+
+  {% set pdfUrl = backVintageFields.tastingNotePDF.one().getUrl() %}
+{% endif %}
+
+{% if entry|default and entry.backVintages|length %}
+  {% set parent = entry.getParent() ?? entry %}
+  {% set backVintageYears = parent.getDescendants(1) %}
+{% elseif entry is defined %}
+  {% set parent = entry.getParent() ?? entry %}
+  {% set backVintageYears = parent.getDescendants(1) %}
+  {% set entry = NULL %}
+{% endif %}
+
+{% set backVintageProducts = craft.entries().section('backVintages').level(1) %}
+
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+{% set backVintageComponents = craft.entries().section('backVintage').one() %}
+
+  {% set ctaText = {
+    heading: backVintageComponents.headingWithText.heading,
+    copy: backVintageComponents.headingWithText.copy,
+  } %}
+
+  {% block hero %}
+    {% set title = 'Back Vintages' %}
+    {% set heroImage = backVintageComponents.bannerImage.one|default ? backVintageComponents.bannerImage.one.url %}
+
+    {% include "_page-builder-components/hero-small.twig" with { image: heroImage }%}
+    <a name="vintage"></a>
+  {% endblock %}
+
+  {% block featured %}
+    {% include "_views/_cta" with ctaText %}
+
+    {% include "shop/back-vintages/_partials/vintages-select" %}
+  {% endblock %}
+
+  {% block content %}
+
+
+    {% if backVintageFields is defined %}
+    <div class="section section--bleed product t-black-on-white product--back-vintage">
+      <div class="product__row">
+        <div class="product__col product__col--image js-carousel">
+          <div class="product__slider js-carousel-items">
+            {% for image in backVintageFields.images %}
+              <div class="product__image-slide">
+                <img src="{{ image.getUrl() }}" class="product__image" alt="Product image">
+              </div>
+            {% endfor %}
+          </div>
+          {% if backVintageFields.images|length > 1 %}
+            <div class="product__carousel-control">
+              <a href="#" class="product__carousel-prev js-carousel-prev"><svg><use xlink:href="#chevron"></use></svg></a>
+              <a href="#" class="product__carousel-next js-carousel-next"><svg class="flip-right"><use xlink:href="#chevron"></use></svg></a>
+            </div>
+          {% endif %}
+        </div>
+        <div class="product__col product__col--content">
+          <div class="product__content">
+
+            {% if backVintageFields.super %}
+              <strong class="product__sub-title">{{ backVintageFields.super }}</strong>
+            {% endif %}
+
+            <h1 class="product__title">{{ backVintageFields.title }}</h1>
+            <span class="product__vintages-description">{{ backVintageFields.subTitle }}</span>
+
+            <ul class="product__list">
+              <li class="product__list-item">
+                <strong class="product__list-item-title">Vintage quality:</strong>
+              {{ backVintageFields.vintageQuality }}
+              </li>
+              <li class="product__list-item">
+                <strong class="product__list-item-title">Cellar guide: </strong>
+                {{ backVintageFields.cellarGuide }}
+              </li>
+              <li class="product__list-item">
+                <strong class="product__list-item-title">Last tasted: </strong>
+                {{ backVintageFields.lastTested }}
+              </li>
+              <li class="product__list-item">
+                <strong class="product__list-item-title">Notes: </strong>
+                {{ backVintageFields.notes }}
+              </li>
+            </ul>
+          </div>
+          <a href="{{ pdfUrl }}" class="boxed-button" target="_blank">Download Tasting Note</a>
+        </div>
+      </div>
+
+
+    </div>
+    {% endif %}
+
+   {% include "_containers/_page-builder/_cta" with { component: backVintageComponents } %}
+
+  {% endblock %}
+{% endembed %}

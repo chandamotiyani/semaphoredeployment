@@ -1,0 +1,112 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+  {% block content %}
+
+    {% if title is not defined %}
+      {% set title = 'Checkout' %}
+    {% endif %}
+
+
+    {% if cart is not defined %}
+      {% set cart = craft.commerce.carts.cart %}
+    {% endif %}
+
+    {% set user = currentUser|default %}
+
+    {% include "_page-builder-components/hero-small.twig" %}
+
+    <section class="checkout container-fluid">
+      <ul class="checkout__tab-nav">
+        <li class="checkout__tab-nav-item" data-panel-index="0">Your Order</li>
+        <li class="checkout__tab-nav-item" data-panel-index="1">Your Details</li>
+      </ul>
+
+      <div class="checkout__row js-tabbed-panels">
+        <div class="checkout__col checkout__col--left js-tabbed-panels-tab">
+          <div class="back-button back-button--checkout">
+            <a href="{{ url('shop') }}" class="back-button__link js-back-button">
+              <svg class="back-button__chev"><use xlink:href="#chev-heavy"></use></svg>
+              <span>Back</span>
+            </a>
+          </div>
+
+          <h2 class="checkout__col-heading">Your Order</h2>
+          <cart-summary validate="true" group="true"></cart-summary>
+          <a href="#" class="checkout__button-next" data-panel-index="1">Next: Your Details</a>
+        </div>
+
+        <div class="checkout__col checkout__col--right js-tabbed-panels-tab js-update-checkout">
+          <h3 class="checkout__col-heading">Your Details</h3>
+          {% if cart.lineItems %}
+          {#
+            @Forms
+            Email: update-cart
+          #}
+          <div class="checkout-email-address">
+            {% include 'shop/checkout/_sections/email-address' with { cart: cart, user: user } %}
+          </div>
+          {#
+            @Forms
+            1: User Signin: user-signin
+            2: Update Cart User Details: update-cart
+            3: Create Account: user-create-account
+          #}
+          <div class="accordion-tab js-personal-details" data-index="1">
+            <div class="accordion-tab__title"><h3>Personal Details</h3> 
+              <a href="#" class="accordion-tab__edit-link">Edit</a>
+            </div>
+            <div class="accordion-tab__collapse">
+              <div class="accordion-tab__body">
+                <div class="signed-up-msg"></div>
+                {% include 'shop/checkout/_sections/personal-details' with { cart: cart, user: user } %}
+              </div>
+            </div>
+          </div>
+
+          {#
+            @Forms
+            1: Shipping Address: update-cart
+            2: Billing Adddress: update-cart
+          #}
+          <div class="accordion-tab js-address-details" data-index="2">
+            <div class="accordion-tab__title"><h3>Address Details</h3><a href="#" class="accordion-tab__edit-link">Edit</a></div>
+            <div class="accordion-tab__body">
+              <div class="accordion-tab__collapse">
+                {% include 'shop/checkout/_sections/address-details' with { cart: cart, user: user } %}
+              </div>
+            </div>
+          </div>
+
+          {#
+            @Forms
+            1: Update payment source: update-cart
+            2: Payment Form
+          #}
+          <div class="accordion-tab js-payment-details" data-index="3">
+            <div class="accordion-tab__title"><h3>Payment Details</h3><a href="#" class="accordion-tab__edit-link">Edit</a></div>
+            <div class="accordion-tab__body">
+              <div class="accordion-tab__collapse">
+                {% if craft.app.getUser.id and craft.app.getUser.getIdentity.getGroups|default %}
+                  {% set userGroup = craft.app.getUser.getIdentity.getGroups[0].handle %}
+                  {{ members.productMemberNotes.one[userGroup]|raw }}
+                {% endif %}
+                {% include 'shop/checkout/_forms/update-cart-discount-code' with { cart: cart, user: user } %}
+                {% include 'shop/checkout/_sections/payment-details' with { cart: cart, user: user } %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %} 
+          <p>You haven't added anything to your cart yet.</p>
+        {% endif %}
+      </div>
+
+    </section>
+
+    <script type="text/javascript">
+      window.csrfTokenName = "{{ craft.app.config.general.csrfTokenName|e('js') }}";
+      window.csrfTokenValue = "{{ craft.app.request.csrfToken|e('js') }}";
+      window.globals = { userId: "{{ user.id|default }}" };
+    </script>
+  {% endblock %}
+{% endembed %}

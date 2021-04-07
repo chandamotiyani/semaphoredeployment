@@ -1,0 +1,21 @@
+{# {% set component = component.collage %} #}
+	{% set items = [] %}
+
+	{% for item in component.collageTwoColumn %}
+		{% set items = items | merge(
+			[
+				{
+					image: item.image.one() | default,
+					super: item.super | default,
+					title: item.heading | default,
+					description: item.copy | default,
+					cta: item.buttonLabel | default('Learn More'),
+					entry: item.buttonLink.one() | default,
+					url: item.linkExternal|default,
+					openInNewTab: item.isExternal|default,
+				}
+			]
+		) %}
+	{% endfor %}
+
+	{% include '_views/_collage-two-column' with { header: header | default, items: items } only %}

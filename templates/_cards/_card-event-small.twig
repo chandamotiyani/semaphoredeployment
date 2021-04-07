@@ -1,0 +1,16 @@
+{% embed '_cards/_card.twig' with { type: 'event-small' } %}
+	{% block details %}
+		<h2 class="{{ class }}__title">{{ contentHeading }}</h2>
+		<div class="{{ class }}__time">
+			<span>{{ dateFrom | date('g:ia') }}</span>
+			<span>–</span>
+			<span>{{ dateTo | date('g:ia') }}</span>
+		</div>
+		<span class="{{ class }}__location">{{ location }}</span>
+		<div class="{{ class }}__price">
+			<span>$</span>
+			<span>{{ price|currency('AUD', stripZeros = true)|trim('$') }}</span>
+			<span>{{ perLabel }}</span>
+		</div>
+	{% endblock %}
+{% endembed %}

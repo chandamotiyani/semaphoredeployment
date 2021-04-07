@@ -1,0 +1,23 @@
+{% set states = craft.commerce.states.allEnabledStatesAsListGroupedByCountryId %}
+
+{% set countryId = 13 %}{# Australia #}
+{% set options = (states[countryId] is defined ? states[countryId] : []) %}
+
+{% set options = {} %}
+{% for state in states[countryId] %}
+    {# Keys have to be a string in twig, they can't be numeric. #}
+    {% set options = options|merge({
+      (state): state
+    }) %}
+{% endfor %}
+
+{% include "_forms/select" with { 
+  name: 'fields[state]', 
+  label: 'State', 
+  blockClass: 'member',
+  cssClass: 'form__input-wide',
+  options: options,
+  value: currentUser|default ? currentUser.state|default,
+  subText: craft.commerce.customers.customer.user ? '' : 'The Wine Club is currently only available to members in Australia. For international friends of Yalumba, we recommend joining our mailing list.'
+}
+%}

@@ -1,0 +1,26 @@
+/**
+ * Command palette for Craft.
+ *
+ * @author    a&m impact
+ * @copyright Copyright (c) 2017 a&m impact
+ * @link      http://www.am-impact.nl
+ */
+
+.palette {
+    background: rgba(51, 63, 77, 0.75);
+    border-radius: 14px;
+    padding: 6px;
+}
+
+.palette__tabs {
+    border-radius: 10px 10px 0 0;
+}
+
+.palette__container {
+    background: #ffffff;
+    border-radius: 10px;
+}
+
+.palette .palette__tabs:not(.hidden) + .palette__container {
+    border-radius: 0 0 10px 10px;
+}

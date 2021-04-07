@@ -1,0 +1,98 @@
+// TODO refactor
+.related-articles {
+  @extend .cards;
+
+  &__row {
+    @extend .cards__row;
+  }
+
+  &__item {
+    @extend .cards__item;
+
+    text-align: left;
+    padding: 0 $padding-small;
+  }
+
+  &__item-inner {
+    @extend .cards__item-inner;
+
+    margin-left: 0;
+    margin-right: 0;
+    background: $background-primary;
+  }
+
+  &__item-footer {
+    @extend .cards__item-footer;
+  }
+
+  &__title {
+    @extend .cards__title;
+
+    line-height: 1.2;
+    margin-bottom: 0;
+  }
+
+  &__sub-title {
+    @extend .cards__sub-title;
+  }
+
+  &__text {
+    @extend .body-text;
+
+    margin-bottom: 2.5rem;
+  }
+
+  &__content {
+    @extend .cards__content;
+
+    padding: 0 3rem 3rem 3rem;
+  }
+
+  &__image-wrap {
+    @extend .cards__image-wrap;
+  }
+
+  &__image {
+    @extend .cards__image;
+  }
+
+  &__button {
+    @extend .heading-secondary-md;
+
+    margin-top: auto;
+    color: $brand-primary;
+  }
+
+  &__meta {
+    @extend .heading-secondary-sm;
+    color: $black;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  &__meta-date {
+    font-weight: 800;
+    margin-right: 2px;
+  }
+
+  &__footer { 
+	  // TODO Refactor
+    // @extend .section__actions;
+  }
+
+  &__item-footer { 
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__footer-button {
+    @extend .boxed-button;
+
+    margin: auto;
+    display: none;
+
+    @include media-breakpoint-up(md) {
+      display: flex;
+    }
+  }
+}

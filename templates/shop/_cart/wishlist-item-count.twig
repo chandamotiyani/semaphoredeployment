@@ -1,0 +1,7 @@
+{% set list = craft.wishlist.lists().default(true).one() %}
+
+<span class="js-wishlist-items primary-navigation__cart-items">
+  {% if list is not null %}
+    {{ list.items.all()|length }}
+  {% endif %}
+</span>

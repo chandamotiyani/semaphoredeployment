@@ -1,0 +1,28 @@
+{% if entry.type.handle == 'pageWithSmallBanner' %}
+	{% set navbar = 'small' %}
+{% endif %}
+
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+
+	{% if entry.type.handle == 'pageWithSmallBanner' %}
+		{% include "_page-builder-components/hero-small.twig" with {
+			focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+			image: entry.bannerImage.one|default ? entry.bannerImage.one.getUrl : '',
+			title: entry.title,
+		} %}
+	{% elseif entry.banner is defined %}
+		{% include "_page-builder-components/hero.twig" with { component: entry.banner, bigScrollCTA: entry.type.handle == 'heritage' } %}
+	{% endif %}
+
+{% endblock %}
+
+{% block content %}
+	{% switch entry.type.handle %}
+		{% case 'heritage' %}
+			{% include "_partials/_page-builder.twig" with { components: entry.componentsHeritage } %}
+		{% default %}
+			{% include "_partials/_page-builder.twig" with { components: entry.components } %}
+	{% endswitch %}
+{% endblock %}

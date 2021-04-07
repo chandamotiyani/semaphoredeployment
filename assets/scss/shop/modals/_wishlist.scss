@@ -1,0 +1,135 @@
+.wishlist {
+
+  &__row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-self: flex-end;
+    margin-left: auto;
+    position: relative;
+    z-index: 10;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      width: 1440px;
+
+      @at-root .modal--signed-in & {
+        //width: 900px;
+      }
+    }
+  }
+
+  &__col {
+    flex: 1;
+    flex-basis: 40%;
+
+    &--right {
+      background: $background-primary;
+      flex-basis: 60%;
+
+      @at-root .modal--signed-in & {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
+    }
+
+
+    &--left {
+      background: $background-tertiary;
+      flex-basis: 40%;
+      color: $white;
+    }
+  }
+
+  &__heading {
+    color: $black;
+    margin-top: 0;
+
+    @at-root .cart-summary__col--left & {
+      color: $white;
+    }
+  }
+
+  &__text {
+    @extend .body-text;
+
+    @at-root .cart-summary__col--left & {
+      color: $white;
+      display: block;
+      margin-right: -$flexboxgrid-gutter-width/2;
+      font-weight: 600;
+
+      &--small {
+        font-weight: 100;
+        font-size: em(17);
+      }
+
+      &--smaller {
+        font-weight: 100;
+        font-size: em(14);
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__link {
+    font-size: em(14);
+    color: $white;
+    text-decoration: underline;
+    margin-top: em(20);
+    margin-bottom: em(20);
+    display: block;
+  }
+
+  &__button-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+  }
+
+  &__button {
+    @extend .boxed-button;
+    @extend .boxed-button--on-dark;
+
+    min-width: 140px;
+  }
+
+  &__cart-items {
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  &__product-add-to-cart {
+    @extend .heading-secondary-sm;
+
+    color: $text-color-accent;
+    font-weight: 600;
+
+  }
+
+  &__form-input {
+    @extend .form__input;
+
+    width: 100%;
+  }
+
+  &__form-label {
+    @extend .form__label;
+
+    color: $white;
+  }
+
+  &__close {
+    left: -35px;
+    top: 0;
+    height: 45px;
+    pointer-events: none;
+  }
+}
+
+.wishlist-text .product-form__wishlist {
+  height: 10px;
+}

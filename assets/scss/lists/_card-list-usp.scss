@@ -1,0 +1,29 @@
+.card-list-usp {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	&__item {
+		justify-items: center;
+		justify-content: center;
+		min-width: 100%;
+		flex-basis: 100%;
+
+		@include media-breakpoint-up(md) {
+			min-width: 100%;
+			flex-basis: 100%;
+		}
+
+		@include media-breakpoint-up(xl) {
+			min-width: 50%;
+			flex-basis: 50%;
+		}
+
+		strong {
+			@extend .body-text;
+
+			font-weight: 900;
+			color: $black;
+		}
+	}
+}

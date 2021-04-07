@@ -1,0 +1,58 @@
+.recipe {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		//margin-top: $section-spacing-vertical-large;
+	}
+
+	@include media-breakpoint-down($single-column-breakpoint) {
+		flex-direction: column;
+		flex-wrap: nowrap;
+	}
+	
+	&__ingredients {
+		@include media-breakpoint-up($single-column-breakpoint) {
+			flex-basis: 1/3*100%;
+			padding-right: $section-gutter-width;
+		}
+	}
+
+	&__ingredients-list {
+		@extend .body-text;
+
+		& > li {
+			display: flex;
+			padding-left: 0;
+
+			&:not(:first-child) {
+				margin-top: 1em;
+			}
+		}
+	}
+
+	&__method {
+		flex-basis: 2/3*100%;
+	}
+
+	&__method-text {
+		@extend .body-text;
+	}
+
+	&__method {
+		@include media-breakpoint-down($single-column-breakpoint) {
+			margin-top: $section-spacing-vertical-small;
+		}
+	}
+
+	&__heading {
+		@extend .heading-secondary-md;
+		margin-bottom: 1em;
+		color: $black;
+		font-family: $font-primary !important;
+		font-size: 1rem !important;
+		font-weight: bold !important;
+		letter-spacing: 0.1em !important;
+	}
+}

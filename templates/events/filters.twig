@@ -1,0 +1,114 @@
+<a name="events"></a>
+<div class="search-header-container">
+	<div class="search-header">
+		<div class="filters__container">
+			<div class="filters__show-filter-buttons hidden-desktop">
+				<strong class="filters__show-filter-buttons-button js-toggle-target" data-toggle-target-class="filters">
+					Filter:
+				</strong>
+			</div>
+			<form class="filters js-product-filters"  action="{{ action|default('/events/') }}" data-load-data="{{ loadAjaxData }}">
+				<div class="search-header__col search-header__col">
+          <strong class="filters__list-title hidden-desktop">Search Events</strong>
+					<strong class="filters__list-title hidden-mobile">Filter</strong>
+
+					<a href="#" class="filters__list-close hidden-desktop js-toggle-target" data-toggle-target-class="filters">
+						<svg class="exceptions-list__icon--close">
+							<use xlink:href="#close"></use>
+						</svg>
+					</a>
+
+					<ul class="filters__list">
+					{# Category Filters #}
+					{% for filterName, filter  in filters %}
+						{% if not filter.private|default %}
+							{% set currentFilterIds = craft.app.request.getParam(filterName) | split(',') %}
+							<li class="filters__list-item filters__list-item--dropdown collapsible">
+								<span class="filters__list-item-text collapsible__trigger">
+									{{ filter.name }}
+								</span>
+								{% set currentFilters = [] %}
+								{% set filters = [] %}
+									{% if filter.available|default(0) %}
+										{% for availableKey, availableFilter in filter.available %}
+											{% set filters = filters|merge([{
+												name: filter.handle,
+												value: availableKey,
+												label: availableFilter,
+												blockClass: 'checkout',
+												checked: (availableKey|default in currentFilterIds|default(0)),
+												id: 'tag-'~availableKey
+											}]) %}
+										{% endfor %}
+
+										{% set currentFilters = currentFilters|merge([{
+											title : '',
+											children : filters,
+											hasChildren : false,
+										}]) %}
+								{% else %}
+									{% set categoryQuery = craft.categories().group(filterName).level(1) %}
+									{% for node in categoryQuery %}
+										{% set filters = [] %}
+										{% set nodes = node.children|length ? node.children : [node] %}
+
+										{% for node in nodes %}
+											{% set filters = filters|merge([{
+												name: filterName,
+												value: node.id,
+												label: node.title,
+												blockClass: 'checkout',
+												checked: (node.id|default in currentFilterIds|default(0)),
+												id: 'tag-'~node.id
+											}]) %}
+										{% endfor %}
+
+										{% set currentFilters = currentFilters|merge([{
+											title : node.title,
+											children : filters,
+											hasChildren : node.children|length,
+										}]) %}
+									{% endfor %}
+									{# Checkboxes #}
+									{% endif %}
+									{% include 'shop/_partials/product-filter-group' with { filters: currentFilters } %}
+							</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="search-header__col search-header__col--sort hidden-mobile">
+					<div>
+						{% if craft.app.request.segments|last == "calendar" %}
+						<a href="/events#events" class="icon-button">
+							<div class="icon-button__label">List View</div>
+							<svg class="icon-button__icon"><use xlink:href="#event-list"></use></svg>
+						</a>
+						{% else %}
+						<a href="/events/calendar" class="icon-button">
+							<div class="icon-button__label">Calendar View</div>
+							<svg class="icon-button__icon"><use xlink:href="#event-calendar"></use></svg>
+						</a>
+						{% endif %}
+					</div>
+				</div>
+
+				<div class="sort hidden-desktop">
+					<strong class="filters__list-title hidden-desktop">Sort Wines</strong>
+					<a href="#" class="filters__list-close hidden-desktop js-toggle-target" data-toggle-target-class="sort">
+						<svg class="exceptions-list__icon--close">
+							<use xlink:href="#close"></use>
+						</svg>
+					</a>
+				</div>
+
+				<div class="filters__dropdown-panel-row hidden-desktop">
+          <a href="#" class="boxed-button filters__dropdown-panel-button filters__dropdown-panel-button--mobile js-toggle-target" data-toggle-target-class="filters">View Results</a>
+        </div>
+			</form>
+		</div>
+	</div>
+	<div class="filters__filter-list">
+		<label for="" class="tag tag--tmp" style="display: none"></label>
+	</div>
+</div>

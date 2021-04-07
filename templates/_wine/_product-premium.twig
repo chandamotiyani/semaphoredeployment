@@ -1,0 +1,129 @@
+{% set entry = product %}
+{% set component = product %}
+
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% include "_page-builder-components/hero.twig" %}
+{% endblock %}
+
+{% block content %}
+
+{# include "shop/_cart/_cart-sticky-header.twig" #}
+
+<div class="container-fluid two-column-text-image two-column-text-image--quote two-column-text-image--has-bg">
+  <div class="two-column-text-image__wrap">
+    <div class="two-column-text-image__col two-column-text-image__col--image two-column-text-image__col--normal two-column-text-image__col--right" style="background-image: url('https://yalumba-cms-assets-dev.s3-ap-southeast-2.amazonaws.com/Yalumba-Riedel-The-Signature-LR.jpg')">
+    </div>
+    <div class="two-column-text-image__col two-column-text-image__col--black two-column-text-image__col--larger">
+      <div class="two-column-text-image__content two-column-text-image__content--align-left">
+          <blockquote class="two-column-text-image__block-quote container-fluid">
+            <div class="two-column-text-image__block-quote-content">
+              <p>An impressive and delicious wine.<br> 95 points.</p>
+              <footer class="two-column-text-image__block-quote-footer">Huon Hooke<cite title="Source Title" class="two-column-text-image__block-quote-cite">The Real Review | May 2019</cite></footer>
+            </div>
+          </blockquote>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+
+  <div class="product">
+      <div class="product__col product__col--image">
+        <div class="product__slider">
+          {% for image in product.image %}
+            <div class="product__image-slide">
+              <img src="{{ image.getUrl()|default('') }}" class="product__image" alt="Product image">
+              <img src="{{ alias('@assetBaseUrl/img/wine-badge.png') }}" alt="Wine of the month winner" class="featured-wines-badge">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="product__col product__col--content">
+        <div class="product__content">
+          <strong class="product__sub-title">Barossa Valley</strong>
+          <h1 class="product__title">{{ product.title }}</h1>
+          <strong class="product__detail-heading">Cabernet Sauvignon and Shiraz 2015</strong>
+          <p class="product__text hidden-mobile">Encompassing everything our family stands for and the perfect representation of our history and ethos, The Signature is a sentimental favourite.</p>
+
+          <p class="product__text hidden-mobile">A classic Australian blend of Cabernet Sauvignon and Shiraz, the first vintage release of The Signature was in 1962. Since then, this outstanding wine has acknowledged more than 56 Signatories; people who have enhanced the traditions and culture of Yalumba.</p>
+          <strong class="product__price"><sup class="product__price-currency">$</sup>52<sup class="product__price-rrp"><strong>Member’s price</strong><br><span>
+            (RRP $62)</span></sup></strong>
+
+        </div>
+
+        <form method="POST">
+          <input type="hidden" name="action" value="/commerce/cart/update-cart">
+          {{ redirectInput('shop/cart') }}
+          {{ csrfInput() }}
+          <ul class="product__buttons">
+            <!--li class="product__button-item hidden-mobile">
+              <div class="number-field product__button product__button--qty">
+                <button class="number-field__minus minus">-</button>
+                <input type="text" name="qty" value="1" class="number-field__input">
+                <button class="number-field__plus plus">+</button>
+              </div>
+            </li-->
+            <li class="product__button-sub-item">
+              <ul class="product__button-sub-list">
+                <li class="product__button-item"><input type="submit" value="{{ "Add to cart"|t }}" class="product__button product__button--cart"/></li>
+                <li class="product__button-item"><a href="#" class="product__button product__button--gift">Add as a gift</a></li>
+              </ul>
+            </li>
+            <li class="product__button-item"><a href="#" class="product__button product__button--favourite"><svg><use xlink:href="#heart"></use></svg></a></li>
+            <li class="product__button-item hidden-mobile">
+              <select class="product__button product__button--options choices">
+                <option>Tasting Notes</option>
+                <option>Tasting Notes</option>
+                <option>Tasting Notes</option>
+              </select>
+            </li>
+          </ul>
+        </form>
+        <div class="hidden-mobile">
+          <div class="product__terms-text">
+            Price per 750ml bottle or $240 for six. Orders over $200 qualify for free shipping.
+          </div>
+        </div>
+      </div>
+
+      <div class="product__detail hidden-desktop">
+        <div class="product__terms-text">
+          Price per 750ml bottle or $240 for six. Orders over $200 qualify for free shipping.
+        </div>
+        <p class="product__text">This light-bodied and highly aromatic wine shows the bright Barossa Grenache flavours at their individual best.</p>
+        <select class="product__button">
+          <option>Tasting Notes</option>
+          <option>Tasting Notes</option>
+          <option>Tasting Notes</option>
+        </select>
+      </div>
+
+      <hr class="seperator">
+
+      <div class="product__footer">
+        <div class="product__footer-col">
+          <h2 class="product__footer-heading">Tasting comments</h2>
+          <p class="product__footer-text">Stylish, approachable and very drinkable. This wine opens with perfumed fruits, showing blue exotic florals, pomegranate and cranberry, with milk chocolate and liquorice depth. The palate is medium weighted with a fresh, tight acidity carrying through.</p>
+        </div>
+        <div class="product__footer-col">
+          <h2 class="product__footer-heading">Terroir & site</h2>
+          <p class="product__footer-text">The majority of Cabernet Sauvignon grapes are sourced from five vineyards in the Barossa Valley, as well as one vineyard in Eden Valley. Diversity in the Cabernet Sauvignon vineyard selection provides rich lifted aromatics and palate structure. The Shiraz grapes include old vine plantings, the oldest having being planted in 1925.</p>
+        </div>
+        <div class="product__footer-col">
+          <h2 class="product__footer-heading">Treatment</h2>
+          <p class="product__footer-text">Matured for 22 months in 18% new French barriques and Hungarian hogsheads, with the balance in older French, Hungarian and American barriques and hogsheads. All new and seasoned oak barrels were crafted by hand in our on-site winery Cooperage.</p>
+        </div>
+      </div>
+      {% include "shop/_partials/vintages-slider.twig" %}
+    </div>
+</div>
+{% include "shop/_modals/cart-summary" %}
+{% for component in product.components %}
+  {% include "_components/" ~ component.type.handle|kebabCase with { component: component } only %}
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+.button-group {
+	display: flex;
+	flex-direction: row;
+	// flex-wrap: wrap;
+	align-items: stretch;
+	align-content: stretch;
+	justify-content: stretch;
+	justify-items: stretch;
+	flex-basis: 100%;
+	text-align: center;
+	width: 100%;
+	flex-grow: 1;
+	margin-top: $padding-small;
+
+	&__buttons {
+		display: flex;
+		flex-wrap: wrap;
+		flex-grow: 1;
+		justify-content: center;
+		flex-direction: column;
+
+		& > :not(:first-child) {
+			margin-top: $padding-small / 2;
+		}
+		
+		@include media-breakpoint-up($single-column-breakpoint) {
+			flex-direction: row;
+
+			& > :not(:first-child) {
+				margin-left: $padding-small / 2;
+				margin-top: 0;
+			}
+		}
+	}
+
+	&__button {
+		@extend .boxed-button;
+	}
+}

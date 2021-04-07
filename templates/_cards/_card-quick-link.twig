@@ -1,0 +1,10 @@
+<a class="card-quick-link" href="{{ url }}">
+	<div class="card-quick-link__image-mask">
+		<div class="card-quick-link__image" style="background-image: url('{{ image | default }}')"></div>
+	</div>
+
+	<div class="card-quick-link__details">
+		<h3 class="card-quick-link__title">{{ title }}</h3>
+		<p class="card-quick-link__cta"><span>{{ subtitle }}</span></p>
+	</div>
+</a>

@@ -1,0 +1,110 @@
+{% set formComponent = form %}
+	<section class="section section--narrow js-contact-form">
+
+		<div class="cta">
+			<h2 class="cta__heading">{{ formComponent.formTitle }}</h2> 
+			<div class="cta__copy">{{ formComponent.text }}</div>
+		</div>
+
+
+		{% set form = craft.freeform.form(formComponent.form.id) %}
+
+		{{ form.renderTag({rowClass: "checkout__form-row", }) }}
+{# {
+			dynamicNotification: { recipients: ["admin@example.com", "support@example.com"] }
+		}) #}
+
+		{% for row in form %}
+			<div class="{{ form.customAttributes.rowClass }}">
+				{% for field in row %}
+					{% set columnClass = form.customAttributes.columnClass %}
+					{% if field.type == "submit" %}
+						{% set columnClass = columnClass ~ " submit-column" %}
+					{% endif %}
+
+							{% if field.type == 'textarea' %}
+								{% include "_forms/textarea" with {  
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+								} %}
+							{% endif %}
+
+							{% if field.type == 'select' or field.type == 'dynamic_recipients' %}
+								{% include "_forms/select" with {  
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+									options: field.options,
+									hidePlaceholder: true,
+								} %}
+							{% endif %}
+
+							{% if field.type == 'text' or field.type == 'email' %}
+								{% include "_forms/text-input" with { 
+									type: field.type, 
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+								} %}
+							{% endif %}
+
+							{% if field.type == 'checkbox' %}
+								{% include "_forms/checkbox" with { 
+									type: field.type, 
+									value: 1, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide form-rows__checkbox',
+								} %}
+							{% endif %}
+
+							{% if field.type == 'datetime' %}
+								{% include "_forms/text-input" with { 
+									type: field.type, 
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+								} %}
+							{% endif %}
+
+							{% if field.type == "submit" %}
+								{% include "_forms/submit" with { 
+									type: field.type, 
+									value: field.label, 
+									name: field.handle, 
+									blockClass: 'contact-form-submit',
+								} %}
+							{% endif %}
+
+							{% if field.type == 'file' %}
+								{% include "_forms/file-input" with { 
+									type: field.type, 
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+								} %}
+							{% endif %}
+
+				{% endfor %}
+			</div>
+		{% endfor %}
+		{{ form.renderClosingTag }}
+	</section>

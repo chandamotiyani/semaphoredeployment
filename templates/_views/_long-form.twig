@@ -1,0 +1,7 @@
+<section class="section">
+	{% embed '_layouts/_long-form.twig' %}
+		{% block body %}
+			{{ component.textLongForm.text | typogrify }}
+		{% endblock %}
+	{% endembed %}
+</section>

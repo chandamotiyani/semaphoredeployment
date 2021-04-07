@@ -1,0 +1,146 @@
+
+		<div class="product product--{{ productType }} t-black-on-white">
+			<div class="product__row js-product-main">
+				<div class="product__col product__col--image js-carousel">
+					<div class="product__status-badges">
+						{% if productFields.specialRelease|default %}
+							<!-- todo: check if this is still going to be used -->
+							{% for release in productFields.specialRelease %}
+								<div class="product__status-circle product__status-circle--release">
+									<span>{{ release.label }}</span>
+								</div>
+							{% endfor %}
+						{% endif %}
+
+						{% if productFields.isWineOfTheMonth|default(false) %}
+							{% set wineBadge = shopSettings.wineOfTheMonthBadge.one.url|default %}
+							<div class="product__badge-wine-of-the-month" style="background-image: url({{ wineBadge }});"></div>
+						{% endif %}
+					</div>
+					<div class="product__slider js-carousel-items">
+						{% if productFields.imageFront %}
+						<div class="product__image-slide">
+							<img src="{{ productFields.imageFront }}" class="product__image" alt="Product image">
+						</div>
+						{% endif %}
+
+						{% if productFields.imageBack %}
+						<div class="product__image-slide">
+							<img src="{{ productFields.imageBack }}" class="product__image" alt="Product image">
+						</div>
+						{% endif %}
+					</div>
+					{% if productFields.imageFront and productFields.imageBack %}
+						<div class="product__carousel-control">
+							<a href="#" class="product__carousel-prev js-carousel-prev"><svg><use xlink:href="#chevron"></use></svg></a>
+							<a href="#" class="product__carousel-next js-carousel-next"><svg class="flip-right"><use xlink:href="#chevron"></use></svg></a>
+						</div>
+					{% endif %}
+				</div>
+
+				<div class="product__col product__col--content">
+					<div class="product__content js-update-product-content">
+						{% if productFields.superUrl|default %}
+							<a href="{{ productFields.superUrl }}" class="product__sub-title">{{ productFields.super|default }}</a>
+						{% elseif productFields.super|default %}
+							<a href="{{ productFields.super }}" class="product__sub-title">{{ productFields.super|default }}</a>
+						{% endif %}
+						<h1 class="product__title">{{ productFields.title }}</h1>
+						<span class="card-product__info">{{ productFields.subtitle }}</span>
+
+						{% if productFields.isMembersOnly|default %}
+							<span class="product__members-only">Members Only</span>
+						{% endif %}
+
+							<p class="product__text hidden-mobile">{{ productFields.description }}</p>
+
+							<strong class="product__price">
+
+								{% if productFields.premiseOnly != true %}
+									<sup class="product__price-currency">$</sup>{{ productFields.price }}
+
+									{% if productFields.membershipsDiscounts|length or productFields.isOnSale == true %}
+										<div class="product__price-rrp">
+
+											{% if productFields.membershipsDiscounts|length %}
+												{% for discounts in productFields.membershipsDiscounts %}
+														<strong class="heading-secondary-sm">{{ discounts.name }}</strong><br>
+												{% endfor %}
+											{% endif %}
+												(RRP ${{ productFields.rrpPrice }})
+												<br><strong>{{ productFields.bottleSize|default }}</strong>
+										</div>
+									{% else %}
+										<sup class="product__price-rrp"><strong>{{ productFields.bottleSize|default }}</strong></sup>
+									{% endif %}
+									
+									<div class="product__status-buttons">
+										{% if productFields.outOfStock == true %}
+											<div class="product__status-circle">Out of stock</div>
+										{% elseif productFields.isAvailable == false %}
+											<div class="product__status-circle">Coming Soon</div>
+										{% elseif productFields.isOnSale == true %}
+											<div class="product__status-circle product__status-circle--highlight">On Sale</div>
+										{% endif %}
+									</div>
+								{% else %}
+									<strong class="product__price">
+										<div class="product__status-circle product__status-circle--card">On Premise only</div>
+									</strong>
+								{% endif %}
+							</strong>
+					</div>
+					{% block productForm %}
+						<div class="product-form__buttons">
+							<div class="js-product-list-modal-form" data-product-id="{{ productFields.id }}" style="display: flex">
+								{% embed "shop/_partials/product/_product-form.twig" with productFields only %}{% endembed %}
+							</div>
+						</div>
+					{% endblock %}
+
+					<div class="product__terms-text">
+						{{ productFields.note|default }}
+						{% if craft.app.getUser.id and craft.app.getUser.getIdentity.getGroups|default %}
+							{% set userGroup = craft.app.getUser.getIdentity.getGroups[0].handle %}
+							{{ members.productMemberNotes.one[userGroup]|raw }}
+						{% else %}
+							{{ members.productMemberNotes.one.guest|raw }}
+						{% endif %}
+					</div>
+
+					{% if productFields.badges is defined and productFields.badges %}
+						<ul class="product__badges">
+							{% for badge in productFields.badges %}
+								<li class="product__badge"><img src="{{ badge.url }}"></li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+
+			<p class="product__text hidden-desktop">{{ productFields.description }}</p>
+
+			<hr class="seperator">
+
+			{% block productFooter %}
+			{% if productNotes is defined and productNotes[0].heading %}
+					<div class="product__footer">
+						{% for productNote in productNotes %}
+							<div class="product__footer-col">
+								<h2 class="product__footer-heading">{{ productNote.heading }}</h2>
+								<p class="product__footer-text">{{ productNote.description }}</p>
+							</div>
+						{% endfor %}
+						</div>
+					{% endif %}
+			{% endblock %}
+		</div>
+
+
+
+<script>
+	var csrfToken = {
+		param: '{{ craft.app.request.csrfParam }}',
+		name : '{{ craft.app.request.csrfToken }}'
+	}
+</script>

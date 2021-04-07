@@ -1,0 +1,17 @@
+// -----------------------------------------------------------------------------
+// This file contains all @font-face declarations, if any.
+// -----------------------------------------------------------------------------
+@font-face{
+    font-family:"Bodoni 72";
+    src:url("../fonts/bodoni-regular/2206cc6b-244c-4060-88b8-3fad98606916.eot?#iefix");
+    src:url("../fonts/bodoni-regular/2206cc6b-244c-4060-88b8-3fad98606916.eot?#iefix") format("eot"),url("../fonts/bodoni-regular/5d60805f-567f-4ccb-920d-fefe77577fd5.woff2") format("woff2"),url("../fonts/bodoni-regular/c2dcad27-a62d-40b0-88a4-fd4b1126d0cc.woff") format("woff"),url("../fonts/bodoni-regular/a8b4ab7e-4314-421c-a076-5e2f1b5a7845.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family:"Bodoni 72";
+    src:url("../fonts/bodoni-italic/95acd58e-0fa8-4450-923c-5406ae1d6818.eot?#iefix");
+    src:url("../fonts/bodoni-italic/95acd58e-0fa8-4450-923c-5406ae1d6818.eot?#iefix") format("eot"),url("../fonts/bodoni-italic/e8f76d64-52d0-45a3-9616-2403acec1030.woff2") format("woff2"),url("../fonts/bodoni-italic/3cb77b99-7b69-430d-ba73-a48c6a88c6ad.woff") format("woff"),url("../fonts/bodoni-italic/fb4f5703-051e-49ba-ab9e-716c0894dc11.ttf") format("truetype");
+    font-weight: normal;
+    font-style: italic;
+}

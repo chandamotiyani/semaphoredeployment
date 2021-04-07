@@ -1,0 +1,10 @@
+.card-list-event-small {
+	@include list;
+	@include list-gutters-vertical(0.5);
+	@include list-hover-fade-effect;
+	@include list-vertical-gutter-borders;
+
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+}

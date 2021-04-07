@@ -1,0 +1,12 @@
+{
+	"toolbarFixed": false,
+	"replaceDivs": false,
+	"linebreaks": true,
+	"breakline": false,
+	"pastePlainText": true,
+	"markup": "p",
+	"deniedTags": ["br"],
+	"source": true,
+	"linkNewTab": true,
+	"buttons": ["bold", "italic", "link", "format"]
+}

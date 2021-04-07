@@ -1,0 +1,59 @@
+{% block buy %}
+{% set lineItemName = 'lineItems['~lineItemId|default('')~'][qty]' %}
+
+{# if product has variations, don't show buy now button, show modal instead #}
+  <div class="product-form" data-product-id="{{ id }}">
+    {% block variants %}
+      {% if variants|length > 1 %}
+        <div class="product-form__list">
+          <ul class="dropdown product-form__button product-form__button--variants hidden-mobile">
+            <li class="dropdown__title">
+              Bottle Size
+              <ul class="dropdown__list">
+                {% for variant in variants %}
+                  <li class="dropdown__list-item {{ purchasableId == variant.id ? 'dropdown__list-item--active' : '' }}">
+                    <a class="dropdown__list-item-link js-product-variant" href="{{ variant.url }}" data-product-id="{{ id }}" data-disable-buy-button="{{ variant.stock <= 0 and variant.hasUnlimitedStock == false or disableBuyButton|default }}">{{ variant.bottleSizes|join('') }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+
+          <select class="select no-bg js-product-variant-select hidden-desktop">
+            {% for variant in variants %}
+              <option value="{{ variant.url }}" {{ purchasableId == variant.id ? 'selected' : '' }} data-product-id="{{ id }}" data-disable-buy-button="{{ variant.stock <= 0 and variant.hasUnlimitedStock == false or disableBuyButton|default }}">{{ variant.bottleSizes|join('') }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    <div class="product-form__list">
+      <div class="product-form__list-group product-form__list-group--add-to-cart">
+        {% block addtocart %}
+          <add-to-cart disable="{{ disableBuyButton }}" purchasableid="{{ purchasableId }}" lineitem="{{ lineItemName|default }}" notify="panel" productid="{{ id }}"></add-to-cart>
+        {% endblock %}
+
+        {% block gift %}
+          {% if giftOptions|default %}
+            <add-gift-option-button productid="{{ id }}" purchasableid="{{ purchasableId }}" disable="{{ disableBuyButton }}"></add-gift-option-button>
+          {% endif %}
+        {% endblock %}
+      </div>
+
+      {% if premiseOnly != true %}
+        {% block wishlist %}
+            <add-to-wishlist inwishlist="{{ inWishlist|default(false) }}" purchasableid="{{ purchasableId }}" wishlisttoggleurl={{ wishlistToggleUrl|default }}></add-to-wishlist>
+        {% endblock %}
+      {% endif %}
+    </div>
+  </div>
+  <div class="hidden-mobile">
+    {% block tastingNotes %}
+      {% if tastingNotes|default %}
+        {% include "shop/_partials/product/_product-tasting-notes.twig" with {  tastingNotes: tastingNotes } only %}
+      {% endif %}
+    {% endblock %}
+  </div>
+
+{% endblock %}

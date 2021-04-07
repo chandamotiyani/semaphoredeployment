@@ -1,0 +1,229 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass mixins.
+// -----------------------------------------------------------------------------
+
+/*
+ * Apply an aspect ratio to an element that's retained when resized.
+ *
+ * Usage:
+ * @include aspect-ratio(16, 9); // Most common television/monitor ratio
+ * @include aspect-ratio(1.85, 1); // Widescreen film ratio
+ * @include aspect-ratio(4, 3); // Old style television/monitor ratio
+ * @include aspect-ratio; // Square
+ */
+
+ @mixin aspect-ratio($width: 1, $height: 1) {
+	@include child-fill-parent;
+	padding-bottom: $height / $width * 100%;
+
+	& > * {
+			object-fit: cover;
+			background-size: cover;
+			background-position: center;
+	}
+}
+
+/*
+ * Expand a child element to the size of its parent.
+ */
+
+ @mixin child-fill-parent {
+	display: block;
+	position: relative;
+
+	& > * {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+	}
+}
+
+/// Em to PX conversion
+@function em($pixels, $context: $default-font-size) {
+	@return $pixels / $context * 1em
+}
+
+/// Event wrapper
+@mixin on-event($self: false) {
+	@if $self {
+
+		&,
+		&:hover,
+		&:active,
+		&:focus {
+			@content;
+		}
+	}
+
+	@else {
+
+		&:hover,
+		&:active,
+		&:focus {
+			@content;
+		}
+	}
+}
+
+/// Make a context based selector a little more friendly
+/// @author Hugo Giraudel
+/// @param {String} $context
+@mixin when-inside($context) {
+	#{$context} & {
+		@content;
+	}
+}
+
+@mixin overlay($color) {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: $color;
+}
+
+@mixin bg-image-overlay() {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+@mixin gradient-overlay() {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.84) 0%, rgba(106, 106, 106, 0) 100%);
+}
+
+@mixin hover-on($type: light) {
+	@if $type==light {
+		transition: color 0.4s ease;
+
+		&:hover {
+			cursor: pointer;
+			color: $text-dark;
+		}
+	}
+
+	@else if $type==dark {
+		transition: opacity 0.4s ease;
+
+		&:hover {
+			cursor: pointer;
+			opacity: 0.45;
+		}
+	}
+
+}
+
+@mixin list-seperator() {
+	content: "";
+	height: 100%;
+	border-right: solid 1px #e3e3e3;
+	margin: 0 em(15);
+	min-height: 21px;
+}
+
+@mixin text-decoration-underline($active: false, $color: $white) {
+	position: relative;
+
+	&:before {
+		content: "";
+		height: 2px;
+		width: 100%;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		top: auto;
+		background: $color;
+		transform: scaleX(0);
+		transform-origin: center;
+		transition: transform 0.2s ease-out;
+
+		@if $active {
+			transform: scaleX(0.9);
+		}
+	}
+
+	&--active,
+	&:hover {
+		&:before {
+			transform: scaleX(0.9);
+
+			@if $active {
+				transform: scaleX(0);
+			}
+		}
+	}
+}
+
+@mixin lock-width-to-aspect-ratio($w, $h) {
+	position: relative;
+	height: 100%;
+	padding-right: $w / $h * 100%;
+	width: 0;
+}
+
+@mixin lock-height-to-aspect-ratio($w, $h) {
+	position: relative;
+	height: 0;
+	padding-bottom: $h / $w * 100%;
+	width: 100%;
+}
+
+@mixin absolute-fill-parent {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
+@mixin price {
+	position: relative;
+	height: 2.4em; // Optical adjustment to ensure that the text baseline meets the bottom of the block
+
+	& span {
+		&:nth-child(1) {
+			position: relative;
+			bottom: 1em; // Optical superscript alignment
+			margin-right: -0.4em;
+		}
+
+		&:nth-child(2) {
+			@extend .heading-primary-sm;
+			font-style: italic;
+		}
+
+		&:nth-child(3) {
+			// @extend .heading-primary-sm;
+			margin-left: 0.5em;
+		}
+	}
+}
+
+@mixin arrow() {
+	content: "";
+	height: 0;
+	width: 0;
+	border-style: solid;
+	border-color: $text-color-primary transparent transparent transparent;
+	border-width: 5px;
+	position: absolute;
+	right: 11.5px;
+	top: 50%;
+	margin-top: -2.5px;
+	pointer-events: none;
+}

@@ -1,0 +1,7 @@
+<ul class="card-list-{{ type|default('') }}{{ appendJsClass is defined and appendJsClass ? ' js-card-list-' ~ type|default('') : '' }} js-card-list card-list-mixed">
+	{% for item in items %}
+		<li class="card-list-{{ type|default('') }}__item js-card-list__ite">
+			{% block item %}{% endblock %}
+		</li>
+	{% endfor %}
+</ul>

@@ -1,0 +1,41 @@
+{% if item %}
+
+  {%
+    set product = {
+      id: item.id,
+      title: item.title,
+      imageUrl: item.image.one.getUrl()|default(''),
+      description: item.shortDescription|default(''),
+      price: item.defaultVariant.price > 0 ? item.defaultVariant.price|currency('AUD', stripZeros = true) : 'FREE',
+      productId: item.defaultVariant.id,
+      messageField: item.messageField.options[0].selected|default,
+    }
+  %}
+
+  <li class="gift-items__product">
+    <div class="gift-items__row">
+      <img src="{{ product.imageUrl }}" class="gift-items__image" height="160">
+      {# productListingGift (is the thumbID for this) #}
+      <div class="gift-items__product-detail-wrap">
+        <div class="gift-items__product-detail">
+            <h3 class="gift-items__product-heading">{{ product.title }}</h3>
+            <p class="gift-items__product-sub-text">{{ product.description }}
+              </p>
+          </div>
+          <div class="gift-items__product-options">
+            <div class="gift-items__product-right">
+              {% include "_forms/checkbox" with { 
+                name: 'options['~item.id~']', 
+                label: '', blockClass: 'checkout',
+                value: product.title } %}
+              <div class="gift-items__product-price">{{ product.price }}</div>
+            </div>
+          </div>
+      </div>
+    </div>
+    {% if product.messageField %}
+      {% include "_forms/textarea" with { name: 'note', label: '', placeholder: 'Enter  your message' } %}
+  {% endif %}
+  </li>
+
+{% endif %}

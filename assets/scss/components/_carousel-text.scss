@@ -1,0 +1,12 @@
+.carousel-text {
+	// flex-basis: 25%;
+	// width: 25%;
+	&__heading {
+		@extend .heading-primary-lg;
+	}
+
+	&__text {
+		@extend .body-text;
+		margin-block-start: 2em;
+	}
+}

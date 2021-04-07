@@ -1,0 +1,336 @@
+{% requireLogin %}
+
+{% set tabs = [
+	{
+		name: 'My Membership',
+		url: '/members/my-membership',
+		active: craft.app.request.segments|last == 'my-membership',
+	},
+	{
+		name: 'Update Account Details',
+		url: '/members/update-account-details',
+		active: craft.app.request.segments|last == 'update-account-details',
+  },
+  {
+		name: 'View My Purchases',
+		url: '/members/my-purchases',
+		active: craft.app.request.segments|last == 'my-purchases',
+	},
+	{
+		name: 'View My Wishlist',
+		url: '/shop/wishlist',
+		active: craft.app.request.segments|last == 'my-wishlist',
+	},
+] %}
+
+{% set customer = craft.commerce.customers.customer %}
+
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+    {% if title is not defined %}
+      {% set title = 'Welcome to The Yalumba Wine Club' %}
+
+      {% if currentUser %}
+        {% set title = 'Welcome '~currentUser.firstName|capitalize %}
+      {% endif %}
+    {% endif %}
+
+
+    {% if cart is not defined %}
+      {% set cart = craft.commerce.carts.cart %}
+    {% endif %}
+
+    {% block hero %}
+      {% embed "_page-builder-components/hero-small.twig" with {
+          component: {
+            image: entry.heroImage.one.getUrl() ?? alias('@assetBaseUrl/img/members-banner.jpg'),
+          }, title: title|default('') } %}
+      {% endembed %}
+    {% endblock %}
+
+
+    {% block content %}
+
+    {% embed '_layouts/_section.twig' with { narrow: true } %}
+  {% block body %}
+  <div class="container-fluid cart__container-thin">
+    <div class="row">
+      <h2 class="purchaces__heading">Update Account Details</h2>
+      <ul class="card-list-accordion js-card-list-accordion">
+        <li class="card-list-accordion__item js-card-list__item">
+          <div class="card-accordion">
+            <div class="card-accordion__title">
+              <h3>Name and contact details</h3>
+            </div>
+            <div class="card-accordion__details-mask">
+              <div class="card-accordion__details">
+
+                <form method="post" accept-charset="UTF-8" class="js-update-user-form">
+                  {{ actionInput('users/save-user') }}
+                  {{ hiddenInput('userId', currentUser.id) }}
+                  <div class="container">
+                    <div class="checkout__form-row">
+                      {% include "_forms/text-input" with { name: 'firstName', label: 'First Name*', value: currentUser.firstName, blockClass: 'member', cssClass: 'form__input-wide'  } %}
+                      {% include "_forms/text-input" with { name: 'lastName', value: currentUser.lastName, label: 'Last Name*', blockClass: 'member', cssClass: 'form__input-wide' } %}
+                    </div>
+
+                    {# FYI: If we want to allow them to update email, you'll need to add password verification. #}
+                    <div class="checkout__form-row">
+                      {% include "_forms/text-input" with { 
+                        type: 'email', 
+                        value: currentUser.email, 
+                        name: 'email', 
+                        label: 'Email*', 
+                        blockClass: 'member', 
+                        cssClass: 'form__input-wide'
+                      } %}
+                      {% include "_forms/state-dropdown" %}
+                    </div>
+
+                    <div class="checkout__form-row password-wrap" style="display:none;">
+                      <div class="form__input-wrap password__input-wrap form__input-wide">
+
+                        <label for="" class="password__form-label form__label">Email address changes require you to re-enter your password</label>
+                        <input name="password" value="" style="" class="form__input" type="password" />
+                      </div>
+                    </div>
+
+                    <div class="checkout__form-row">
+                      {% include "_forms/dob-input" with { 
+                        name: 'fields[dateOfBirth]',
+                        label: 'Date of Birth*', 
+                        blockClass: 'checkout', 
+                        max: '2999-12-31',
+                        value: currentUser.dateOfBirth|default ? currentUser.dateOfBirth|date("yy-m-d"),
+                        type: 'text',
+                        hint: 'dd/mm/yyyy',
+                        placeholder: 'dd/mm/yyyy',
+                      } %}
+            
+                      {% include "_forms/text-input" with { 
+                        name: 'fields[phoneNumber]', 
+                        label: 'Phone*', 
+                        blockClass: 'checkout', 
+                        value: currentUser.phoneNumber,
+                      }%}
+                    </div>
+
+                    <div class="js-msg form__success-message"></div>
+                    <div class="checkout__form-row--center">
+                      <input type="submit" value="Update" class="boxed-button">
+                    </div>
+
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="card-list-accordion__item js-card-list__item">
+          <div class="card-accordion">
+            <div class="card-accordion__title">
+              <h3>Manage addresses</h3>
+            </div>
+            <div class="card-accordion__details-mask">
+              <div class="card-accordion__details">
+              <form method="post" accept-charset="UTF-8" class="js-update-address" data-disable-inputs="false">
+                {{ actionInput('commerce/customer-addresses/save') }}
+                <div class="js-checkout-address" data-address-type="">
+                  <input type="hidden" name="address[id]" value="">
+                  {% include "shop/checkout/_includes/addresses-select.twig" with { addresses: customer.addresses } %}
+                  {% include "shop/checkout/_includes/addresses-form.twig" %}
+                  <div class="checkout__address-footer">
+                    <input type="submit" class="submit boxed-button" value="Add Address">
+                    {% if customer.addresses|length %}
+                      <a href="#" class="js-delete-address hidden">Delete this address</a>
+                    {% endif %}
+                  </div>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="card-list-accordion__item js-card-list__item">
+          <div class="card-accordion">
+            <div class="card-accordion__title">
+              <h3>Payment Details</h3>
+            </div>
+            <div class="card-accordion__details-mask">
+              <div class="card-accordion__details">
+                <div class="js-payment-source">
+                  {% set storedCards = craft.commerce.paymentSources.allPaymentSourcesByUserId(currentUser.id ?? null) %}
+                  {% if(storedCards|length > 0) %}
+                    <div class="form__input-wrap {{ blockClass|default('') }}__input-wrap">
+                      <label for="paymentSourceId">Stored Cards:</label>
+                      <select name="paymentsource" id="paymentSourceId" class="select__select form__select address-select select">
+                        <option value="">Please Select</option>
+                        <option value="add">Add New Card</option>
+                        {% for storedCard in storedCards %}
+                          <option value="{{ storedCard.id }}">{{ storedCard.description }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  {% endif %}
+
+                  {% set paymentSources = craft.commerce.paymentSources.getAllPaymentSourcesByUserId(currentUser.id) %}
+                  {% if(paymentSources|length > 0) %}
+                    {% for paymentSource in paymentSources %}
+                      <form method="POST" class="js-remove-payment-source card flex justify-between hidden payment-source" id="payment-source-{{ paymentSource.id }}">
+                        <div>
+                          <strong class="heading-secondary-sm">{{ paymentSource.description }}</strong>
+                          <!--div class="heading-secondary-sm">{{ paymentSource.gateway.name }}</div-->
+                        </div>
+
+                        <div>
+                            {{ csrfInput() }}
+                            {{ redirectInput('/members/cards') }}
+                            <input type="hidden" name="action" value="commerce/payment-sources/delete">
+                            <input type="hidden" name="id" value="{{ paymentSource.id }}"/>
+                            <br>
+                            <input type="submit" class="boxed-button" value="Remove"/>
+                        </div>
+                      </form>
+                    {% endfor %}
+                  {% endif %}
+
+                  {% set gateways = craft.commerce.gateways.allCustomerEnabledGateways %}
+
+                  {% set supportedGateways = {} %}
+                  {% for gateway in gateways %}
+                    {% if gateway.supportsPaymentSources() %}
+                      {# Keys have to be a string in twig, they can't be numeric. #}
+                      {% set supportedGateways = supportedGateways|merge({
+                        (gateway.id~' '): gateway.name
+                      }) %}
+                    {% endif %}
+                  {% endfor %}
+
+                  <div class="add-new-payment-type">
+                    {% set spreedlyPaymentGatewayId = 2 %}
+                    {% set gateway = gateways[spreedlyPaymentGatewayId] %}
+                    {% if gateway.supportsPaymentSources() %}
+                      <div id="fields-{{ gateway.id }}" class="gateway-fields form__input-wide">
+                          <form method="POST" onsubmit="checkFullName()" class="form-horizontal paymentSource-form max-w-md js-update-payment-source" id="gateway-{{ gateway.id }}">
+                            <p>You can add a credit card to speed up the checkout process. If you need to update a card, please delete it and add a new one as no details are stored here.</p>
+                              <input type="hidden" name="action" value="commerce/payment-sources/add"/>
+                              <input type="hidden" name="gatewayId" value="{{ gateway.id }}"/>
+                              <input type="hidden" name="cancelUrl" value="{{ '/members/cards'|hash }}"/>
+                              {{ redirectInput('/members/cards') }}
+                              {{ csrfInput() }}
+
+                              <div class="edit-card">
+                                {{ gateway.getPaymentFormHtml({})|raw }}
+
+                                <div class="grid">
+                                  <div class="item">
+                                      <input class="text description w-full" type="text" name="description" value="" maxlength="70" autocomplete="off" placeholder="Card description">
+                                  </div>
+                                </div>
+                                <div class="js-msg"></div>
+                                <div class="buttons">
+                                  <button class="boxed-button" type="submit">Add card</button>
+                                </div>
+                            </div>
+                          </form>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="card-list-accordion__item js-card-list__item">
+          <div class="card-accordion">
+            <div class="card-accordion__title">
+              <h3>Change Password</h3>
+            </div>
+            <div class="card-accordion__details-mask">
+              <div class="card-accordion__details">
+                <div class="checkout__form" data-address-type="shipping">
+                  <form method="post" accept-charset="UTF-8" class="js-checkout-account-change-password">
+                    {{ actionInput('users/save-user') }}
+                    {{ hiddenInput('userId', currentUser.id) }}
+                    {{ csrfInput() }}
+                    <div class="container">
+            
+            
+            
+                      <div class="checkout__form-row">
+                        {% include "_forms/text-input" with {
+                          name: 'password',
+                          type: 'password',
+                          label: 'Current Password',
+                          blockClass: 'member',
+                          cssClass: 'form__input-wide',
+                          type: 'password',
+                          instruction: 'Please enter your current password.'
+                        } %}
+                      </div>
+            
+                      <div class="checkout__form-row">
+                        {% include "_forms/text-input" with {
+                          name: 'newPassword',
+                          type: 'password',
+                          label: 'New Password',
+                          blockClass: 'member',
+                          cssClass: 'form__input-wide',
+                          type: 'password',
+                        } %}
+            
+                        {% include "_forms/text-input" with {
+                          name: 'confirmPassword',
+                          type: 'password',
+                          label: 'Confirm New Password',
+                          blockClass: 'member',
+                          cssClass: 'form__input-wide',
+                          type: 'password',
+                        } %}
+
+                      </div>
+                      <br>
+            
+                      <div class="checkout__form-row--center">
+                        <input type="submit" value="Change Password" class="signin-submit modal-panel-sign-in__button modal-panel-sign-in__button--submit">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="card-list-accordion__item js-card-list__item">
+          <div class="card-accordion">
+            <div class="card-accordion__title">
+              <h3>Cancel my membership</h3>
+            </div>
+            <div class="card-accordion__details-mask">
+              <div class="card-accordion__details">
+                <div class="checkout__form" data-address-type="shipping">
+                  <p>Do you want to cancel your membership?</p>
+                  <br>
+                  <p>Cancelling your membership means that you will no longer receive discounts, special offers and have access to your order history. If you decide to sign up again, you will be creating a new account and will not be able to able to retrieve this data. Alternatively, if you simply want to stop receiving the email newsletter, you can unsubscribe here.</p>
+                  <br>
+                  <form method="post" accept-charset="UTF-8" action="" class="js-delete-account">
+                    {{ csrfInput() }}
+                    <input type="hidden" name="action" value="site-module/site-module/remove-account">
+                    <input type="hidden" name="redirect" value="/members/update-account-details">
+                    <input type="submit" value="Cancel my membership" class="boxed-button js-confirm">
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+</div>
+  {% endblock %}
+{% endembed %}
+
+    {% endblock %}
+{% endembed %}

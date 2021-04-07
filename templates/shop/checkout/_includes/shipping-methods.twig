@@ -1,0 +1,33 @@
+{% if cart.availableShippingMethods|length %}
+
+    {% if cart.availableShippingMethods|length == 1 %}
+        {% for handle, method in cart.availableShippingMethods %}
+            <input type="hidden" name="shippingMethodHandle" value="{{ handle }}">
+        {% endfor %}
+    {% else %}
+        <form method="POST">
+            <input type="hidden" name="action" value="/commerce/cart/update-cart">
+            {{ redirectInput('shop/checkout/payment') }}
+            {{ csrfInput() }}
+
+            {% for handle, method in cart.availableShippingMethods %}
+                <div class="shipping-select">
+                    <label>
+                    <input type="radio" name="shippingMethodHandle" value="{{ handle }}"
+                            {% if handle == cart.shippingMethodHandle %}checked{% endif %} />
+                    <strong>{{ method.name }}</strong>
+
+                    <span class="price">
+                        {{ method.priceForOrder(cart)|commerceCurrency(cart.currency) }}
+                    </span>
+                    </label>
+                </div>
+            {% endfor %}
+            <span class="flash">{{ cart.getErrors('shippingMethod')|join }}</span>
+
+            <p><input type="submit" class="button button-primary" value="Select Shipping Method"/></p>
+        </form>
+    {% endif %}
+
+{% endif %}
+

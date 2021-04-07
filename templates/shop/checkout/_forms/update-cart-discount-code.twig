@@ -1,0 +1,24 @@
+<form method="POST" class="js-update-cart-discount-code">
+  <input type="hidden" name="action" value="/commerce/cart/update-cart">
+  {{ csrfInput() }}
+  <div class="checkout__form-row checkout__form-row--instruction-left text-left checkout__form-voucher">
+    <label>Add a voucher or discount code</label>
+    <div class="checkout__discount-code-field {{ cart.couponCode and not hasDiscountApplied(cart) ? 'form__input-error-msg has-error' : '' }}">
+
+
+      {% if cart.couponCode and not hasDiscountApplied(cart) %}
+        <strong class="error-coupon">There are no products in your cart that are eligiable for the coupon selected.</strong>
+      {% endif %}
+
+      {% if cart.couponCode %}
+        <span class="coupon">{{ cart.couponCode }}</span>
+      {% endif %}
+
+
+      {% set buttonText = cart.couponCode ? 'Remove' : 'Apply' %}
+      {% set placeHolder = cart.couponCode ? '' : 'Voucher Code' %}
+
+      {% include "_forms/input-with-button.twig" with { name: 'couponCode', value: false, buttonText: buttonText, placeholder: placeHolder, class: cart.couponCode|default ? 'has-coupon' : '' } %}
+    </div>
+  </div>
+</form>

@@ -1,0 +1,121 @@
+{% import "_includes/forms" as forms %}
+{% from "seomatic/settings/_includes/macros.twig" import configWarning %}
+
+<div id="general">
+    {% namespace "settings" %}
+
+        {{ forms.textField({
+            label: "Plugin name"|t("seomatic"),
+            instructions: "The public-facing name of the plugin"|t("seomatic"),
+            id: "pluginName",
+            name: "pluginName",
+            value: settings.pluginName,
+            warning: configWarning("pluginName", "seomatic"),
+            errors: settings.getErrors("pluginName"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Automatic Render Enabled"|t("seomatic"),
+            instructions: "Controls whether SEOmatic will automatically render metadata on your pages. If you turn this off, you will need to manually render the metadata."|t("seomatic"),
+            id: "renderEnabled",
+            name: "renderEnabled",
+            on: settings.renderEnabled,
+            warning: configWarning("renderEnabled", "seomatic"),
+            errors: settings.getErrors("renderEnabled"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Sitemaps Enabled"|t("seomatic"),
+            instructions: "Controls whether SEOmatic will automatically render frontend sitemaps for your website."|t("seomatic"),
+            id: "sitemapsEnabled",
+            name: "sitemapsEnabled",
+            on: settings.sitemapsEnabled,
+            warning: configWarning("sitemapsEnabled", "seomatic"),
+            errors: settings.getErrors("sitemapsEnabled"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Regenerate Sitemaps Automatically"|t("seomatic"),
+            instructions: "Controls whether sitemaps will automatically be regenerated when entries are saved."|t("seomatic"),
+            id: "regenerateSitemapsAutomatically",
+            name: "regenerateSitemapsAutomatically",
+            on: settings.regenerateSitemapsAutomatically,
+            warning: configWarning("regenerateSitemapsAutomatically", "seomatic"),
+            errors: settings.getErrors("regenerateSitemapsAutomatically"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Submit Sitemap Changes"|t("seomatic"),
+            instructions: "Should sitemaps be submitted to search engines automatically whenever there are changes?"|t("seomatic"),
+            id: "submitSitemaps",
+            name: "submitSitemaps",
+            on: settings.submitSitemaps,
+            warning: configWarning("submitSitemaps", "seomatic"),
+            errors: settings.getErrors("submitSitemaps"),
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: "Manually Set SEOmatic Environment"|t("seomatic"),
+            instructions: "If off, SEOmatic will automatically attempt to determine the current environment. Turn this on to manually set the environment."|t("seomatic"),
+            id: "manuallySetEnvironment",
+            name: "manuallySetEnvironment",
+            on: settings.manuallySetEnvironment,
+            warning: configWarning("manuallySetEnvironment", "seomatic"),
+            errors: settings.getErrors("manuallySetEnvironment"),
+            toggle: ".environment-wrapper",
+        }) }}
+
+        <div class="environment-wrapper {% if not settings.manuallySetEnvironment %} hidden{% endif %}">
+            {% if seomatic.helper.craft31 %}
+                {{ forms.autosuggestField({
+                    label: "Environment"|t("seomatic"),
+                    instructions: "The server environment, either `live`, `staging`, or `local`. If `devMode` is on, SEOmatic will override this setting to `local` Development."|t("seomatic"),
+                    suggestions: [{
+                        label: "SEOmatic Environment",
+                        data: [
+                            {name: "live", hint: "Live Production"|t("seomatic")},
+                            {name: "staging", hint: "Staging"|t("seomatic")},
+                            {name: "local", hint: "Local Development"|t("seomatic")},
+                        ]
+                    }] | merge(craft.cp.getEnvSuggestions(false)),
+                    suggestEnvVars: true,
+                    id: "environment",
+                    name: "environment",
+                    value: settings.environment,
+                    warning: configWarning("environment", "seomatic"),
+                    errors: settings.getErrors("environment"),
+                }) }}
+            {% else %}
+                {{ forms.selectField({
+                    label: "Environment"|t("seomatic"),
+                    instructions: "The server environment, either `live`, `staging`, or `local`. If `devMode` is on, SEOmatic will override this setting to `local` Development."|t("seomatic"),
+                    id: "environment",
+                    name: "environment",
+                    options: {
+                        live: "Live Production"|t("seomatic"),
+                        staging: "Staging"|t("seomatic"),
+                        local: "Local Development"|t("seomatic"),
+                    },
+                    value: settings.environment,
+                    warning: configWarning("environment", "seomatic"),
+                    errors: settings.getErrors("environment"),
+                }) }}
+            {% endif %}
+        </div>
+
+        {# @TODO: This will be added an upcoming "pro" edition
+
+                {{ forms.lightswitchField({
+                    label: "Display Sidebar SEO Analysis"|t("seomatic"),
+                    instructions: "Controls whether to display the SEO and content analysis in the sidebar on entry and category pages."|t("seomatic"),
+                    id: "displayAnalysisSidebar",
+                    name: "displayAnalysisSidebar",
+                    on: settings.displayAnalysisSidebar,
+                    warning: configWarning("displayAnalysisSidebar", "seomatic"),
+                    errors: settings.getErrors("displayAnalysisSidebar"),
+                }) }}
+
+        #}
+
+    {% endnamespace %}
+</div>

@@ -1,0 +1,112 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+
+    {% set cart = craft.commerce.getCarts().getCart()%}
+    {% do cart.setLineItems([]) %}
+    {% do craft.app.elements.saveElement(cart) %}
+    {% set number = craft.app.request.param('number') %}
+
+    {% set order = craft.orders.number(number).one() %}
+
+    {% if not order or order.isCompleted == false %}
+        {% redirect 'shop/customer' %}
+    {% endif %}
+
+    {% block content %}
+
+    {% if title is not defined %}
+      {% set title = 'Checkout' %}
+    {% endif %}
+
+    {% include "_page-builder-components/hero-small.twig" %}
+
+
+    <div class="section section--constrained order">
+
+            <div class="cta">
+                <h2 class="cta__heading">Thank you.</h2>
+                <h3 class="heading-primary-sm">Your order #{{ order.reference }} has been placed.</h3>
+
+                <div class="cta__copy">
+                    <p>An email has been sent to <strong>{{ order.email }}</strong> with your order confirmation and receipt.<br>If you can not see it in your inbox, please check your junk/spam folder.</p>
+                    <p><a href="{{ order.getPdfUrl('receipt') }}">Print Receipt</a></p>
+                </div>
+            </div>
+
+            <div class="checkout__row">
+                <div class="checkout__col">
+
+                    <h3 class="checkout__col-heading">Order Summary</h3>
+
+                    <div class="order-summary">
+
+                        {% if order.couponCode and hasDiscountApplied(order) %}
+                            <span class="order-summary__coupon-text">Coupon <strong class="order-summary__coupon-code">{{ order.couponCode }}</strong> has been applied to this order.</span>
+                         {% endif %}
+                        <ul class="order-summary__list">
+                            {% for item in order.lineItems %}
+                                {% include "members/_partials/"~lineItemTemplate|default('line-item') with { item: item, showLink: true } %}
+                            {% endfor %}
+                            {% include "members/_partials/adjustments" with { order: order } %}
+                            {% include "members/_partials/order-summary-total" with { order: order } %}
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="checkout__col">
+                    <div class="checkout__form order__address">
+                        <h2 class="checkout__col-heading">Payment Information</h2>
+                        <strong class="order__address-heading">Billing Address</strong>
+                        {% if order.billingAddress %}
+                            {% include 'shop/customer/_addresses/address' with { address: order.billingAddress } %}
+                        {% endif %}
+                    </div>
+
+                    <div class="checkout__form order__address">
+                        <h2 class="checkout__col-heading">Shipping Information</h2>
+                        <strong class="order__address-heading">Shipping Address</strong>
+                        {% if order.shippingAddress %}
+                            {% include 'shop/customer/_addresses/address' with { address: order.shippingAddress } %}
+                        {% endif %}
+                        <br><br>
+                        {% if order.shippingMethod %}
+                            <strong class="order__address-heading">Shipping Method</strong>
+                        {{ order.shippingMethod.name }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="checkout__footer">
+                <h2 class="checkout__col-heading">What happens next?</h2>
+                <p>You will receive an order confirmation by email. To track your order, please refer to the tracking number which you will receive shortly in an email from Australia Post.</p>
+
+                <p>Please allow up to 5 working days for your order to arrive.</p>
+            </div>
+        </div>
+
+        {% endblock %}
+
+        {% block scripts %}
+            {{ parent() }}
+
+            <script>
+                window.addEventListener("load", function(){
+                    if(window.ga && ga.create) {
+                        ga('create', '{{ getenv('GA_TRACKING_CODE') }}');
+                        ga('require', 'ec');
+                        ga('set', 'currencyCode', 'AUD'); // Set currency to AUD.
+
+                        {{ order|gaTransactionJs|raw }}
+
+                        {% for item in order.lineItems %}
+                            {{ item|gaItemJs(order.reference, item)|raw }}
+                        {% endfor %}
+
+                        ga('send', 'pageview');
+                    }
+                });
+            </script>
+
+        {% endblock %}
+    {% endembed %}  

@@ -1,0 +1,611 @@
+.card-product {
+	display: flex;
+	padding-right: 0;
+  padding-left: 0;
+  width: 100%;
+  flex: 1;
+  flex-direction: row;
+
+  @at-root .flickity-slider & {
+    @include media-breakpoint-up(lg) {
+      min-height: 400px;
+    }
+  }
+
+  @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise & {
+    @include media-breakpoint-down(md) {
+      flex-direction: column;
+    }
+  }
+
+  @at-root .card-large & {
+    flex-direction: column;
+  }
+
+  @include media-breakpoint-up(lg) {
+    max-height: none;
+  }
+
+  &--featured-home {
+    @include media-breakpoint-up(md) {
+      min-height: 500px;
+    }
+
+    @include media-breakpoint-up(xl) {
+      min-height: 600px;
+    }
+  }
+
+	&__content {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 3rem;
+    width: 70%;
+    margin-left: -20px;
+
+    @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise &, .featured-wines .carousel__item--large & {
+      @include media-breakpoint-down(md) {
+        width: 100%;
+        margin-left: 0;
+        min-width: 100%;
+        padding: 0 3rem;
+        margin-top: 1rem;
+      }
+      @include media-breakpoint-down(sm) {
+        padding: 0;
+        padding-right: 0;
+        padding-left: 20px;
+      }
+    }
+
+    @at-root .card-large & {
+      width: 100%;
+      margin-left: 0;
+      min-width: 100%;
+      padding: 0 3rem;
+      margin-top: 1rem;
+    }
+
+    @at-root .card-product--featured-home & {
+      margin-top: 28%;
+    }
+
+    @at-root .featured-wines & {
+      margin-top: 6rem;
+    }
+
+
+    @include media-breakpoint-down(sm) {
+      margin-top: 1rem;
+      overflow: hidden;
+    }
+
+    @include media-breakpoint-up(md) {
+      overflow: hidden;
+    }
+
+    @include media-breakpoint-down(xxxs) {
+      @at-root .featured-wines & {
+        width: 75%;
+      }
+    }
+
+  }
+
+  &__badge {
+    width: 50px;
+    height: 50px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    left: 0;
+    right: 50px;
+    top: 10%;
+    background-color: white;
+    border-radius: 100%;
+    z-index: 1;
+
+    @include media-breakpoint-up(xs) {
+      left: auto;
+      right: 90px;
+      top: 90px;
+    }
+  }
+
+  &__image-container {
+    margin-bottom: 0;
+    height: auto;
+    width: 40%;
+
+    @include media-breakpoint-down(xxxs) {
+      max-width: 95px;
+    }
+
+    @at-root .carousel__item {
+      min-height: 300px;
+    }
+
+    @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise &, .card-list-product--gift & {
+      @include media-breakpoint-down(md) {
+        margin-bottom: 1rem;
+        min-height: 250px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: none;
+      }
+    }
+
+    @at-root .card-large & {
+      margin-bottom: 1rem;
+      min-height: 150px;
+      max-height: 230px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: none;
+    }
+
+    @include media-breakpoint-up(xl) {
+      width: 50%;
+    }
+
+
+    max-height: 500px;
+    display: flex;
+    position: relative;
+
+    @at-root .card-list-product--gift & {
+      @include media-breakpoint-up(md) {
+        width: 60%;
+        max-height: 340px;
+        margin-top: auto;
+
+        img {
+          height: auto;
+        }
+      }
+    }
+
+    @at-root .card-product--featured-home & {
+      max-height: 580px;
+    }
+    @include media-breakpoint-down(xs) {
+      @at-root .card-product--featured-home & {
+        max-height: 500px;
+      }
+    }
+  }
+
+	&__image {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    object-fit: contain;
+    object-position: bottom right;
+    width: 100%;
+    margin-top: auto;
+    margin-left: auto;
+   // max-height: stretch;
+    max-width: 100%;
+    height: 100%;
+    width: auto;
+    transition: transform 0.4s ease;
+    transform: scale(0.93);
+    margin-right: 0;
+    flex-shrink: 0;
+    max-height: 200px;
+
+    @at-root .featured-wines & {
+      height: auto;
+    }
+
+    @include media-breakpoint-up(xxs) {
+      max-height: 400px;
+    }
+
+    @include media-breakpoint-up(md) {
+      margin-left: auto;
+      max-height: 500px;
+      height: 100%;
+    }
+
+    @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise & {
+      @include media-breakpoint-down(md) {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    @at-root .card-large & {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @at-root .carousel__item--large & {
+      @include media-breakpoint-down(xs) {
+        max-height: 200px;
+      }
+    }
+
+    @at-root .card-product:hover & {
+      transform: scale(1);
+    }
+
+    @at-root .card-product & {
+      @include media-breakpoint-up(md) {
+        max-height: 500px;
+      }
+    }
+
+    @at-root .card-product--featured-home & {
+      @include media-breakpoint-up(md) {
+        min-height: 420px;
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      padding-right: 1rem;
+      padding-left: 0;
+    }
+  }
+
+	&__title {
+		@extend .heading-primary-sm;
+
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    color: $black;
+
+
+    @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise & {
+      @include media-breakpoint-down(md) {
+        margin-top: 15px;
+      }
+    }
+
+    @at-root .card-large & {
+      margin-top: 15px;
+    }
+
+    @at-root .featured-wines--has-one & {
+      @extend .heading-primary-md;
+    }
+
+
+    @at-root .card-product--featured-home & {
+      @extend .heading-primary-md;
+      @include media-breakpoint-up(xl) {
+        font-size: em(52);
+        line-height: 1;
+      }
+    }
+
+    &--small {
+      margin-bottom: 1.2rem;
+    }
+
+    &--details {
+      @extend .heading-primary-xs;
+
+      @at-root .card-product--featured-home & {
+        @extend .heading-primary-xs;
+
+        @include media-breakpoint-up(xl) {
+          font-size: em(32);
+          line-height: 1;
+        }
+      }
+    }
+	}
+
+	&__sub-title {
+		@extend .heading-secondary-sm;
+		@extend .heading-secondary-sm--underlined;
+
+    margin-bottom: 2.2rem;
+    color: $black;
+    @include media-breakpoint-down(xs) {
+      padding-bottom: 1px;
+      display: inline-block;
+      line-height: 1.2em;
+      font-size: 0.8em;
+      margin-top: -2px;
+    }
+	}
+
+	&__info {
+		@extend .heading-secondary-sm;
+
+		font-weight: 600;
+    margin-bottom: 1.7rem;
+    color: $black;
+    display: block;
+
+    line-height: 2;
+    flex-grow: 1;
+
+    @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise & {
+      @include media-breakpoint-down(md) {
+        margin-bottom: 12px;
+      }
+    }
+
+    @at-root .card-large & {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__add-to-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-start;
+
+    @at-root .card-product--featured-home & {
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+			.card-product__cart{
+        font-weight: 900;
+        color: #c88242;
+        padding: 0.5rem;
+        border-right: 1px solid #b3b3b3;
+        text-transform: uppercase;
+        line-height: 1rem;
+      }
+      .product__button--favourite{
+        padding: 0.3rem 0.5rem;
+      }
+		}
+
+  }
+
+
+  &__status-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    top: -2.7em;
+    right: 0;
+    margin-left: 1rem;
+
+    @include media-breakpoint-down(xs) {
+      top: -0.7em;
+
+      @at-root .featured-wines & {
+        top: -2.7em;
+      }
+    }
+  }
+
+  &__price {
+    @extend .heading-primary-sm;
+
+    color: $black;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-style: italic;
+    font-weight: 100;
+    display: flex;
+    flex-direction: row;
+    align-self: flex-start;
+    width: 100%;
+    //flex: 1;
+
+    @at-root .card-list-product--gift__item &, .carousel__item--large &, .product--gift &, .product--merchandise & {
+      @include media-breakpoint-down(md) {
+
+      }
+    }
+
+    @at-root .card-product--featured-home & {
+      margin-bottom: 2rem;
+    }
+
+    @at-root .featured-wines--has-text & {
+      font-size: em(52);
+    }
+
+    @at-root .card-list-product & {
+      font-size: em(32);
+    }
+
+    @at-root .card-list-product--gift & {
+      font-size: em(32);
+    }
+
+    @at-root .featured-wines & {
+      font-size: em(32);
+    }
+
+    &--featured {
+      margin-top: 1rem;
+      position: relative;
+    }
+
+    @at-root .card-product__content-detail & {
+      @extend .heading-primary-xs;
+      margin-right: 10px;
+      display: flex;
+    }
+
+    &--rrp {
+      font-size: 10px;
+      line-height: 0.7;
+      letter-spacing: 0.8px;
+      margin-left: 9px;
+    }
+
+    .product__price-rrp{
+      @extend .heading-secondary-sm;
+      flex-basis: 100%;
+      margin-left: 0px;
+    }
+
+  }
+
+  &__price-container {
+    @include media-breakpoint-down(sm) {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 63%;
+    }
+  }
+
+  &__price-currency {
+    @extend .heading-secondary-sm;
+
+    font-weight: 100;
+    font-size: em(7);
+    font-style: normal;
+    position: static;
+    line-height: 2;
+  }
+  &__price-from {
+    @extend .heading-secondary-sm;
+
+    font-weight: 100;
+    font-size: em(6);
+    font-style: normal;
+    text-transform: initial;
+    position: static;
+    line-height: 2;
+    letter-spacing: 0.05em;
+    margin-top: 14px;
+  }
+
+  &__content-slider {
+    display: flex;
+    flex-direction: row;
+    width: 200%;
+    height: calc(100% - 24px);
+  }
+
+  &__content-preview, &__content-detail {
+    width: 50%;
+    padding-right: 0;
+    transition: transform 0.4s ease, opacity 0.1s ease;
+    transform: translateX(-100%);
+    display: inline-block;
+
+    @include media-breakpoint-up(md) {
+      @at-root .card-product:hover & {
+        transform: translateX(0);
+      }
+    }
+    &--inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding-bottom: 30px;
+
+      .product-form__buttons {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__content-preview {
+    opacity: 1;
+    @include media-breakpoint-up(md) {
+      @at-root .card-product:hover & {
+        opacity: 0;
+      }
+    }
+    .card-product__price{
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+  }
+
+  &__content-detail {
+    opacity: 0;
+    pointer-events: none;
+
+    @include media-breakpoint-up(md) {
+      pointer-events: all;
+
+      @at-root .card-product:hover & {
+        opacity: 1;
+      }
+    }
+
+    &--inner {
+      @include media-breakpoint-down(xxs) {
+        margin-left: -8px;
+
+        @at-root .carousel__item--large & {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  &__description {
+    font-family: $font-secondary;
+    font-style: italic;
+    font-weight: 100;
+    text-transform: none;
+    position: relative;
+    font-size: 16px;
+    line-height: 1.4;
+
+    flex-grow: 1;
+
+    @include media-breakpoint-up(sm) {
+      font-size: em(18);
+    }
+
+    &--mobile {
+      margin-bottom: 1rem;
+    }
+
+    .quote {
+      color: $brand-primary;
+      font-size: em(36);
+      line-height: 1;
+      position: absolute;
+      left: -22px;
+      top: 0px;
+      padding: 0 !important;
+    }
+  }
+
+  &__learn-more {
+    @extend .heading-secondary-md;
+
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &__animation-slide-viewport {
+    overflow: hidden;
+    height: 24px;
+    max-width: 200px;
+  }
+
+  &__animation-slide-track {
+    display: flex;
+    flex-direction: row;
+    transform: translateX(0);
+    transition: transform 0.4s ease;
+
+    @at-root .card-product:hover & {
+      transform: translateX(-100%);
+    }
+  }
+
+  &__animation-slide-slide {
+    min-width: 100%;
+  }
+}
+
+.js-product-listing.card-list {
+  padding: 1rem;
+}

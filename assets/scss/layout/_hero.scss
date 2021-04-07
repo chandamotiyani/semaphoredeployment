@@ -1,0 +1,256 @@
+.hero {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: calc(100vh - #{$site-border-width * 2});
+	min-height: 600px;
+	margin: 0;
+	margin-left: auto;
+	background-size: cover;
+	text-align: center;
+	background-position: center;
+	background-repeat: no-repeat;
+	color: $white;
+	z-index: $z-hero;
+
+	@at-root .page-heritage & {
+		z-index: 999 !important;
+		min-height: 900px;
+	}
+
+	&--small {
+		min-height: 0;
+		height: 1 / 3 * 100vh;
+
+		.hero__content {
+			padding-bottom: 6rem;
+		}
+	}
+
+	&--has-tabs {
+		margin-top: -90px;
+		min-height: 300px;
+
+		@include media-breakpoint-up(md) {
+			min-height: 400px;
+		}
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			margin-top: 0;
+		}
+	}
+
+	&--gradient {
+		&:before {
+			@include gradient-overlay();
+		}
+	}
+
+	&--overlay {
+		&:before {
+			@include overlay(rgba($black, 0.35));
+		}
+	}
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		text-align: left;
+		// height: auto;
+	}
+
+	&--position-center {
+		text-align: center;
+		.hero__maxwidth {
+			@include media-breakpoint-up($single-column-breakpoint) {
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+	}
+
+	&--position-right {
+		text-align: right;
+		.hero__maxwidth {
+			@include media-breakpoint-up($single-column-breakpoint) {
+				margin-left: auto;
+			}
+		}
+	}
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		&--small {
+			min-height: 310px;
+			//   height: 300px;
+			align-items: center;
+
+			&:before {
+				@include overlay(rgba($black, 0.25));
+			}
+
+			.hero__content {
+				margin-top: 0;
+
+				.hero__maxwidth {
+					max-width: none;
+				}
+
+			}
+
+			.hero__title {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	&__content {
+		position: relative;
+		padding-left: 2.5rem;
+		padding-right: 2.5rem;
+		padding-top: 6rem;
+		margin-top: em(120);
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-left: 10rem;
+			padding-right: 10rem;
+			margin-top: em(120);
+		}
+
+		@at-root .hero--small & {
+			text-align: center;
+		}
+
+		@include media-breakpoint-down(xxs) {
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+
+	&__maxwidth {
+		@include media-breakpoint-up($single-column-breakpoint) {
+			max-width: calc(50% + 235px);
+		}
+	}
+
+	&__title {
+		@extend .heading-primary-xl;
+
+		line-height: 1.1;
+		text-shadow: 0 0 26px rgba(0, 0, 0, 0.76);
+		color: $white;
+		margin-bottom: em(10);
+		margin-top: 0;
+
+		@include media-breakpoint-down(xs) {
+			font-size: 2.9em !important;
+		}
+	}
+	&__sub-title {
+		@extend .heading-secondary-sm;
+		@extend .heading-secondary-sm--underlined;
+
+		display: inline-block;
+		margin-bottom: 2.2rem;
+		color: $white;
+	}
+
+	&__text, &__extended {
+		text-shadow: 0 0 26px rgba(0, 0, 0, 0.76);
+		color: $white;
+		font-family: $font-tertiary;
+		font-size: em(40);
+		line-height: 1.4;
+		margin-bottom: 40px;
+		margin-top: 0;
+		font-weight: 300;
+
+		@include media-breakpoint-up(sm) {
+			font-size: em(40);
+			font-weight: 300;
+			letter-spacing: -1.76px;
+		}
+
+		a {
+			color: $white;
+			line-height: em(25);
+			font-size: 17px;
+			text-decoration: underline;
+			font-family: $font-primary;
+			letter-spacing: 0.34px;
+		}
+	}
+
+	&__button {
+		@extend .boxed-button;
+		@extend .boxed-button--on-dark;
+
+		font-weight: 200;
+		font-size: 12px;
+
+		&:hover {
+			background-color: transparent;
+		}
+	}
+
+	&__scroll {
+		position: absolute;
+		z-index: 10;
+		bottom: 1.4rem;
+		right: 50%;
+		transform: translateX(50%);
+
+		@include media-breakpoint-up(sm) {
+			right: 3rem;
+		}
+	}
+
+	&__scroll-big {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: absolute;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			left: $section-padding-large;
+			right: $section-padding-large;
+			bottom: $section-padding-large;
+		}
+
+		@include media-breakpoint-down($single-column-breakpoint) {
+			left: $section-padding-small;
+			right: $section-padding-small;
+			bottom: $section-padding-small;
+		}
+	}
+
+	&__scroll-cta {
+		@extend .heading-secondary-md;
+	}
+
+	&__scroll-icon {
+		@extend .svg-icon;
+
+		font-size: em(22);
+		height: 1em;
+		margin-top: 1em;
+	}
+	
+	&__video {
+		@include absolute-fill-parent;
+
+		z-index: -1;
+		pointer-events: none;
+		overflow: hidden;
+
+		// Faux object-fit: fill style trick taken from https://codepen.io/abennington/pen/ZONqqv (only way to avoid letterboxing the video when filling the screen. NOTE that this assumes that the video aspect ratio is 16:9)
+		& > iframe {
+			width: 100vw;
+			height: 56.25vw; /* Given a 16:9 aspect ratio, 9/16*100 = 56.25 */
+			min-height: 130vh;
+			min-width: 230.1vh; /* Given a 16:9 aspect ratio, 16/9*100 = 177.77 */
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+}

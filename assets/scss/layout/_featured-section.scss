@@ -1,0 +1,14 @@
+.featured-section {
+	padding-top: $section-spacing-vertical-small;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		padding-top: $section-spacing-vertical-large;
+	}
+
+	z-index: $z-article;
+}
+
+.featured-section > .section{
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}

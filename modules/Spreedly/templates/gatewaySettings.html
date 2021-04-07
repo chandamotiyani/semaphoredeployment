@@ -1,0 +1,51 @@
+{% from "_includes/forms" import textField, lightswitchField, autosuggestField %}
+
+
+
+{{ autosuggestField({
+    label: 'Enviroment Key'|t('commerce'),
+    id: 'environment_key',
+    class: 'ltr',
+    name: 'environment_key',
+    value: gateway.environment_key,
+    suggestEnvVars: true,
+    errors: gateway.getErrors('environment_key')
+}) }}
+
+{{ autosuggestField({
+    label: 'Access Secret'|t('commerce'),
+    id: 'access_secret',
+    class: 'ltr',
+    name: 'access_secret',
+    value: gateway.access_secret,
+    suggestEnvVars: true,
+    errors: gateway.getErrors('access_secret')
+}) }}
+
+{{ autosuggestField({
+    label: 'Gateway Token'|t('commerce'),
+    id: 'gateway_token',
+    class: 'ltr',
+    name: 'gateway_token',
+    value: gateway.gateway_token,
+    suggestEnvVars: true,
+    errors: gateway.getErrors('gateway_token')
+}) }}
+
+
+{{ autosuggestField({
+    label: 'Test Mode Gateway Token'|t('commerce'),
+    id: 'test_mode_gateway_token',
+    class: 'ltr',
+    name: 'test_mode_gateway_token',
+    value: gateway.test_mode_gateway_token,
+    suggestEnvVars: true,
+    errors: gateway.getErrors('test_mode_gateway_token')
+}) }}
+
+ {{ lightswitchField({
+     label: "Test mode?"|t('commerce'),
+     name: 'test_mode',
+     on: gateway.test_mode,
+     errors: gateway.getErrors('test_mode'),
+ }) }}

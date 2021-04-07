@@ -1,0 +1,221 @@
+@mixin section-metrics {
+	display: flex;
+	flex-direction: column;
+	align-content: stretch;
+	align-items: stretch;
+	flex-basis: auto;
+	flex-grow: 1;
+	position: relative;
+
+	// This is set to align the list body with the LHS of the sidebar gutters of other sections
+	&:not(#{&}--bleed) {
+		padding-top: $section-spacing-vertical-large;
+
+		&:not(:first-child) {
+			padding-top: $section-spacing-vertical-small;
+
+			@include media-breakpoint-up($single-column-breakpoint) {
+				padding-top: $section-spacing-vertical-large;
+			}
+		}
+
+		padding-left: $section-padding-inset-small;
+		padding-right: $section-padding-inset-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-left: $section-padding-inset-medium;
+			padding-right: $section-padding-inset-medium;
+		}
+	}
+	
+	// If a section is sitting directly before the footer and is not intended to bleed to the edges, offset it from the footer by the standard vertical section gap amount.
+	&:last-child:not(#{&}--bleed) {
+		padding-bottom: $section-spacing-vertical-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-bottom: $section-spacing-vertical-large;
+		}
+	}
+
+	// Two bleeding sections that have different colour schemes should not have a gap between them and use padding instead.
+	&:not(.t-black-on-transparent)#{&}--bleed + &.t-black-on-transparent#{&}--bleed,
+	&:not(.t-black-on-white)#{&}--bleed + &.t-black-on-white#{&}--bleed,
+	&:not(.t-white-on-black)#{&}--bleed + &.t-white-on-black#{&}--bleed {
+		padding-top: $section-spacing-vertical-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-top: $section-spacing-vertical-large;
+		}
+	}
+
+	&:last-child#{&}--bleed {
+		padding-bottom: $section-spacing-vertical-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-bottom: $section-spacing-vertical-large;
+		}
+	}
+
+	&:not(#{&}--bleed) + &#{&}--bleed {
+		padding-top: $section-spacing-vertical-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-top: $section-spacing-vertical-large;
+		}
+	}
+
+	&--inset:not(#{&}--bleed) {
+		padding-left: $section-padding-inset-small;
+		padding-right: $section-padding-inset-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-left: $section-padding-inset-large + $card-padding-large;
+			padding-right: $section-padding-inset-large + $card-padding-large;
+		}
+	}
+
+	&--pad-bottom {
+		padding-bottom: $section-spacing-vertical-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-bottom: $section-spacing-vertical-large;
+		}
+	}
+}
+
+@mixin section-z-index {
+	@for $i from 1 through 20 {
+		&:nth-child(#{$i}) {
+			z-index: 20 - $i !important;
+		}
+	}
+}
+
+@mixin section {
+	z-index: $z-section;
+
+	// Specifically for the Heritage page, ensure that any sections that are not included in the scroll indicator will overlap / obscure the scroll indicator.
+	&:not(.js-include-in-scroll-indicator) {
+		z-index: $z-scroll-indicator + 1 !important;
+	}
+
+	// The nested wrap element is used only so we can constrain its contents' width while still having a full-width background.
+	&__wrap {
+		display: flex;
+		flex-direction: column;
+		justify-content: stretch;
+		justify-items: stretch;
+		align-items: stretch;
+		align-content: stretch;
+		flex-grow: 1;
+		position: relative;
+		flex-basis: auto;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			flex-direction: row;
+		}
+
+		&--column {
+			flex-direction: column;
+		}
+	}
+	&__body {
+		// flex-grow: 1;
+
+
+		// NOTE: Certain child elements are dependent on this being a flexbox in order to align horizontally correctly.
+		display: flex;
+		flex-direction: column;
+		flex-basis: auto;
+		width: 100%; // fixes old safari wrap
+
+		.heading-with-text{
+			@include media-breakpoint-up($single-column-breakpoint) {
+				margin-top: 4rem;
+				margin-bottom: 6rem;
+			}
+		}
+	}
+
+	&__gutter {
+		// This is to specifically sit above the carousel faux-mask defined in .carousel:before
+		z-index: 200;
+		display: block;
+		flex-basis: $section-gutter-width;
+		position: relative;
+		background-color: $background-secondary;
+		padding-bottom: $padding-small;
+
+		& > h2 {
+			@extend .heading-secondary-md;
+		}
+
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			z-index: 100;
+			border-right: 1px solid $grey-keyline;
+			position: relative;
+			padding-bottom: 0;
+			
+			& > h2 {
+				margin-bottom: 0;
+				text-transform: uppercase;
+				font-size: em(15);
+				position: absolute;
+				top: -0.25em; // Optical adjustment
+				left: 6px; // Optical adjustment
+				transform: rotate(270deg) translateX(-100%);
+				transform-origin: top left;
+				min-width: 400px;
+				text-align: right;
+			}
+		}
+	}
+	
+	&__header {
+		flex-basis: 100%;
+		padding-bottom: $padding-small;
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-bottom: $padding-huge;
+			flex-basis: auto;
+		}
+	}
+
+	&__footer {
+		flex-basis: 100%;
+		padding-top: $padding-small;
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-top: $padding-large;
+		}
+	}
+
+	&--narrow {
+		width: 100%;
+		max-width: $section-narrow-width;
+		margin: 0 auto;
+	}
+
+	&--constrained > &__wrap {
+		@include media-breakpoint-up($large-desktop-breakpoint) {
+			max-width: $section-constrained-width;
+			align-self: center;
+		}
+	}
+
+	&--padded > &__wrap {
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding-left: $section-spacing-vertical-large;
+			padding-right: $section-spacing-vertical-large;
+		}
+	}
+}
+
+.section {
+	@include section;
+	@include section-metrics;
+	@include section-z-index;
+
+	&.js-include-in-scroll-indicator {
+		z-index: $z-scroll-indicator - 1;
+	}
+}

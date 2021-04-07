@@ -1,0 +1,11 @@
+@include media-breakpoint-down($single-column-breakpoint) {
+  .js-tabbed-panels {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    overflow: hidden;
+
+    &-tab {
+      min-width: 100%;
+    }
+  }
+}

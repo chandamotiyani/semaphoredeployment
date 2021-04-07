@@ -1,0 +1,73 @@
+{% set articles = [] %}
+
+{% set introduction = component.sectionHeader.one()|default %}
+
+{% if introduction | length %}
+	{% set introFields = {
+		template: 'card-carousel-text',
+		super: introduction.super|default,
+		heading: introduction.heading|default,
+		copy: introduction.copy|default
+	} %}
+{% else %}
+	{% set introFields = "" %}
+{% endif%}
+
+{% set filterArticles = [] %}
+{% if component.relatedArticles.one.articles|default %}
+	{% set filterArticles = component.relatedArticles.one.articles.limit(3) %}
+{% endif %}
+
+{% if component.relatedArticles.one.category|default %}
+	{% set filterArticles = craft.entries.relatedTo(component.relatedArticles.one.category).limit(3) %}
+
+	{% set categoryButton = {
+		url: component.relatedArticles.one.category.one.url|default,
+	} %}
+{% endif %}
+
+{% set footer = {
+	buttons: [{
+		label: 'View More',
+		url: categoryButton.url ?? '/archives',
+	}],
+} %}
+
+{% for article in filterArticles %}
+	{%
+		set articles = articles | merge([{
+		template: 'card-article',
+		title: article.title,
+		image: article.articleBanner.image.one() | default,
+		location: article.eventLocation[0].title | default,
+		cta: 'Learn more',
+		url: article.url,
+		date: article.postDate,
+		entryType: article.articleCategory.one().title | default('Article'),
+		description: article.articleAbstract,
+	}]) %}
+{% endfor %}
+
+{% if articles|length == 1 %}
+
+	{% set article = articles[0] %}
+	{%
+		set featuredItem = {
+			entryType: 'Article',
+			date: article.date,
+			contentHeading: article.title,
+			contentText: article.description,
+			url: article.url,
+			linkLabel: 'Read the Article',
+			image: article.image,
+			entry: article
+		}
+	%}
+	{% embed "_layouts/_section.twig" %}
+		{% block body %}
+			{% include "_cards/_card-article-big.twig" with featuredItem only %}
+		{% endblock %}
+	{% endembed %}
+{% else %}
+	{% include '_views/_related-articles' with { articles: articles, header: introFields, footer: footer } only %}
+{% endif %}

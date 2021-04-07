@@ -1,0 +1,35 @@
+{% if emailKey == 'forgot_password' %}
+
+  {% embed 'emails/layout' with { 
+    title: 'Reset your Yalumba Password', 
+    heading: 'Reset your Yalumba Password' 
+  } %}
+
+    {% block content %}
+      <p style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+        {% if user %}
+          Hello, {{ user.friendlyName }}!
+        {% endif %}
+      </p>
+      <p style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+        You can reset your Yalumba password by clicking the link below or copying and pasting it into your browser.
+
+      </p>
+  
+      <p style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+        Thank you, <br>
+        The Yalumba Wine Club team
+      </p>
+
+
+      <a style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #c88242; line-height: 24px;" href="{{ link }}">{{ link }}</a>
+
+      <p style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+        Didn’t request this email? You don't need to do anything. Your password will stay the same.
+      </p>
+
+    {% endblock %}
+  {% endembed %}
+
+{% endif %}
+

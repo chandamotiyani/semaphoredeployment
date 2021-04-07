@@ -1,0 +1,43 @@
+
+{% embed '_layouts/_section.twig' %}
+	{% block body %}
+		<div class="featured-wines{{ carouselModifiers.hasText|default ? ' featured-wines--has-text' : '' }}{{ carouselModifiers.hasOne|default ? ' featured-wines--has-one' : '' }}{{ carouselModifiers.hasTwo|default ? ' featured-wines--has-two' : '' }}{{ carouselModifiers.hasMany|default ? ' featured-wines--has-many' : '' }}">
+
+			<div class="featured-wines__wrap">
+				{% if moduleHeading|default %}
+					<div class="featured-wines__inner">
+						<h2 class="featured-wines__module-heading">{{ moduleHeading | typogrify }}</h2>
+					</div>
+				{% endif %}
+				{# include "_partials/_module-header.twig" #}
+
+				<div class="featured-wines__inner">
+
+					{% if carouselModifiers.hasText|default %}
+						<div class="featured-wines__text">
+							<h3 class="featured-wines__text-heading">{{ introFields.heading | typogrify  }}</h3>
+							<div class="featured-wines__text-description">{{ introFields.text|raw }} </div>
+							{# buttons #}
+							{% if buttons is defined and buttons | length %}
+
+								{% for button in buttons %}
+
+										<a href="{{ button.entry.url | default }}" {{ button.entry['target']|default }} class="featured-wines__button featured-wines__button--desktop">{{ button.label|default('Learn More') }}</a>
+
+								{% endfor %}
+
+						{% endif %}
+						</div>
+					{% endif %}
+					{% set winesOfTheMonth = getWOMSales() %}
+					{% embed "_layouts/_carousel.twig" with { wineBadge: wineBadge, wishList: wishList, cart: cart, winesOfTheMonth: winesOfTheMonth, items: wines, class: 'featured-wines__carousel' } %}
+						{% block item %}
+							{% include item.container with { wineBadge: wineBadge, winesOfTheMonth: winesOfTheMonth, wine: item.wine, wishList: wishList, cart: cart  } only %}
+						{% endblock %}
+					{% endembed %}
+				</div>
+				{% include "_layouts/_carousel-controls.twig" with { hideCarouselControls: 'false' } only %}
+			</div>
+		</div>
+	{% endblock %}
+{% endembed %}

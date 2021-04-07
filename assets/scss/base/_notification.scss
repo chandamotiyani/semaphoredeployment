@@ -1,0 +1,40 @@
+.notification {
+	height: auto;
+	font-size: 10px;
+	color: $white;
+	display: flex;
+	transition: all 0.4s ease-in;
+	position: fixed;
+	height: 0;
+	align-items: center;
+	padding: 0 1rem;
+	transform: translateX(-100%);
+	transform: translateY(100%);
+	animation: slideDown 1s forwards ease-in-out;
+	background: $black;
+	z-index: 9999999999;
+	bottom: 0;
+	right: 25px;
+	margin-right: 1.5rem;
+	&--success {
+
+	}
+
+	&--error {
+		transform: translateX(0);
+	}
+
+	&--hide {
+		opacity: 0;
+	}
+
+	&--add-to-wishlist {
+		margin-right: 2.5rem;
+	}
+}
+
+@keyframes slideDown {
+	0%   { opacity: 0; height: 0; overflow: hidden; }
+	50%  { height: 38px; overflow: visible; }
+	100% { opacity: 1; height: 38px; }
+}

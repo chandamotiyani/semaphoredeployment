@@ -1,0 +1,24 @@
+
+{% cache %}
+	{% set component = component.quicklinks %}
+
+	{% set items = [] %}
+
+	{% for item in component.with([['quicklinks.quickLinkImage', {
+		withTransforms: ['cardImage']
+		}]]).all() %}
+		{% set items = items | merge(
+			[
+				{
+					image: item.quickLinkImage[0].url,
+					title: item.quickLinkTitle | default,
+					subtitle: item.quickLinkSubTitle | default,
+					url: item.quickLinkEntry[0].url | default,
+					linkTitle: item.quicklinkLinkTitle | default,
+				}
+			]
+		) %}
+	{% endfor %}
+
+	{% include '_views/_quick-links' with { items: items } only %}
+	{% endcache %}

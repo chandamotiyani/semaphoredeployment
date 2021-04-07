@@ -1,0 +1,53 @@
+.card-carousel-event {
+	@include card;
+	@include card-with-image;
+	@include card-with-image-at-top;
+	@include card-with-image-that-scales-on-hover;
+	@include card-with-location;
+	@include card-with-title;
+	@include card-with-date-tag;
+	@include card-with-cta;
+	@include card-with-white-background-on-hover;
+	@include card-with-image-height-locked-to-aspect-ratio;
+
+	top: 0;
+	bottom: 0;
+
+	&__next-on {
+		padding-bottom: 6px;
+		font-size: 10px;
+
+		@include media-breakpoint-up(md) {
+			position: absolute;
+			font-size: 12px;
+			left: 0;
+			top: 0;
+			transform: rotate(-90deg) translateX(-100%) translateY(0);
+			transform-origin: left top;
+			background: $white;
+			padding: 13px 24px;
+
+			&:after {
+				content: "";
+				width: 60%;
+				height: 1px;
+				position: absolute;
+				top: 39px;
+				left: 20%;
+				background: rgba(142, 142, 142, 0.35);
+			}
+		}
+	}
+	
+	&__header {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+	}
+
+	&__members-only {
+		@extend .product-form__cart-add-btn;
+
+		margin-left: auto;
+	}
+}

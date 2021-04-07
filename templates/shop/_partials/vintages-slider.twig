@@ -1,0 +1,27 @@
+<div class="vintages-slider">
+  <div class="vintages-slider__wrapper hidden-mobile">
+    <!--strong class="vintages-slider__vintage-heading">Back Vintages</strong-->
+    <a href="{{ tastingNotes|first.pageUrl|default }}/#main" class="vintages-slider__prev">{{ tastingNotes|first.title|default }}</a>
+    <div class="vintages-slider__years">
+
+      {% for tastingNote in tastingNotes %}
+        <div class="vintages-slider__year">
+          <a href="{{ tastingNote.pageUrl }}/#main" class="vintages-slider__slide {{ loop.index == ((tastingNotes|length / 2)|round(0, 'ceil')) ? 'vintages-slider__slide--active' : '' }}">
+              <span class="vintages-slider__date">{{ tastingNote.title|default }}</span>
+          </a>
+        </div>
+      {% endfor %}
+
+    </div>
+    <a href="{{ tastingNotes|last.pageUrl|default }}/#main" class="vintages-slider__next">{{ tastingNotes|last.title|default }}</a>
+  </div>
+
+  <div class="vintages-dropdown hidden-desktop">
+    <select class="select js-select-url">
+      <option value="">Select Vintage</option>
+      {% for tastingNote in tastingNotes %}
+        <option value="{{ tastingNote.pageUrl }}/#main">{{ tastingNote.title|default }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>

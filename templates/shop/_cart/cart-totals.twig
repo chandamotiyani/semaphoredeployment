@@ -1,0 +1,11 @@
+{% set blockModifier = blockModifier|default('') %}
+{% set cart = craft.commerce.getCarts().getCart()%}
+
+{% set total = total is defined ? total : cart.itemTotal|currency('AUD', stripZeros = true) %}
+
+<div class="cart-totals cart-totals--{{ blockModifier }}">
+  <div class="cart-totals__totals">
+    <h3 class="cart-totals__totals-heading"></h3>
+    <div class="cart-totals__totals-price">{{ total }}</div>
+  </div>
+</div>

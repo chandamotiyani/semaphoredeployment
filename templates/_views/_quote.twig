@@ -1,0 +1,10 @@
+{% embed '_layouts/_section.twig' %}
+	{% block body %}
+		<blockquote class="quote">
+			<div class="quote__content">
+				<p>{{ text }}</p>
+				<footer class="quote__footer">{{ person }}<cite title="Source Title" class="quote__cite">{{ role }}</cite></footer>
+			</div>
+		</blockquote>
+	{% endblock %}
+{% endembed %}

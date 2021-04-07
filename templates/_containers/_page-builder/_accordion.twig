@@ -1,0 +1,15 @@
+{# {% set accordion = component.accordion %} #}
+
+{# {{ dump(component) }} #}
+
+{% set items = [] %}
+
+{% for item in component.accordion %}
+	{% set items = items | merge([{
+		title: item.question,
+		description: item.answer
+	}]) %}
+{% endfor %}
+
+
+{% include '_views/_accordion' with { items: items } only %}

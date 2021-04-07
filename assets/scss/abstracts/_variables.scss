@@ -1,0 +1,164 @@
+$default-font-size: 16; // (px) Em to PX conversion uses this for context - (desktop first)
+
+// TODO: These fonts stacks need to be cleaned up once the final fonts are setup.
+$font-primary: 'proxima-nova', 'Proxima Nova', 'Helvetica Neue Light', 'Arial', sans-serif !default;
+$font-secondary: 'Bodoni 72', 'Times New Roman', 'Arial', serif !default;
+$font-tertiary: $font-secondary; // 'Bodoni Svty Two ITCTT - Book Ita', 'Times New Roman', 'Arial', sans-serif !default;
+
+/// Copy text color
+$text-color-primary: #4a4a4a !default;
+$text-color-primary-on-dark: #fff !default;
+$text-color-accent: #c88242 !default;
+$text-dark: #202020;
+$text-light: #8E8E8E;
+
+$brand-primary: #c88242 !default;
+$brand-secondary: #202020 !default;
+$brand-tertiary: #c7c7c7;
+
+$background-primary: #fff !default;
+$background-secondary: #f7f7f7 !default;
+$background-tertiary: #202020 !default;
+
+$white: #fff;
+$black: #000;
+$grey: #8E8E8E;
+
+$grey-keyline: transparentize($grey, 0.75);
+
+// -----------------------------------------------------------------------------
+// GRID BREAKPOINTS
+// This is used for the mixins media-breakpoint-up, media-breakpoint-down and media-breakpoint-between.
+// Typically the implementation of these mixins is referring to $single-column-breakpoint however - just
+// to keep the break between single and multi column defined in one place.
+// -----------------------------------------------------------------------------
+
+$grid-breakpoints: (
+  xxxs: 375px,
+  xxs: 414px,
+  xs: 576px,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px,
+  xl: 1442px,
+  xxl: 1680px,
+  xxxl: 1920px
+);
+
+$navigation-breakpoint: lg;
+$single-column-breakpoint: md;
+$large-desktop-breakpoint: xxl;
+
+// -----------------------------------------------------------------------------
+// GLOBAL
+// One set of metric values to rule them all. Choose wisely :D
+// -----------------------------------------------------------------------------
+$padding-massive: 8rem;
+$padding-huge: 6rem;
+$padding-large: 4rem;
+$padding-medium: 3rem;
+$padding-small: 2rem;
+
+// -----------------------------------------------------------------------------
+// CARDS
+// Cards are absolutely everywhere in the site. Their metrics generally boil down to these
+// basic values, derived from the 'global metrics' above.
+// -----------------------------------------------------------------------------
+$card-padding-small: $padding-medium;
+$card-padding-large: $padding-huge;
+$card-padding-large-with-bleed: $card-padding-large * 2;
+
+// -----------------------------------------------------------------------------
+// CARD LISTS
+// Card lists determine the layout of their cards. These gutter values determine the gaps between them, vertically and horizontally.
+// -----------------------------------------------------------------------------
+
+$card-list-gutter-height-small: $padding-large;
+$card-list-gutter-width-small: $padding-small;
+
+$card-list-gutter-height-large: $padding-huge;
+$card-list-gutter-width-large: $padding-massive;
+
+// -----------------------------------------------------------------------------
+// SECTIONS
+// .section is the main class used to wrap all content blocks. Padding, gutter sizes and
+// max-widths etc are all defined here. Any value appended with '-large' is used for desktop,
+// and '-small' is used on tablet down.
+// -----------------------------------------------------------------------------
+$section-spacing-vertical-small: $padding-medium;
+$section-spacing-vertical-large: $padding-huge;
+$section-gutter-width: $padding-medium;
+$section-padding-large: $padding-large;
+$section-padding-small: $padding-small;
+$section-padding-inset-small: $padding-small;
+$section-padding-inset-medium: $padding-medium;
+$section-padding-inset-large: $padding-huge;
+$section-constrained-width: 2/3 * 100%;
+$section-narrow-width: 1200px;
+
+// -----------------------------------------------------------------------------
+// FOOTER
+$footer-padding-inset: $padding-huge;
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// CTAS
+// CTA blocks are big, sparse blocks with plenty of vertical space. Define their vertical minimums here.
+// -----------------------------------------------------------------------------
+$cta-padding-vertical-large: $padding-huge;
+$cta-padding-vertical-small: $padding-small;
+
+// -----------------------------------------------------------------------------
+// SITE BORDER WIDTH
+// The entire site is surrounded by a white border. This defines its thickness.
+// -----------------------------------------------------------------------------
+$site-border-width: 1.25rem;
+
+// -----------------------------------------------------------------------------
+// SCROLL INDICATOR
+// The scroll indicator can only be used on the 'Our Heritage' page which contains .section--bleed
+// blocks whose .card-text-with-image__detail elements use the padding value $card-padding-large-with-bleed.
+// This ensures that the scroll indicator never overlaps the text.
+// -----------------------------------------------------------------------------
+$scroll-indicator-width: $card-padding-large-with-bleed;
+
+// -----------------------------------------------------------------------------
+// COLLAGE CARD MINIMUM HEIGHT
+// In case collage cards' text content is shorter than a certain height, they will remain tall enough
+// relative to the screen width (yeah, vw, it's weird but it works) so that their aspect ratio still looks good.
+// -----------------------------------------------------------------------------
+$collage-card-minimum-height-small: 80vw;
+$collage-card-minimum-height-large: 40rem;
+
+
+// -----------------------------------------------------------------------------
+// PRIMARY NAVIGATION
+// -----------------------------------------------------------------------------
+$primary-navigation-height-xs: 60px;
+$primary-navigation-height-sm: 87px;
+$primary-navigation-height-md: 130px;
+$primary-navigation-height-lg: 145px;
+$primary-navigation-height-xl: 150px;
+$primary-navigation-height-xxl: 200px;
+
+// -----------------------------------------------------------------------------
+// LONG FORM
+// -----------------------------------------------------------------------------
+$long-form-gutter-horizontal-large: $padding-medium;
+
+// -----------------------------------------------------------------------------
+// Z-INDEXING
+// z-indexes for elements are defined here where possible, to make it clear what should stack
+// above what. If a z-index somewhere in the codebase isn't defined here, consider moving it!
+// -----------------------------------------------------------------------------
+
+$z-hero: 10;
+$z-filters: 250;
+$z-footer: 10;
+$z-scroll-indicator: 100;
+$z-section: $z-scroll-indicator + 1;
+$z-section-stepper: $z-scroll-indicator;
+$z-popout-menu: 999999999;
+$z-article: $z-hero + 1;
+$z-search-header: $z-article + 2;
+$z-dropdown: $z-scroll-indicator + 1;

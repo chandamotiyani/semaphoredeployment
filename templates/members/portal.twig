@@ -1,0 +1,28 @@
+{% if not currentUser %}
+    {% redirect "/members/sign-in" %}
+{% endif %}
+
+{% set tabs = [
+	{
+		name: 'My Membership',
+		url: '/members/my-membership',
+		active: craft.app.request.segments|last == 'my-membership',
+	},
+	{
+		name: 'Update Account Details',
+		url: '/members/update-account-details',
+		active: craft.app.request.segments|last == 'update-account-details',
+  },
+  {
+		name: 'View My Purchases',
+		url: '/members/my-purchases',
+		active: craft.app.request.segments|last == 'my-purchases',
+	},
+	{
+		name: 'View My Wishlist',
+		url: '/shop/wishlist',
+		active: craft.app.request.segments|last == 'my-wishlist',
+	},
+] %}
+
+{% extends "members/index.twig" %}

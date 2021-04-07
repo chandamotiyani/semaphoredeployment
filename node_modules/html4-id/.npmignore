@@ -1,0 +1,12 @@
+# Test and Code Quality Items
+test
+coverage
+
+# Module Configs
+.buddyrc
+.eslintignore
+.eslintrc
+.jscsrc
+.jsinspectrc
+.nsprc
+.travis.yml

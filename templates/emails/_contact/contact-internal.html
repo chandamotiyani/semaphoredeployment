@@ -1,0 +1,30 @@
+{# subject: New submission from your {{ form.name }} form #}
+{# fromEmail: {{ craft.app.systemSettings.getSettings('email').fromEmail }} #}
+{# fromName: {{ craft.app.systemSettings.getSettings('email').fromName }} #}
+{# replyToEmail: {{ craft.app.systemSettings.getSettings('email').fromEmail }} #}
+{# cc: #}
+{# bcc: #}
+{# includeAttachments: true #}
+{# presetAssets: #}
+{# description: New submission sample email template #}
+
+{% embed 'emails/layout' with { 
+    title: 'New Form Submitted', 
+    heading: 'Contact Yalumba' 
+  } %}
+  
+    {% block content %}
+
+        <p style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">You have received a new form submission from {{ form.name|default }}.</p>
+
+        <ul style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px; margin-left: 0; list-style: none">
+            <li><strong>Date Submitted:</strong> {{ dateCreated|default|date('l, F j, Y \\a\\t g:ia') }}</li>
+            <li><strong>From:</strong> {{ craft.app.systemSettings.getSettings('email').fromName }}</li>
+            <li><strong>Email:</strong> {{ craft.app.systemSettings.getSettings('email').fromEmail }}</li>
+            {% for field in allFields|default([]) %}
+                <li><strong>{{ field.label|default }}:</strong> {{ field.valueAsString|default }}</li>
+            {% endfor %}
+        </ul>
+
+    {% endblock %}
+{% endembed %}

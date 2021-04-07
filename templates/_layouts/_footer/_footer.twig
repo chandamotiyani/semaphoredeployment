@@ -1,0 +1,44 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+<footer class="footer t-white-on-black">
+    {% include "_layouts/_footer/_footer-navigation.twig" %}
+    <ul class="footer__actions">
+        <li class="footer__actions-item">
+            {% if craft.commerce.customers.customer.user|default %}
+                <a href="{{ siteUrl('/logout') }}" class="footer__actions-link">
+                    <svg class="primary-navigation__icon primary-navigation__icon--user"><use xlink:href="#user-icon"></use></svg>
+                    <span>Sign Out</span>
+                </a>
+            {% else %}
+                <a href="{{ siteUrl('members/sign-in') }}" class="footer__actions-link">
+                    <svg class="primary-navigation__icon primary-navigation__icon--user"><use xlink:href="#user-icon"></use></svg>
+                    <span>Sign in</span>
+                </a>
+            {% endif %}
+        </li>
+        <li class="footer__actions-item">
+            <a href="{{ siteUrl('shop/cart') }}" class="footer__actions-link">
+                <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#cart-icon"></use></svg>
+                <span>View Cart</span>
+            </a>
+        </li>
+    </ul>
+    <div class="footer__bottom">
+        {% if not currentUser %}
+            <div class="footer__subscribe">
+                <h4 class="footer__sub-heading">Subscribe to our mailing list</h4>
+                <span class="footer__sub-text">Keep up-to-date with all the latest news, events & releases.</span>
+                {# TODO This input-with-button component isn't padded correctly in this context? #}
+                <div class="footer__subscribe-field">
+                    {% include "_forms/newsletter" with { id: "footer-newsletter", hash: '#footer-newsletter' } %}
+                </div>
+            </div>
+        {% else %}
+            <div class="footer__subscribe">
+                {% set user = craft.commerce.customers.customer.user %}
+                <h4 class="footer__sub-heading">Welcome back {{ user.firstName }}</h4>
+            </div>
+        {% endif %}
+        {% include "_layouts/_footer/_footer-contact.twig" %}
+    </div>
+    {% include "_layouts/_footer/_footer-navigation-bottom.twig" %}
+</footer>

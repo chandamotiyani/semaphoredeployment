@@ -1,0 +1,67 @@
+// Set the number of columns you want to use on your layout.
+
+// Set the horizontal gutter between columns.
+$flexboxgrid-gutter-width: 2.2rem !default;
+// Set a margin for the container sides.
+$padding-large: 6rem !default;
+
+$flexboxgrid-max-width: 80rem !default;
+
+$gutter-compensation: -$flexboxgrid-gutter-width;
+$half-gutter-width: $flexboxgrid-gutter-width * .5;
+
+// TODO Tentatively removed as supposedly not used?
+// .wrapper {
+//   box-sizing: border-box;
+//   max-width: $flexboxgrid-max-width;
+//   margin: 0 auto;
+// }
+
+.container-fluid {
+	display: flex;
+	flex-direction: column;
+	align-content: stretch;
+	align-items: stretch;
+	padding: 0 $padding-large;
+	flex-basis: 100%;
+
+	@include media-breakpoint-down(sm) {
+		padding: 0 $padding-large / 2;
+	}
+}
+
+.container-constrained {
+	align-self: center;
+	max-width: $flexboxgrid-max-width;
+	width: 100%;
+	// @include fluid-property-map(padding-left, ( lg: 32px, xxxl: 512px ));
+	// @include fluid-property-map(padding-right, ( lg: 32px, xxxl: 512px ));
+}
+
+.container--thin {
+	flex-basis: auto;
+	max-width: 100%;
+}
+
+.row {
+	box-sizing: border-box;
+	display: flex;
+	flex: 0, 1, auto;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin-right: $gutter-compensation;
+	margin-left: $gutter-compensation;
+}
+
+.col {
+	flex: 1;
+	padding: 0 $flexboxgrid-gutter-width;
+
+	&__large {
+		min-width: 65%;
+	}
+
+	&__x-large {
+		min-width: 74%;
+	}
+}

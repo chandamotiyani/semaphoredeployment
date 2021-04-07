@@ -1,0 +1,6 @@
+{% embed '_cards/_card.twig' with { type: 'carousel-page' }%}
+	{% block details %}
+		<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>
+		<div class="{{ class }}__cta">{{ cta }}</div>
+	{% endblock %}
+{% endembed %}

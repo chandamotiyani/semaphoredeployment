@@ -1,0 +1,50 @@
+.card-event {
+	@include card;
+	@include card-with-buttons($justify-to-bottom: false);
+	@include card-with-image;
+	@include card-with-image-height-locked-to-aspect-ratio;
+	@include card-with-date-tag;
+	@include card-with-title;
+	@include card-with-white-background-on-hover;
+	@include card-with-image-that-scales-on-hover;
+	//@include card-with-white-background-on-hover;
+
+	&__time {
+		@extend .heading-secondary-sm;
+		margin-block-start: 1.5em;
+		margin-bottom: 2em;
+	}
+
+	&__next-on {
+		padding-bottom: 6px;
+		font-size: 10px;
+
+		@include media-breakpoint-up(md) {
+			position: absolute;
+			font-size: 12px;
+			left: 0;
+			top: 0;
+			transform: rotate(-90deg) translateX(-100%) translateY(0);
+			transform-origin: left top;
+			background: $white;
+			padding: 13px 24px;
+
+			&:after {
+				content: "";
+				width: 60%;
+				height: 1px;
+				position: absolute;
+				top: 39px;
+				left: 20%;
+				background: rgba(142, 142, 142, 0.35);
+			}
+		}
+	}
+
+	&__price {
+		@include price;
+
+		margin-top: auto;
+    margin-bottom: 0;
+	}
+}

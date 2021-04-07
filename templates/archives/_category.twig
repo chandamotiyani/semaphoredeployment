@@ -1,0 +1,4 @@
+{# Get the requested entry slug from the URL #}
+{% set requestedSlug = craft.app.request.getSegment(2) %}
+
+{% include 'archives/_list.twig' with { section: 'blogPosts', featuredItem: [], type: 'mixed', slug: requestedSlug|literal } %}

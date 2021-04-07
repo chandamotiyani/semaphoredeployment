@@ -1,0 +1,11 @@
+.card-list-collage-staggered {
+	@include list;
+	
+	@include card-list-collage-gutters;
+	@include card-list-collage-staggered-items;
+	@include card-list-collage-gutters;
+	
+	@include card-list-collage-min-height;
+
+	justify-content: stretch;
+}

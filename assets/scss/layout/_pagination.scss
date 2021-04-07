@@ -1,0 +1,8 @@
+.pagination {
+	display: flex;
+	justify-content: center;
+	
+	&__button {
+		@extend .boxed-button;
+	}
+}

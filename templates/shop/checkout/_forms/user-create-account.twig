@@ -1,0 +1,55 @@
+
+
+<form method="POST" class="js-user-create-account">
+  <div class="checkout__form">
+    <input type="hidden" name="action" value="users/save-user">
+    {{ csrfInput() }}
+
+    <div style="display: none">
+      {% include "shop/checkout/_includes/user-details-fields.twig" with {
+          firstName: {
+            name: 'firstName',
+            value: user.firstName|default ? user.firstName : cart.firstName|default,
+          },
+          lastName: {
+            name: 'lastName',
+            value: user.lastName|default ? user.lastName : cart.lastName|default,
+          },
+          phoneNumber: {
+            name: 'fields[phoneNumber]',
+            value: user.phoneNumber|default ? user.phoneNumber : cart.phoneNumber|default
+          },
+          dateOfBirth: {
+            name: 'fields[dateOfBirth]',
+            value: user.dateOfBirth|default ? user.dateOfBirth|date("yy-m-d") : cart.dateOfBirth|default ? cart.dateOfBirth|date("yy-m-d")
+          },
+        } 
+      %}
+    </div>
+
+    <input name="email" type="hidden" value="{{ cart.email }}">
+
+    <div class="js-msg alert"></div>
+    <h3 class="checkout__col-sub-heading">Create an account to get 10% off selected wines.</h3>
+    <p class="checkout__col-text">Our members also receive special monthly wine offers, invitations to events, access to curated wine packs and free shipping for orders over $200.</p>
+
+    {% if members.productMemberNotes.one.guest|default %}
+      <p>{{ members.productMemberNotes.one.guest|raw }}</p><br>
+    {% endif %}
+
+    <div class="checkout__form-row">
+      {% include "_forms/text-input" with {
+        type: 'password',
+        name: 'password',
+        value: '',
+        label: 'Password',
+        blockClass: 'checkout',
+        hint: 'Use letters, numbers and symbols for a stronger password. Passwords should be more than 6 characters.'
+      } %}
+    </div>
+
+    <input type="submit" value="Create Account" class="checkout__continue-link">
+    <input type="submit" value="Checkout as Guest" class="checkout__continue-link js-sign-in-continue">
+
+  </div>
+</form>

@@ -1,0 +1,39 @@
+{% extends "_visit-us/_list.twig" %}
+
+{% set eventsResults = craft.events.getEventGroupByHandle('tours').events %}
+
+{% set events = [] %}
+
+{% for event in eventsResults %}
+	{% if event is not null %}
+		{% set events = events | merge([ event ]) %}
+	{% endif %}
+{% endfor %}
+
+{% block hero %}
+
+{% include "_page-builder-components/hero-small.twig" with { title: entry.bannerTitle, image: entry.bannerImage.one.url | default, 			focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '', } %}
+{% endblock %}
+
+{% block content %}
+	{% embed '_layouts/_section.twig' with { padded: true, padBottom: false } %}
+		{% block body %}
+			{% embed '_partials/_card-list.twig' with { type: 'tour', items: events } %}
+				{% block item %}
+					{% set normalisedItem = {
+							url: item.url,
+							image: item.bannerImage.one,
+							location: item.eventLocation[0].title,
+							title: item.title,
+							duration: 'Duration: ' ~ item.eventDuration,
+							description: item.eventShortDescription,
+							price: item.price,
+							event: item,
+					} %}
+					{% include '_cards/_card-tour.twig' with normalisedItem only %}
+				{% endblock %}
+			{% endembed %}
+		{% endblock %}
+	{% endembed %}
+	{{ parent() }}
+{% endblock %}

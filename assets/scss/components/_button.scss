@@ -1,0 +1,194 @@
+.boxed-button {
+	@extend .heading-secondary-sm;
+
+	display: inline-flex;
+	align-items: center;
+	padding: 1.5em;
+	border: 1px solid $text-color-primary;
+	color: $text-color-primary;
+	text-transform: uppercase;
+	justify-content: center;
+	font-weight: 600;
+	cursor: pointer;
+	box-sizing: border-box;
+	min-width: 20em;
+
+	&[disabled] {
+		opacity: 0.4;
+		cursor: default;
+		pointer-events: none;
+
+		&:hover {
+			background-color: initial;
+			color: initial;
+		}
+	}
+
+	&.is-busy {
+		animation: pulse 1s infinite;
+
+		@keyframes pulse {
+			0% {
+				opacity: 0.25;
+			}
+
+			50% {
+				opacity: 1;
+			}
+
+			100% {
+				opacity: 0.25;
+			}
+		}
+	}
+
+	&.is-disabled {
+		opacity: 0.25;
+		pointer-events: none;
+	}
+
+	&:not(:hover) {
+		transition: all 0.4s ease;
+	}
+
+	@include media-breakpoint-up(sm) {
+		height: 47px;
+		min-width: 14em;
+	}
+
+	@include on-event() {
+		text-decoration: none;
+	}
+
+	@include on-event() {
+		background: $black;
+		color: $white;
+		border-color: $black;
+	}
+
+	&--on-dark,
+	.t-white-on-black & {
+		color: $white;
+		border: $white;
+		border: 1px solid $white;
+
+		@include on-event() {
+			background: $white;
+			color: $black;
+			border-color: $white;
+		}
+	}
+
+	.t-black-on-transparent & {
+		color: $black;
+		border: $black;
+		border: 1px solid $black;
+		background: transparent;
+		transform: translateZ(0);
+
+		@include on-event() {
+			background: $black;
+			color: $white;
+			border-color: transparent;
+		}
+	}
+
+	&--black {
+		background: $black;
+		color: $white;
+		border: 1px solid $black;
+		transform: translateZ(0);
+
+		@include on-event() {
+			background: $white;
+			color: $black;
+			border-color: $white;
+		}
+	}
+}
+
+.text-button {
+	@extend .heading-secondary-lg;
+
+	color: $text-color-primary;
+	transition: color 0.4s ease;
+	font-size: 12px;
+	font-weight: 600;
+
+	@include media-breakpoint-up(sm) {
+		font-size: em(13);
+	}
+
+	@include on-event() {
+		color: lighten($text-color-primary, 40%);
+		text-decoration: none;
+	}
+
+
+	&--on-dark {
+		color: darken($white, 30%);
+
+		@include on-event() {
+			color: $white;
+		}
+	}
+}
+
+
+.nav-buttons {
+	display: flex;
+	width: em(80);
+	justify-content: space-between;
+
+	&__button {
+		color: rgba($text-color-primary, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: color 0.4 ease;
+		min-width: 0;
+		padding: 0;
+
+		@include on-event() {
+			color: $text-color-primary;
+		}
+
+		svg {
+			width: em(30);
+			height: em(30);
+		}
+	}
+}
+
+.link {
+	text-decoration: underline;
+	color: $text-color-primary;
+
+	&:hover {
+		color: $text-color-accent;
+	}
+}
+
+.icon-button {
+	@extend .heading-secondary-sm;
+	
+	display: inline-flex;
+	align-items: center;
+	padding: 1.5em;
+	color: $text-color-primary;
+	text-transform: uppercase;
+	justify-content: center;
+	font-weight: 600;
+	cursor: pointer;
+	border: none;
+	background: none;
+
+	&__icon {
+		width: 2em;
+		height: 2em;
+	}
+
+	& > :first-child {
+		margin-right: 1em;
+	}
+}

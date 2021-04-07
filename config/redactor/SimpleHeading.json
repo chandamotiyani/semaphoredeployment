@@ -1,0 +1,12 @@
+{
+	"toolbarFixed": false,
+	"replaceDivs": false,
+	"linebreaks": false,
+	"enterKey": true,
+	"breakline": true,
+	"pastePlainText": true,
+	"markup": "div",
+	"deniedTags": ["br"],
+	"source": true,
+	"buttons": ["bold", "italic"]
+}

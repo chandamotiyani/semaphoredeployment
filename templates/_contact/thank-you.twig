@@ -1,0 +1,31 @@
+{% set contactPages = craft.entries()
+	.section('contact').withPermission().orderBy('postDate DESC').all() %}
+
+{% set tabs = [] %}
+	{# Display the entries #}
+{% for pages in contactPages %}
+
+	{% set tabs = tabs|merge([
+		{
+			name: pages.title,
+			url: pages.getUrl,
+			active: craft.app.request.absoluteUrl == pages.getUrl,
+		},
+	]) %}
+{% endfor %}
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+  {% block hero %}
+    {% include "_page-builder-components/hero-small.twig" with {
+        image: entry.bannerImage.one|default ? entry.bannerImage.one.getUrl : '',
+        title: 'Thank you',
+        focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+    } %}
+  {% endblock %}
+
+  {% block content %}
+    {% include "_partials/_page-builder.twig" with { components: entry.components } %}
+  {% endblock %}
+
+
+{% endembed %}

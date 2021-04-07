@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+	<head>
+		{% block head %}
+				<meta http-equiv="X-UA-Compatible" content="IE=edge">
+				<meta charset="utf-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<meta name="google-site-verification" content="LIWhZb0rqv3xNHkByHF8VCkHNYdH1U9YHuu7WXIcjtI" />
+				<link rel="dns-prefetch" href="{{ siteUrl }}">
+				<link rel="preconnect" href="{{ siteUrl }}" crossorigin>
+				{% import "_partials/_macros.twig" as macro %}
+				{% block _head_links %}{% endblock %}
+				{% include "_partials/_global-header.twig" %}
+				<link rel="stylesheet" href="https://use.typekit.net/qmt6hva.css">
+				<link rel="stylesheet" href="{{ siteUrl ~'assets/css/main.css'|cacheBust }}">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-75a5828c7207e2a97c3e6a79f8818c15.png">
+				<link rel="shortcut icon" type="image/x-icon" href="{{ siteUrl}}assets/img/favicons/favicon-cdb5dbd1d4db223f2e14605ef172ca3a.ico">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-72x72-d4fe05f85db19018c43edf6e7f4d64c7.png" sizes="72x72">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-76x76-28a07d29b0cf403beb2cb0fd6f52da2c.png" sizes="76x76">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-114x114-c723d23547e65683a538395c4471b8eb.png" sizes="114x114">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-120x120-82c4811d8edea757a411de842ceed543.png" sizes="120x120">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-144x144-aeffa6c86fd6794c3960db386b852932.png" sizes="144x144">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-152x152-296258be66cea485d99cfbfec57be8fe.png" sizes="152x152">
+				<link rel="apple-touch-icon" type="image/png" href="{{ siteUrl}}assets/img/favicons/apple-touch-icon-180x180-1389a625c3a64ffd189ec5a41f4aca59.png" sizes="180x180">
+		{% endblock %}
+	</head>
+	{% set bannerClass = navbar|default == 'small' ? 'page-banner-small header--pinned' : 'page-banner-large' %}
+	<body class="{{ bannerClass }}{{ invert is defined and invert ? ' --invert' }} {{ 'page-'~entry.type.handle|default(craft.app.request.getSegment(2)) }} page-slug-{{ craft.app.request.getSegment(2)|default('page') }}">
+
+			{% if cart is not defined %}
+				{% set cart = craft.commerce.getCarts().getCart() %}
+			{% endif %}
+
+			<!-- Google Tag Manager (noscript) -->
+				<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K26W33G"
+			height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+			<!-- End Google Tag Manager (noscript) -->
+
+			<div id="vue-container">
+				<div class="cookies-notice hidden">
+					<div class="cookies-notice__text">
+						<p>We use cookies to give you the best experience possible. Click accept to continue, or find out more in our cookie policy <a class="cookies-notice__link" target="_blank" href="https://web-assets-prod.yalumba.com/The-Yalumba-Wine-Company-Cookie-Policy.pdf">here</a>.</p>
+					</div>
+					<div class="cookies-notice__buttons">
+						<a href="#" class="boxed-button js-accept-cookies">Accept and continue</a>
+
+					</div>
+				</div>
+
+
+			{% if showBorder is not defined or showBorder %}
+				<div class="site-border">
+					<div class="site-border site-border--top"></div>
+					<div class="site-border site-border--bottom"></div>
+					<div class="site-border site-border--left"></div>
+					<div class="site-border site-border--right"></div>
+				</div>
+			{% endif %}
+
+			{% include "_partials/_exceptions-list.twig" %}
+			{% include "shop/_modals/cart-summary.twig" %}
+			{% include "shop/_modals/wishlist.twig" %}
+			{% include "shop/_modals/sign-in.twig" %}
+			{% include "shop/_modals/add-gift.twig" %}
+			{% include "shop/_modals/search.twig" %}
+			{% include "shop/_modals/sign-in-no-insider.twig" %}
+
+			{# This element is used by carousel.js to work out whether the device is at a mobile or desktop size according to $single-column-breakpoint defined in the SCSS #}
+			<div class="breakpoint-hint-desktop js-breakpoint-hint-desktop"></div>
+
+			{% block menu %}
+				{% include "_partials/_popout-menu.twig" %}
+			{% endblock %}
+
+			{% block header %}
+				{% include "_partials/_header.twig" %}
+			{% endblock %}
+				{% include "_base/svg-sprite-sheet.twig" %} {# SVG Sprite Sheet #}
+			{% if entry.type.handle | default == 'heritage' %}
+				{% include "_partials/_scroll-indicator.twig" %}
+			{% endif %}
+
+			{% block hero %}{% endblock %}
+
+			{% if tabs is defined %}
+				<nav class="secondary-navigation">
+					<ul class="secondary-navigation__tabs">
+						{% for tab in tabs %}
+							<li class="secondary-navigation__tab {{ tab.active ? 'secondary-navigation__tab--active' : '' }}">
+								<a href="{{ tab.url }}">{{ tab.name }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</nav>
+			{% endif %}
+
+			{% if block('filter') is not empty %}
+				<div class="filter-section">
+					{% block filter %}{% endblock %}
+				</div>
+			{% endif %}
+
+			{% if block('featured') is not empty %}
+				<section class="featured-section" id="featured-section">
+					{% block featured %}{% endblock %}
+				</section>
+			{% endif %}
+
+			{% if block('list') is not empty %}
+				<section class="list-section">
+					{% block list %}{% endblock %}
+				</section>
+			{% endif %}
+
+			{% if block('content') is not empty %}
+				<article class="article js-article" id="main">
+					{% block content %}{% endblock %}
+				</article>
+			{% endif %}
+
+			{% block footer %}
+				{% include "_layouts/_footer/_footer.twig" %}
+			{% endblock %}
+		</div>
+		{% block scripts %}
+			<script>
+				window.csrfTokenName = '{{ craft.app.config.general.csrfTokenName | raw }}';
+				window.csrfTokenValue = '{{ craft.app.request.csrfToken | raw }}';
+			</script>
+			<script src="{{ siteUrl ~'assets/js/main.js'|cacheBust }}"></script>
+			<script
+					src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+					integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+					crossorigin="anonymous"></script>
+			    {#
+                    The following javascript polls the server every 30 seconds and sees if the cart has changed on another session or browser tab
+                    and will refresh the page if the current page is out of date. This prevents the customer from changing the cart on another tab,
+                    then submitting an update cart form action that might overwrite the changes on the other page.
+                #}
+
+		{% if cart is not defined %}
+			{% set cart = craft.commerce.getCarts().getCart() %}
+		{% endif %}
+
+		{% endblock %}
+	</body>
+</html>

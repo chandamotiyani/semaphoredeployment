@@ -1,0 +1,16 @@
+<table class="data fullwidth collapsible">
+    <tr>
+        <th>Order Id</th>
+        <th>Order Date</th>
+        <th>Order User Id</th>
+        <th>Order Shipping Address Id</th>
+    </tr>
+    {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.dateCreated.format('d-M-Y') }}</td>
+            <td>{{ order.userId }}</td>
+            <td>{{ order.shippingAddressId }}</td>
+        </tr>
+    {% endfor %}
+</table>

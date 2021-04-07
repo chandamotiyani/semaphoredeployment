@@ -1,0 +1,26 @@
+{% set textWithImage = component.textWithImageHeritage %}
+
+{% set buttons = [] %}
+
+{% for button in textWithImage.buttons.all() %}
+	{% set buttons = buttons | merge([{
+		label: button.label,
+		entry: button.type.handle == 'entryButton' ? button.entry.one() : button.product.one()
+	}]) %}
+{% endfor %}
+
+{%
+	set fields = {
+		constrainImageTo: 'square',
+		image: textWithImage.image.one() | default,
+		imagePosition: 'right',
+		buttons: buttons,
+		textAlign: 'left',
+		super: textWithImage.super,
+		heading: textWithImage.heading | default,
+		text: textWithImage.copy | default,
+		colourScheme: 'white-on-black'
+	}
+%}
+
+{% include '_views/_text-with-image-heritage' with { fields: fields, buttons: buttons } only %}

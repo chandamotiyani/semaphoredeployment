@@ -1,0 +1,5 @@
+@mixin touchscreen() {
+  @media (hover: none) and (pointer: coarse) {
+    @content;
+  }
+}

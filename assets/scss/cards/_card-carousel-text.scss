@@ -1,0 +1,21 @@
+.card-carousel-text {
+	@include card;
+	top: 0;
+	bottom: 0;
+	@include aspect-ratio(1,1);
+	
+	&__details {
+		display: flex;
+		justify-content: center;
+		padding: $card-padding-large
+	}
+
+	&__title {
+		@extend .heading-primary-md;
+	}
+
+	&__copy {
+		@extend .body-text;
+		margin-top: 2em;
+	}
+}

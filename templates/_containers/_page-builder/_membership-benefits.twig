@@ -1,0 +1,16 @@
+{% set textWithImage = component.membershipBenefits %}
+
+{%
+	set fields = {
+		constrainImageTo: textWithImage.imageAspectRatio | default,
+		image: textWithImage.image.one() | default,
+		imagePosition: textWithImage.imagePosition,
+		textAlign: textWithImage.textAlignment | default,
+		heading: textWithImage.heading | default,
+		text: textWithImage.copy | default,
+		colourScheme: textWithImage.colourScheme | kebabCase,
+		iconList: textWithImage.iconList,
+	}
+%}
+
+{% include '_views/_text-with-image' with { className: 'membership-benefits', header: header | default, fields: fields, sideHeading: component.sideHeading.one.heading|default } only %}

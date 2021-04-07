@@ -1,0 +1,5 @@
+{% embed '_layouts/_section.twig' with { constrained: true } %}
+	{% block body %}
+		{% include '_partials/_video.twig' %}
+	{% endblock %}
+{% endembed %}

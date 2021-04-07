@@ -1,0 +1,28 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+<div class="popout-menu container-fluid t-white-on-black">
+    <div class="popout-menu__scroll">
+        <a href="#" id="data-menu-close">
+            <svg class="popout-menu__icon popout-menu__icon--close"><use xlink:href="#close"></use></svg>
+        </a>
+        {% include "_layouts/_footer/_footer-navigation.twig" %}
+        <div class="popout-menu__bottom">
+            {% if not currentUser %}
+            <div class="popout-menu__subscribe">
+                <h4 class="footer__sub-heading">Subscribe to our mailing list</h4>
+                <span class="footer__sub-text">Keep up-to-date with all the latest news, events & releases.</span>
+                {# TODO This input-with-button component isn't padded correctly in this context? #}
+                <div class="popout-menu__subscribe-field">
+                    {% include "_forms/newsletter" with { hash: '#menu-newsletter', id: 'menu-newsletter' } %}
+                </div>
+            </div>
+        {% else %}
+            <div class="popout-menu__subscribe">
+                {% set user = craft.commerce.customers.customer.user %}
+                <h4 class="footer__sub-heading">Welcome back {{ user.firstName }}</h4>
+            </div>
+        {% endif %}
+            {% include "_layouts/_footer/_footer-contact.twig" %}
+        </div>
+        {% include "_layouts/_footer/_footer-navigation-bottom.twig" %}
+    </div>
+</div>

@@ -1,0 +1,9 @@
+{% embed '_layouts/_section.twig' with { constrained: true, narrow: true } %}
+	{% block body %}
+		{% embed '_partials/_card-list.twig' with { type: 'accordion', items: items, appendJsClass: true } %}
+			{% block item %}
+				{% include "_cards/_card-accordion.twig" with item only %}
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+{% endembed %}

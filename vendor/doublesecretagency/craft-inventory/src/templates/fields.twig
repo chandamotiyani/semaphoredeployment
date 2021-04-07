@@ -1,0 +1,151 @@
+{% extends '_layouts/cp' %}
+{% set title = "Field Inventory"|t %}
+{% set selectedSubnavItem = 'fields' %}
+
+{% set crumbs = [
+    { label: 'Settings'|t,  url: cpUrl('settings') },
+    { label: 'Inventory'|t, url: cpUrl('inventory') },
+    { label: 'Fields'|t,    url: cpUrl('inventory/fields') },
+] %}
+
+{% set groups = craft.app.fields.getAllGroups()|index('id') %}
+
+{% if (groupId ?? false) %}
+    {% if groups[groupId] is not defined %}
+        {% exit 404 %}
+    {% endif %}
+    {% set fields = groups[groupId].getFields() %}
+{% else %}
+    {% set fields = craft.app.fields.getAllFields() %}
+{% endif %}
+
+{% hook 'getFieldLayouts' %}
+
+{% do view.registerAssetBundle('doublesecretagency\\inventory\\web\\assets\\InventoryAssets') %}
+
+{% macro layoutRow(layout) %}
+    {% set deleted = (layout.deleted ? 'deleted') %}
+    {% if deleted %}
+        {% set dateDeleted = date(layout.deleted).diff(now) %}
+        {% set duration = dateDeleted|duration(false) %}
+        {% set duration = duration|replace('/ and .*$/','') %}
+        {% set duration = duration|replace('/,.*$/','') %}
+        {% set link = "<strong>Deleted #{duration} ago</strong>" %}
+    {% elseif layout.editLayout %}
+        {% set link = '<a href="' ~ layout.editLayout ~ '" class="btn edit icon"> ' ~ 'Edit layout'|t ~ '</a>' %}
+    {% else %}
+        {% set link = '&nbsp;' %}
+    {% endif %}
+    <tr>
+        <td class="code">{{ layout.id }}</td>
+        <td class="{{ deleted }}">{{ (layout.elementType ?? '-')|raw }}</td>
+        <td class="{{ deleted }}">{{ (layout.section ?? '-')|raw }}</td>
+        <td class="{{ deleted }}">{{ layout.entryType ?? '-' }}</td>
+        <td class="{{ deleted }}">{{ layout.tab ?? '-' }}</td>
+        <td class="btn-col">{{ link|raw }}</td>
+    </tr>
+{% endmacro %}
+{% from _self import layoutRow %}
+
+{% block sidebar %}
+    <nav>
+        <ul id="groups">
+            <li><a href="{{ url('inventory/fields') }}"{% if groupId is not defined %} class="sel"{% endif %}>{{ 'All Fields'|t }}</a></li>
+            {% for group in groups %}
+                <li><a href="{{ url("inventory/fields/#{group.id}") }}"{% if groupId is defined and group.id == groupId %} class="sel"{% endif %} data-id="{{ group.id }}">{{ group.name|t }}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div id="fields-vue-admin-table" class="vue-admin-table {{ fields ? 'hidden' }}">
+        <div class="zilch">
+            <p>
+                {% if groupId is defined %}
+                    {{ "This group doesn’t have any fields yet."|t }}
+                {% else %}
+                    {{ "No fields exist yet."|t }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <div id="fields-vue-admin-table" class="vue-admin-table {{ not fields ? 'hidden' }}">
+        <div class="tableview">
+            <div class="tablepane vue-admin-tablepane">
+                <table class="vuetable data fullwidth inventory">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{ 'Layouts'|t }}</th>
+                            <th scope="col">{{ 'Name'|t }}</th>
+                            <th scope="col">{{ 'Handle'|t }}</th>
+                            <th scope="col">{{ 'Type'|t }}</th>
+                            <th scope="col" title="{{ 'Translatable'|t }}">{{ 'T'|t }}</th>
+                            {% if groupId is not defined %}<th scope="col">{{ 'Group'|t }}</th>{% endif %}
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="vuetable-body">
+                        {% for f in fieldLayouts %}
+                            {% set field   = f.field %}
+                            {% set layouts = f.layouts %}
+                            {% set showDetails = false %}
+                            <tr>
+                                <td><a class="fieldtoggle collapsed" data-id="{{ field.id }}" title="Show/hide details" onclick="toggleFieldLayouts(this); return false;">&nbsp; {{ layouts|length }}</a></td>
+                                <td><span class="a" onclick="toggleFieldLayouts(this)">{{ field.name }}</span></td>
+                                <td><code>{{ field.handle }}</code></td>
+                                <td>
+                                    {% set fieldType = field.displayName %}
+                                    {% if 'MissingField' != fieldType %}
+                                        {{ fieldType }}
+                                    {% else %}
+                                        <span class="error">{{ field['expectedType'] }}</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="status {{ field.getIsTranslatable() ? 'live' : 'disabled' }} }}"></span></td>
+                                {% if groupId is not defined %}<td>{{ field.group.name|t }}</td>{% endif %}
+                                <td class="btn-col"><a href="{{ url('settings/fields/edit/' ~ field.id) }}" class="btn edit icon"> {{ "Edit field"|t }}</a></td>
+                            </tr>
+                            <tr id="field-{{ field.id }}" {{ not showDetails ? 'style="display:none;"'|raw }}>
+                                <td colspan="100">
+                                    <div class="layout-details">
+                                        {% if layouts %}
+                                            <table class="data fullwidth">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">{{ 'Layout ID'|t }}</th>
+                                                        <th scope="col">{{ 'Element'|t }}</th>
+                                                        <th scope="col">{{ 'Section'|t }}</th>
+                                                        <th scope="col">{{ 'Entry Type'|t }}</th>
+                                                        <th scope="col">{{ 'Tab'|t }}</th>
+                                                        <th scope="col"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for layout in layouts %}
+                                                    {{ layoutRow(layout) }}
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            <table class="data fullwidth">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="unused">This field is not being used anywhere.</td>
+                                                        <td class="btn-col">
+                                                            <a class="btn delete icon" data-id="{{ field.id }}" data-name="{{ field.name }}" onclick="deleteField(this); return false;"> {{ 'Delete field'|t }}</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

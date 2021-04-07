@@ -1,0 +1,8 @@
+2020-09-03 09:54:10 [-][120360][-][error][cp-nav] count(): Parameter must be an array or an object that implements Countable - /Users/chandavyas/websites/production/vendor/verbb/cp-nav/src/services/Service.php: 91.
+2020-09-03 09:54:09 [-][120360][-][info][application] $_GET = []
+
+$_POST = []
+2020-09-03 14:20:29 [-][120360][-][error][cp-nav] count(): Parameter must be an array or an object that implements Countable - /Users/chandavyas/websites/production/vendor/verbb/cp-nav/src/services/Service.php: 91.
+2020-09-03 14:20:28 [-][120360][-][info][application] $_GET = []
+
+$_POST = []

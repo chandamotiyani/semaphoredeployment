@@ -1,0 +1,14 @@
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+{% set purchasable = schedule %}
+{% set lineItem = null %}
+{% for item in cart.lineItems %}
+	{% if item.purchasableId is defined and purchasable.id == item.purchasableId  %}
+		{% set lineItem = item %}
+	{% endif %}
+{% endfor %}
+
+
+{% include "_cards/_card-event.twig" with {schedule: schedule, event: schedule.getEvent() } only %}

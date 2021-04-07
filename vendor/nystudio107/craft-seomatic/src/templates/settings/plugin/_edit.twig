@@ -1,0 +1,44 @@
+{% requirePermission "seomatic:plugin-settings" %}
+
+{% from "seomatic/settings/_includes/macros.twig" import configWarning %}
+
+{% extends "_layouts/cp" %}
+
+{% import "_includes/forms" as forms %}
+
+{% set tabs = {
+    "general": {label: "General"|t('seomatic'), url: "#general"},
+    "appearance": {label: "Appearance"|t('seomatic'), url: "#appearance"},
+    "titles": {label: "Titles"|t('seomatic'), url: "#titles"},
+    "tags": {label: "Tags"|t('seomatic'), url: "#tags"},
+    "endpoints": {label: "Endpoints"|t('seomatic'), url: "#endpoints"},
+    "advanced": {label: "Advanced"|t('seomatic'), url: "#advanced"},
+} %}
+
+{% block content %}
+
+    <input type="hidden" name="action" value="seomatic/settings/save-plugin-settings">
+    <input type="hidden" name="pluginHandle" value="seomatic">
+
+    {{ redirectInput("seomatic/plugin") }}
+
+    {# -- General settings -- #}
+    {% include "seomatic/settings/plugin/_includes/general.twig" %}
+
+    {# -- Appearance settings -- #}
+    {% include "seomatic/settings/plugin/_includes/appearance.twig" %}
+
+    {# -- Title settings -- #}
+    {% include "seomatic/settings/plugin/_includes/titles.twig" %}
+
+    {# -- Tag settings -- #}
+    {% include "seomatic/settings/plugin/_includes/tags.twig" %}
+
+    {# -- Endpoints settings -- #}
+    {% include "seomatic/settings/plugin/_includes/endpoints.twig" %}
+
+    {# -- Advanced settings -- #}
+    {% include "seomatic/settings/plugin/_includes/advanced.twig" %}
+
+{% endblock %}
+

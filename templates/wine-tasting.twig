@@ -1,0 +1,24 @@
+{% extends "_visit-us/_list.twig" %}
+
+{% set eventsResults = craft.events.getEventGroupByHandle('tastings').events %}
+
+{% set events = [] %}
+
+{% for event in eventsResults %}
+	{% if event is not null %}
+		{% set events = events | merge([ event ]) %}
+	{% endif %}
+{% endfor %}
+
+{% block content %}
+	{% embed '_layouts/_section.twig' with { padded: true } %}
+		{% block body %}
+			{% embed '_partials/_card-list.twig' with { type: 'tasting', items: events } %}
+				{% block item %}
+					{% include '_cards/_card-tasting.twig' with item only %}
+				{% endblock %}
+			{% endembed %}
+		{% endblock %}
+	{% endembed %}
+	{{ parent() }}
+{% endblock %}

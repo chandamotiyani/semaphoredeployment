@@ -1,0 +1,115 @@
+.featured-tastings {
+  @extend .cards;
+
+  &__row {
+    @extend .cards__row;
+  }
+
+  &__item {
+    @extend .cards__item;
+
+    padding: 0;
+    
+  }
+
+  &__item-inner {
+    @extend .cards__item-inner;
+
+    padding: 3rem;
+  }
+
+  &__item-footer {
+    @extend .cards__item-footer;
+  }
+
+  &__title {
+    @extend .cards__title;
+
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  &__sub-title {
+    @extend .cards__sub-title;
+  }
+
+  &__content {
+    @extend .cards__content;
+
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
+  &__image-wrap {
+    @extend .cards__image-wrap;
+  }
+
+  &__image {
+    @extend .cards__image;
+  }
+
+  &__list {
+    padding-left: 0;
+    list-style-type: none;
+    margin-top: 0;
+  }
+  
+  &__list-item {
+    @extend .body-text-sm;
+
+    line-height: em(26);
+  }
+
+
+  &__price {
+    font-weight: 200;
+    font-size: 32px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 2rem;
+    font-style: italic;
+    font-family: $font-secondary;
+    color: $black;
+
+    &-currency {
+      font-size: 12px;
+      top: -1.5em;
+      font-weight: 200;
+      font-style: normal;
+      font-family: $font-primary;
+    }
+  }
+
+  &__button {
+    @extend .boxed-button;
+    @extend .boxed-button--black;
+
+    margin: 2rem auto;
+    transition: opacity 0.4s ease;
+
+    @include media-breakpoint-up(md) {
+      opacity: 0;
+    }
+  }
+
+  &__footer { 
+	  // TODO is this being used?
+    // @extend .section__actions;
+  }
+
+  &__item-footer { 
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__footer-button {
+    @extend .boxed-button;
+
+    margin: auto;
+    display: none;
+
+    @include media-breakpoint-up(md) {
+      display: flex;
+    }
+  }
+}

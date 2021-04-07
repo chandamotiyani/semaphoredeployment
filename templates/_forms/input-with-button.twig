@@ -1,0 +1,18 @@
+<div class="input-with-button">
+	{% if instruction is defined and instruction | length %}
+		<div class="form__instruction">{{ instruction }}</div>
+	{% endif %}
+    <input
+        type="{{ type|default('text') }}"
+        value="{{ value|default('') }}"
+        class="input-with-button__input input-with-button__text-field {{ class|default }}"
+        placeholder="{{ placeholder|default('Enter your email') }}"
+        name="{{ name|default('') }}">
+
+    <input type="submit"
+        class="input-with-button__button"
+        id="{{ id|default('') }}"
+        value="{{ buttonText|default('Sign Up') }}">
+
+        <div class="form__input-error-msg"></div>
+</div>

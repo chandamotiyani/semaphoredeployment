@@ -1,0 +1,15 @@
+.card-list-two-column-with-gutters {
+	@include list;
+	@include list-gutters-horizontal(0.5);
+	@include list-gutters-vertical;
+	// @include list-horizontal-wrap;
+	@include list-hover-fade-effect;
+
+	&__item {
+		flex-basis: 100%;
+
+		@include media-breakpoint-up(md) {
+			flex-basis: 1/2*100%;
+		}
+	}
+}

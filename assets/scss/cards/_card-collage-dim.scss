@@ -1,0 +1,18 @@
+.card-collage-dim {
+	@include card;
+	@include card-with-buttons($justify-to-bottom: true, $invert-on-hover: true, $invert: true);
+	@include card-with-image;
+	@include card-with-white-text;
+
+	@include card-collage-with-text;
+	@include card-collage-metrics;
+	@include card-collage-with-image;
+	@include card-with-image-that-dims-on-hover;
+	@include card-with-image-that-scales-on-hover;
+
+	@include card-list-collage-min-height;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		@include card-slide-text-up-on-hover;
+	}
+}

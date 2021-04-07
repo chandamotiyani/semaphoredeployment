@@ -1,0 +1,25 @@
+.back-button {
+//  position: absolute;
+
+  &__link {
+    padding: 1.7rem 0;
+    @extend .heading-secondary-sm;
+
+    color: $text-color-primary;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+
+    span {
+      margin-bottom: -2px;
+      font-weight: 900;
+    }
+  }
+
+  &__chev {
+    height: em(13);
+    width: em(13);
+    margin-right: em(6);
+  }
+}

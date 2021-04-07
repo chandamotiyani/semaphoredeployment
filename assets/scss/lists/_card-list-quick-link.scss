@@ -1,0 +1,22 @@
+.card-list-quick-link {
+	@include list;
+	@include list-gutters-horizontal;
+	@include list-columns($columns: 3, $breakpoint: $single-column-breakpoint, $gutterBorders: false);
+	
+	@include list-gutters-vertical(0);
+	
+	@include media-breakpoint-down($single-column-breakpoint) {
+		@include list-vertical-gutter-borders;
+	}
+
+	&__item:not(:first-child) {
+		@include media-breakpoint-up($single-column-breakpoint) {
+			border-top: none;
+		}
+	}
+}
+
+.quicklinks .section__wrap {
+	padding-left: $padding-medium;
+	padding-right: $padding-medium;
+}

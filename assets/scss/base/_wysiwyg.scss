@@ -1,0 +1,57 @@
+@mixin wysiwyg {
+	& > p > a {
+		text-decoration: underline;
+	}
+
+	& > em {
+		font-style: italic;
+	}
+
+	& > strong {
+		font-weight: bold;
+	}
+
+	& > :not(:first-child) {
+		margin-top: $section-spacing-vertical-small;
+
+		@include media-breakpoint-up($section-spacing-vertical-small) {
+			margin-top: $section-spacing-vertical-large;
+		}
+	}
+
+	& > li {
+		padding-left: 1em;
+
+		&:not(:first-child) {
+			margin-top: 0.6em;
+		}
+	}
+
+	& > h2 {
+		@extend .heading-primary-sm;
+		
+		&:not(:first-child) {
+			margin-top: 2em;
+		}
+	}
+
+	& > h3 {
+		@extend .heading-secondary-xl;
+
+		&:not(:first-child) {
+			margin-top: 4em;
+		}
+	}
+
+	& > p {
+		@extend .body-text-tall;
+		
+		&:not(:first-child) {
+			margin-top: 1.25em;
+		}
+	}
+
+	& > br{
+		margin-top: 0 !important;
+	}
+}

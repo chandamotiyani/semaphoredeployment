@@ -1,0 +1,679 @@
+@mixin card {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	position: relative;
+	color: currentColor;
+	justify-content: space-between;
+
+	cursor: pointer;
+	box-sizing: border-box;
+
+	flex-grow: 1; // If flex-grow is not set to 1, cards with text that will not fill their width will not expand to fill their layout container.
+
+	&__details {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: flex-start;
+	//	min-height: 100%;
+	}
+}
+
+@mixin card-with-image($hide-on-mobile: false) {
+	@if $hide-on-mobile {
+		display: none;
+	} @else {
+		display: flex;
+	}
+
+	&__image-mask {
+		align-self: stretch;
+	}
+
+	&__image {
+		@include absolute-fill-parent;
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+
+		@if $hide-on-mobile {
+			@include media-breakpoint-up($single-column-breakpoint) {
+				display: flex;
+			}
+		}
+	}
+}
+
+@mixin card-with-padding($multiple: 0.5) {
+	// Note that all cards have padding-top applied to their &__details element in the base 'card' mixin.
+	padding-left: $card-padding-small * $multiple;
+	padding-right: $card-padding-small * $multiple;
+	padding-bottom: $card-padding-small * $multiple;
+
+	&__image-mask {
+		margin-left: -$card-padding-small * $multiple;
+		margin-right: -$card-padding-small * $multiple;
+	}
+}
+
+@mixin card-with-white-text {
+	color: white;
+}
+
+@mixin card-with-white-background {
+	background-color: white;
+	// padding-bottom: $card-padding-small;
+}
+
+@mixin card-with-white-background-on-hover {
+	padding-bottom: $card-padding-small;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		z-index: 0;
+
+		&:hover {
+			z-index: 1;
+		}
+
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: -$card-list-gutter-height-large / 4 * 1.05;
+			left: -$card-list-gutter-width-large / 4  * 1.05;
+			bottom: -$card-list-gutter-height-large / 4  * 1.05;
+			right: -$card-list-gutter-width-large / 4  * 1.05;
+			background-color: $white;
+			opacity: 0;
+			z-index: -1;
+
+			transition-duration: 0.25s;
+			will-change: opacity;
+		}
+	
+		&:hover:after {
+			opacity: 1;
+		}
+	}
+}
+
+@mixin card-with-centre-alignment {
+	&__details {
+		text-align: center;
+		align-items: center; // Important for when the contents have a max-width applied
+	}
+}
+
+@mixin card-with-image-that-scales-on-hover($w: 4, $h: 3, $hide-on-mobile: false) {
+	&__image-mask {
+		overflow: hidden;
+	}
+
+	&__image {
+		transition-duration: 0.4s;
+		transition-timing-function: ease-out;
+		transition-property: transform, opacity;
+	}
+	
+	&:hover &__image {
+		opacity: 1;
+		transform: scale(1.1);
+	}
+}
+
+@mixin card-with-image-as-background {
+	&__details {
+		@include absolute-fill-parent;
+	}
+}
+
+@mixin card-with-image-width-locked-to-aspect-ratio($w: 4, $h: 3) {
+	&__image-mask {
+		position: relative;
+	}
+	&__image {
+		@include lock-width-to-aspect-ratio($w, $h);
+	}
+}
+
+@mixin card-with-image-height-locked-to-aspect-ratio($w: 4, $h: 3) {
+	&__image-mask {
+		position: relative;
+	}
+	&__image {
+		@include lock-height-to-aspect-ratio($w, $h);
+	}
+}
+
+@mixin card-with-fixed-aspect-ratio($w: 4, $h: 3) {
+	height: 0;
+	padding-bottom: $h / $w * 100%;
+}
+
+@mixin card-with-image-fill {
+	&__image {
+		@include absolute-fill-parent;
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+
+	&__details {
+		@include absolute-fill-parent;
+		color: $white;
+		padding: $card-padding-small;
+		justify-content: flex-end;
+		z-index: 2;
+	}
+
+	&__image:after {
+		content: '';
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 50%);
+		z-index: 1;
+	}
+
+	&__image:before {
+		content: '';
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: transparentize($black, 0.70);
+		z-index: 1;
+	}
+}
+
+@mixin card-with-image-at-top($multiple: 0.5) {
+	&__image-mask {
+		margin-bottom: $card-padding-small * $multiple ;
+	}
+}
+
+@mixin card-with-image-at-left {
+	flex-direction: row;
+	&__details {
+		margin-left: $card-padding-small;
+	}
+}
+
+@mixin card-with-title {
+	&__title {
+		@extend .heading-primary-sm;
+		margin-block-start: 0.5em;
+		max-width: 100%;
+	}
+}
+
+@mixin card-with-location {
+	&__location {
+		@extend .heading-secondary-sm;
+		@extend .heading-secondary-sm--underlined;
+
+		align-self: flex-start;
+	}
+}
+
+@mixin card-horizontal-with-big-padding {
+	flex-direction: column;
+
+	&__details {
+		justify-content: center;
+		padding: $card-padding-small * 2;
+	}
+	@include media-breakpoint-down(xs) {
+		&__details {
+			padding: $padding-small;
+		}
+	}
+
+	&__image-mask {
+		flex-grow: 1;
+		min-height: 100%;
+	}
+	
+	@include media-breakpoint-up($single-column-breakpoint) {
+		flex-direction: row-reverse;
+
+		&__details, &__image-mask {
+			min-width: 50%;
+			max-width: 50%;
+			flex-basis: 50%;
+		}
+	}
+
+	&__image {
+		// To ensure that if the text content is taller than the image, the image will increase in height to match
+		min-height: 100%;
+	}
+}
+
+@mixin card-with-date-tag {
+	&__date-tag {
+		background: $background-primary;
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		right: 2rem;
+		top: -0.5rem;
+		z-index: 2;
+	
+		padding: 1.2em 1.6em;
+
+		&--has-multiple {
+			@include media-breakpoint-up(md) {
+				padding-left: 55px;
+			}
+		}
+	
+		&>span {
+			display: block;
+			text-align: center;
+			text-transform: uppercase;
+		}
+	
+		&-month {
+			margin-bottom: 8px;
+		}
+	
+		&>span:last-child {
+			@extend .heading-primary-sm;
+		}
+	}
+}
+
+@mixin card-with-cta {
+	&__cta {
+		@extend .heading-secondary-sm;
+
+		margin-block-start: 0.5em;
+		margin-block-end: 0;
+		
+		@include media-breakpoint-up($single-column-breakpoint) {
+			margin-block-start: 1.75em;
+		}
+
+		& > span {
+			display: block;
+			position: relative;
+			transition-property: opacity transform;
+			transition-duration: 0.4s;
+			transition-timing-function: ease;
+			
+			@include media-breakpoint-up($single-column-breakpoint) {
+				opacity: 0;
+				transform: translateX(-$card-padding-small);
+			}
+		}
+	}
+	
+	&:hover &__cta > span {
+		@include media-breakpoint-up($single-column-breakpoint) {
+			opacity: 0.5;
+			transform: none;
+		}
+	}
+}
+
+@mixin card-with-expanded-content {
+	&__image {
+		@include aspect-ratio(2,3);
+	}
+
+	&__expanded {
+		z-index: 3;
+		position: absolute;
+		bottom: 0;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		transform: translateY(100%);
+
+		opacity: 0;
+		pointer-events: none;
+
+		transition-duration: 0.4s;
+		transition-property: transform opacity;
+		transition-timing-function: ease;
+	}
+
+	&.is-selected &__expanded {
+		transform: translateY(100% - 5 / 12 * 100%);
+		opacity: 1;
+		pointer-events: all;
+	}
+
+	&__details {
+		transition-property: transform;
+		transition-duration: 0.4s;
+		transition-timing-function: ease;
+	}
+
+	&.is-selected &__details {
+		transform: translateY(-5/12*100%);
+		pointer-events: none;
+	}
+
+	&__expanded-wrap {
+		display: flex;
+		flex-direction: column;
+		align-content: center;
+
+		padding: $card-padding-small;
+		background-color: $white;
+
+		& > :not(:first-child) {
+			margin-top: 2rem;
+		}
+	}
+
+	&__description {
+		margin-bottom: -0.5em;
+	}
+}
+
+// -----------------------------------------------------------------------------
+// COLLAGE CARD                                             
+// -----------------------------------------------------------------------------
+
+
+@mixin card-collage-metrics {
+	display: flex;
+	align-content: stretch;
+	align-items: stretch;
+	justify-content: stretch;
+	justify-items: stretch;
+	text-align: center;
+
+	&__details {
+		display: flex;
+		flex-direction: column;
+		align-content: stretch;
+		align-items: stretch;
+		justify-content: center;
+		justify-items: center;
+
+		padding: $card-padding-small;
+
+		@include media-breakpoint-up($single-column-breakpoint) {
+			padding: $card-padding-large;
+		}
+	}
+
+	&__wrap {
+		display: flex;
+		flex-direction: column;
+		align-content: center;
+		align-items: center;
+		justify-content: center;
+		justify-items: center;
+		z-index: 2;
+	}
+}
+
+@mixin card-collage-with-text {
+	&__super {
+		display: inline;
+		@extend .heading-secondary-sm;
+		@extend .heading-secondary-sm--underlined;
+		z-index: 3;
+		justify-self: flex-start;
+		top: $card-padding-large;
+		position: absolute;
+
+		@include media-breakpoint-down($single-column-breakpoint) {
+			top: $padding-small;
+		}
+	}
+
+	&__title {
+		@extend .heading-primary-md;
+	}
+
+	&__subhead {
+		@extend .body-text;
+		@extend .body-text-max-width;
+		margin-top: 2em;
+		max-width: 100%;
+	}
+}
+
+@mixin card-slide-text-up-on-hover {
+	&__hover {
+		max-height: 0rem;
+		
+		display: flex;
+		flex-direction: column;
+		justify-items: center;
+		align-items: center;
+		opacity: 0;
+		max-width: 100%;
+
+		transition-duration: 0.25s;
+		transition-property: max-height opacity;
+		transition-timing-function: ease;
+	}
+
+	&:hover &__details &__hover {
+		opacity: 1;
+		max-height: 12rem;
+	}
+}
+
+@mixin card-collage-with-image {
+
+	&__image-mask {
+		@include absolute-fill-parent;
+		overflow: hidden;
+	}
+
+	&__image {
+		@include absolute-fill-parent;
+
+		// TODO: Temporary measure due to dodgy edges of some provided image assets, notably the collage shots
+		transform: scale(1.2);
+		transform-origin: center;
+
+		background-size: cover;
+		background-position: center;
+
+		transition-property: opacity transform;
+		transition-duration: 0.4s;
+		transition-timing-function: ease-out;
+	}
+}
+
+@mixin card-collage-show-image-on-hover {
+	color: inherit;
+	
+	&__image {
+		opacity: 0;
+		transition-property: opacity transform;
+		transition-duration: 0.4s;
+		transition-timing-function: ease-out;
+
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: $brand-secondary;
+			opacity: 0.4;
+			transition-duration: 0.5s;
+			transition-timing-function: ease-out;
+			z-index: 1;
+		}
+	}
+
+	&.is-active, &:hover {
+		color: white;
+	}
+	
+	&.is-active &__image, &:hover &__image {
+		opacity: 1;
+		transform: translateX($card-padding-small) scale(1.2);
+	}
+}
+
+@mixin card-with-buttons($justify-to-bottom: false, $invert: false, $invert-on-hover: false) {
+	&__buttons {
+		display: flex;
+		flex-wrap: wrap;
+
+		margin-top: 1.5em;
+		
+		flex-direction: column;
+		text-align: center;
+
+		@if($justify-to-bottom) {
+			flex-grow: 1;
+			justify-self: flex-end;
+		}
+		
+		@include media-breakpoint-up($single-column-breakpoint) {
+			flex-direction: row;
+		}
+
+		& > *:not(:last-child) {
+			margin-bottom: 1rem;
+
+			@include media-breakpoint-up($single-column-breakpoint) {
+				margin-bottom: 0;
+				margin-right: 1rem;
+			}
+		}
+	}
+
+	&__button {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		// margin-block-start: 3rem;
+		justify-self: flex-end;
+		flex-grow: 1;
+
+		& > * {
+			@extend .boxed-button;
+		}
+
+
+		& > * {
+			//@extend .boxed-button--on-dark;
+
+			color: $white;
+		}
+
+	}
+
+	&.t-white-on-black &__button > *,
+	&.t-white-on-black:hover &__button > * {
+		@extend .boxed-button--on-dark;
+	}
+
+	@if $invert-on-hover {
+		&.is-active &__button > *,
+		&:hover &__button > * {
+			@extend .boxed-button--on-dark;
+		}
+	}
+
+	.t-white-on-black &__button > * {
+		@extend .boxed-button--on-dark;
+	}
+
+	&.is-active &__button, &:hover &__button {
+		@extend .boxed-button--on-dark;
+	}
+}
+
+@mixin card-with-image-that-dims-on-hover {
+	color: $white;
+
+	&__image:after {
+		content: '';
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: $brand-secondary;
+		opacity: 0.4;
+		transition-duration: 0.5s;
+		transition-timing-function: ease-out;
+		z-index: 1;
+	}
+
+	.is-active > & &__image:after, :hover > & &__image:after {
+		opacity: 0.8;
+	}
+
+	.is-active > & &__hover, :hover > & &__hover {
+		opacity: 1;
+	}
+}
+
+@mixin card-collage-show-only-title {
+	&__hover {
+		display: none;
+	}
+}
+
+@mixin card-carousel-card-with-border {
+	@at-root .carousel__item {
+		border-right: solid 1px $brand-tertiary;
+	}
+}
+
+.card-list {
+	background: $white;
+	margin-top: 3rem;
+	padding: 3rem;
+
+	@include media-breakpoint-up('lg') {
+		margin-top: $section-padding-inset-large;
+	}
+
+	@include media-breakpoint-up('xl') {
+		padding: 5rem;
+	}
+
+	@at-root .page-wines & {
+		@include media-breakpoint-down(md) {
+			padding: 1rem;
+			margin-top: 5rem;
+		}
+		@include media-breakpoint-down(sm) {
+			padding: 1rem;
+			margin-top: 3rem;
+		}
+	}
+}
+
+.list-heading {
+	margin-top: $section-spacing-vertical-large;
+	margin-bottom: 0;
+
+	&:first-child {
+		margin-top: 2rem;
+    margin-bottom: 1rem;
+	}
+
+	@include media-breakpoint-down(sm) {
+		text-align: center;
+	}
+}

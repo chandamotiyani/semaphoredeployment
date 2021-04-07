@@ -1,0 +1,111 @@
+.quote {
+	$quote-colour: #DCDCDC;
+	$quote-colour-dark: $black;
+	$quote-font-size: 18rem;
+	$padding-left-small: 4rem;
+	$padding-left-large: 8rem;
+	position: relative;
+
+	padding-left: 1rem;
+	padding-right: 1rem;
+	max-width: 100%;
+	
+	@include media-breakpoint-up($single-column-breakpoint) {
+		max-width: 56em;
+	}
+
+	&__content {
+		position: relative;
+		max-width: 100%;
+
+		p {
+			@extend .heading-primary-sm;
+			position: relative;
+			display: block;
+
+			font-style: italic;
+			line-height: 1.2;
+			padding: 0;
+			max-width: 100%;
+
+			@include media-breakpoint-up(lg) {
+				padding-left: $padding-left-large;
+				padding-right: $padding-left-small;
+				padding-top: 4rem;
+				padding-bottom: 3rem;
+			}
+
+			&:before {
+				content: "\201C";
+				font-family: $font-secondary;
+				color: $quote-colour;
+				position: absolute;
+				left: -50px;
+				top: .385em;
+				transform: translateX(-.17em);
+				line-height: 0;
+				font-size: 11rem;
+
+				@include media-breakpoint-up(lg) {
+					font-size: $quote-font-size;
+					left: 0;
+					transform: translateX(0);
+					width: 135px;
+				}
+			}
+
+			&:after {
+				content: "\201D";
+				font-family: $font-secondary;
+				font-size: $quote-font-size;
+				font-weight: normal;
+				color: $quote-colour;
+				position: absolute;
+				bottom: -0.15em;
+				transform: translateX(-.13em);
+				line-height: 0;
+				font-size: 11rem;
+				right: -27px;
+
+				@include media-breakpoint-up(lg) {
+					font-size: $quote-font-size;
+					right: 0;
+					width: 135px;
+					transform: translateX(0);
+				}
+			}
+
+			@at-root .t-white-on-black & {
+				&:before,
+				&:after {
+					opacity: 0.17;
+				}
+			}
+		}
+	}
+
+	&__footer {
+		text-transform: uppercase;
+		font-size: 13px;
+		line-height: 1.1;
+		font-weight: 600;
+		letter-spacing: 0.13em;
+		padding-left: $padding-left-small;
+		padding-top: 2rem;
+
+		@include media-breakpoint-up(lg) {
+			padding-left: $padding-left-large;
+			padding-top: 0;
+		}
+	}
+
+	&__cite {
+		display: block;
+		font-style: normal;
+		margin-top: em(8);
+	}
+}
+
+.quote-featured {
+	margin-top: -6rem;
+}

@@ -1,0 +1,20 @@
+	{% block title %}{% endblock %}
+	<ul class="card-list-{{ type|default('') }}{{ appendJsClass is defined and appendJsClass ? ' js-card-list js-card-list-' ~ type|default('') : '' }} js-card-list js-product-card-list --items-{{ items | length }} {{ additionalClass|default('') }} {{ jsPaginateSelector|default }}">
+		{% for item in items %}
+			{% if item.enabled is not defined or item.enabled|default == 1 %}
+			<li class="{{ className|default }} card-list-{{ type|default('') }}__item js-card-list__item" {{ ref|default() ? 'ref=item'~item.id : '' }} {{ itemId|default() ? 'data-filter-item-id='~item.id : '' }}>
+				{% block item %}{% endblock %}
+			</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+
+	{% if pageInfo is defined and pageInfo.nextUrl %}
+		<div class="card-list__pagination">
+			{% if pageInfo.nextUrl %}
+				<a href="{{ pageInfo.nextUrl }}" class="js-paginate boxed-button" data-paginate-selector=".{{ jsPaginateSelector|default ? jsPaginateSelector : 'js-product-card-list' }}">Load More</a>
+			{% else %}
+				<!--a href="{{ pageInfo.nextUrl }}" class="js-paginate boxed-button is-disabled" data-paginate-selector=".js-product-card-list">No more products</a!-->
+			{% endif %}
+		</div>
+	{% endif %}

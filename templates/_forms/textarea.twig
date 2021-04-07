@@ -1,0 +1,14 @@
+{% set blockClass = blockClass|default('form') %}
+
+<div class="form__input-wrap {{ blockClass }}__input-wrap {{ cssClass|default }}">
+  {% if label %}
+    <label for="" class="{{ blockClass }}__form-label form__label">{{ label }}{% if required|default %}*{% endif %}</label>
+  {% endif %}
+  {% if instruction is defined and instruction | length %}
+    <div class="form__instruction">
+      {{ instruction|default('') }}
+    </div>
+  {% endif %}
+  <textarea class="{{ blockClass }}__form-input form__input form__input--textarea" name="{{ name }}" placeholder="{{ placeholder|default }}"></textarea>
+  <div class="form__input-error-msg"></div>
+</div>

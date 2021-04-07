@@ -1,0 +1,3 @@
+{% set component = component.headingWithText %}
+
+{% include '_views/_heading-with-text' with { super: component.super, heading: component.heading, copy: component.copy, buttons: component.buttons } only %}

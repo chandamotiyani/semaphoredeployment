@@ -1,0 +1,73 @@
+{% set tabs = [
+	{
+		name: 'Wines',
+		url: '/shop/wines',
+		active: craft.app.request.segments|last == 'wines',
+	},
+	{
+		name: 'Wine Packs and Gifts',
+		url: '/shop/gifts',
+		active: craft.app.request.segments|last == 'gifts',
+	},
+	{
+		name: 'Merchandise',
+		url: '/shop/merchandise',
+		active: craft.app.request.segments|last == 'merchandise'
+	},
+] %}
+
+{% set params = {} %}
+{% set categoryFilters = craft.productService.categoryFilters %}
+{% set customFieldFilters = craft.productService.customFieldFilters %}
+{% set sortFields = craft.productService.sortFilters %}
+{% set cart = craft.commerce.getCarts().getCart() %}
+{% set wishList = craft.wishlist.lists().default(true).one() %}
+
+{% if wishList is null %}
+  {# Forces creation of a new wishlist. A new list doesn't get created until you start interacting with it, but we need the wishlist ID. #}
+	{% set wishList = craft.wishlist.lists(true, true) %}
+{% endif %}
+
+
+{% embed "_layouts/_listing-page.twig" with { title: 'Our Wines', image: alias('@assetBaseUrl/img/wine-listing-cover.jpg'), tabs: tabs  } %}
+
+{% set params = {} %}
+
+	{% set winesQuery = craft.productService.all(['wine', 'premiumWine']).with([
+		'productInfo',
+		['variants.productImageFront', {
+			withTransforms: ['productListingImage']
+		}],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		]) %}
+
+	{% paginate winesQuery as pageInfo, wines %}
+
+	{% set winesOfTheMonth = getWOMSales() %}
+
+	{% block filter %}
+		{% include "shop/_partials/_filters" with { categoryFilters: categoryFilters, customFieldFilters: customFieldFilters, sortFields: sortFields } only %}
+	{% endblock %}
+
+	{% block list %}
+		{% embed '_layouts/_section.twig' %}
+			{% block body %}
+				<div class="js-product-listing card-list">
+					{% if wines|default %}
+						{% embed "_partials/_card-list.twig" with { winesOfTheMonth: winesOfTheMonth, cart: cart, wishList: wishList, items: wines, type: 'product', colourScheme: 'black-on-white', pageInfo: pageInfo, itemId: true, ref: true } only %}
+							{% block item %}
+								{% include "_containers/_shop/_product-wine-card" with { wine: item, wishList: wishList, cart: cart, winesOfTheMonth: winesOfTheMonth } only %}
+							{% endblock %}
+						{% endembed %}
+					{% endif %}
+				</div>
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+{% endembed %}

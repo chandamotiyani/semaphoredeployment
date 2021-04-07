@@ -1,0 +1,23 @@
+{% embed 'emails/layout' with { 
+  title: 'Email address changed', 
+  heading: 'Email address changed' 
+} %}
+
+  {% block content %}
+
+    {% set wine_club = craft.entries.id(40374).first() %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        The email address that you use to access your Yalumba Wine Club account has been updated.
+      {% endblock %}
+    {% endembed %}
+
+    {% embed 'emails/_components/paragraph' %}
+      {% block text %}
+        If you have any questions or need assistance, please contact us on <a href="tel:+61885613222" style="color: #c88242;">+61 8 8561 3222</a>, <a href="mailto:wineclub@yalumba.com" style="color: #c88242;">wineclub@yalumba.com</a> or refer to our <a href="{{ wine_club.getUrl() }}" style="color: #c88242;">FAQs</a>
+      {% endblock %}
+    {% endembed %}
+
+  {% endblock %}
+{% endembed %}

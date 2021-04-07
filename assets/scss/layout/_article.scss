@@ -1,0 +1,14 @@
+.article {
+	z-index: $z-article;
+	// This z-stacking is intended so that any section within the article will sit *beneath* the section that preceded it,
+	// so that it will not overlap it - particularly important for the Our Heritage page where if this is not in the place
+	// the next section will overlap the 'fixed' text of the previous section as the user scrolls.
+
+	& > .is-out {
+		z-index: 0;
+	}
+
+	& > :not(.is-out) {
+		z-index: 1;
+	}
+}

@@ -1,0 +1,50 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% set navbar = 'small' %}
+{% set articles = [] %}
+
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% embed "_page-builder-components/hero-small.twig" with {
+		component: {
+			image: alias('@assetBaseUrl/img/wine-listing-cover.jpg'),
+		}, title: 'Page not found' } %}
+	{% endembed %}
+{% endblock %}
+
+{% block content %}
+
+    {% include '_views/_cta' with {  
+        heading: '<i>Sorry</i>, it appears the page you are looking for has been removed or doesn\'t exist', 
+        copy: 'Try checking the spelling of the URL, or searching the website for the information you need. Explore The Archives to read about Yalumba news, food pairing suggestions, and more.'  
+    } only %}
+
+    {% set articlesQuery = craft.entries()
+        .section('blogPosts')
+        .limit(3) %}
+
+    {% for article in articlesQuery %}
+        {% 
+            set articles = articles | merge([{
+            template: 'card-article',
+            title: article.title,
+            image: article.articleBanner.image.one() | default,
+		location: article.eventLocation[0].title | default,
+            cta: 'Learn more',
+            url: article.url,
+            date: article.postDate,
+		    entryType: article.articleCategory.one().title | default('Article'),
+		    description: article.articleAbstract,
+        }]) %}
+    {% endfor %}
+
+    {% set footer = {
+        buttons: [{
+            label: 'Show More Articles',
+            url: '/archives',
+        }],
+    } %}
+
+    {% include '_views/_related-articles' with { articles: articles, footer: footer } only %}
+
+{% endblock %}

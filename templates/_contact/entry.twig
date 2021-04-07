@@ -1,0 +1,106 @@
+{% set contactPages = craft.entries()
+	.section('contact').withPermission().orderBy('postDate DESC').all() %}
+
+{% set tabs = [] %}
+	{# Display the entries #}
+{% for pages in contactPages %}
+
+	{% set tabs = tabs|merge([
+		{
+			name: pages.title,
+			url: pages.getUrl,
+			active: craft.app.request.absoluteUrl == pages.getUrl,
+		},
+	]) %}
+{% endfor %}
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+{% block hero %}
+	{% include "_page-builder-components/hero-small.twig" with {
+			image: entry.bannerImage.one|default ? entry.bannerImage.one.getUrl : '',
+			title: entry.title,
+			focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+	} %}
+{% endblock %}
+
+{% block content %}
+	{% include "_partials/_page-builder.twig" with { components: entry.components } %}
+
+	{% set formComponent = entry.contactForm.one %}
+	<section class="section section--narrow js-contact-form">
+
+		<div class="cta">
+			<h2 class="cta__heading">{{ formComponent.formTitle }}</h2> 
+			<div class="cta__copy">{{ formComponent.text }}</div>
+		</div>
+
+
+		{% set form = craft.freeform.form(formComponent.form.id) %}
+
+		{{ form.renderTag({rowClass: "checkout__form-row", }) }}
+{# {
+			dynamicNotification: { recipients: ["admin@example.com", "support@example.com"] }
+		}) #}
+
+		{% for row in form %}
+			<div class="{{ form.customAttributes.rowClass }}">
+				{% for field in row %}
+					{% set columnClass = form.customAttributes.columnClass %}
+					{% if field.type == "submit" %}
+						{% set columnClass = columnClass ~ " submit-column" %}
+					{% endif %}
+
+							{% if field.type == 'textarea' %}
+								{% include "_forms/textarea" with {  
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+								} %}
+							{% endif %}
+
+							{% if field.type == 'select' or field.type == 'dynamic_recipients' %}
+								{% include "_forms/select" with {  
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+									options: field.options,
+									hidePlaceholder: true,
+								} %}
+							{% endif %}
+
+							{% if field.type == 'text' or field.type == 'email' %}
+								{% include "_forms/text-input" with { 
+									type: field.type, 
+									value: field.value, 
+									name: field.handle, 
+									label: field.label, 
+									required: field.required,
+									blockClass: 'member', 
+									cssClass: 'form__input-wide',
+								} %}
+							{% endif %}
+
+							{% if field.type == "submit" %}
+								{% include "_forms/submit" with { 
+									type: field.type, 
+									value: field.label, 
+									name: field.handle, 
+									blockClass: 'contact-form-submit',
+								} %}
+							{% endif %}
+
+				{% endfor %}
+			</div>
+		{% endfor %}
+		{{ form.renderClosingTag }}
+	</section>
+
+{% endblock %}
+
+{% endembed %}

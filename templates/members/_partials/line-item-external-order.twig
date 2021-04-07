@@ -1,0 +1,15 @@
+{% set variant = item.phonetic|default ? craft.variants.phonetic(item.phonetic).one()|default(0) %}
+
+{%
+  set lineItem = {
+      id: item.id,
+      title: variant ? variant.title : item.productName,
+      qty: item.quantity|default(0),
+      price: item.price|currency('AUD', stripZeros = true),
+      url: variant ? variant.url : '',
+    }
+%}
+<li class="order-summary__totals-list-item">
+  <h3 class="order-summary__totals-list-item-heading">{{ lineItem.qty~'X' }} {{ lineItem.title }}</h3>
+  <div class="order-summary__totals-list-item-price">{{ lineItem.price }}</div>
+</li>

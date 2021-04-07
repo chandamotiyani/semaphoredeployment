@@ -1,0 +1,95 @@
+{% extends '_layouts/cp' %}
+{% set title = 'Schedule' %}
+
+{% set fullPageForm = true %}
+
+{% import "_includes/forms" as forms %}
+
+{% block actionButton %}
+
+    <div class="btngroup">
+        <input type="submit" class="btn submit" value="{{ 'Save'|t('commerce') }}">
+        <div class="btn submit menubtn"></div>
+        <div class="menu">
+            <ul>
+                <li>
+                    <a class="formsubmit"
+                       data-redirect="">
+                        {{ "Save and continue editing"|t('commerce') }}
+                        {{ forms.optionShortcutLabel('S') }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        {%  if schedule %}
+                {{ forms.datetimeField({
+                    id: 'startDateTime',
+                    label: 'Start DateTime',
+                    name: 'startDateTime',
+                    value: schedule.startDateTime?(schedule.startDateTime|date('Y-m-d H:i:s')):"",
+                    errors: schedule.getErrors('startDateTime'),
+                    autofocus: true
+                }) }}
+
+                {{ forms.datetimeField({
+                    id: 'endDateTime',
+                    label: 'End DateTime',
+                    name: 'endDateTime',
+                    value: schedule.endDateTime?(schedule.endDateTime|date('Y-m-d H:i:s')):"",
+                    errors: schedule.getErrors('endDateTime'),
+                    autofocus: true
+                }) }}
+
+                {{ forms.text({
+                    id: 'ticketsAvailable',
+                    type: 'number',
+                    label: 'TicketsAvailable',
+                    name: 'ticketsAvailable',
+                    value: schedule.ticketsAvailable?schedule.ticketsAvailable:"",
+                    errors: schedule.getErrors('ticketsAvailable'),
+                    autofocus: true
+                }) }}
+
+                {{ forms.text({
+                    id: 'groupId',
+                    type: 'text',
+                    label: 'Group ID',
+                    name: 'groupId',
+                    value: schedule.groupId?schedule.groupId:"",
+                    errors: schedule.getErrors('groupId'),
+                    autofocus: true
+                }) }}
+	        {% for tab in schedule.getFieldLayout().getTabs() %}
+	            <div id="{{ tab.getHtmlId() }}"{% if not loop.first %} class="hidden"{% endif %}>
+	                {% include "_includes/fields" with {
+	                    fields:  tab.getFields(),
+	                    element: schedule
+	                } only %}
+	            </div>
+	        {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block details %}
+
+    <div class="meta">
+        {%  if schedule %}
+            <h2>Event:</h2>
+            <a href="{{ schedule.getEvent().url }}">{{ schedule.getEvent().title }}</a><br />
+            <a href="/admin/events/{{ schedule.getEvent().id }}/edit">Edit</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% set settings = {
+    elementType: className(schedule),
+}
+%}
+

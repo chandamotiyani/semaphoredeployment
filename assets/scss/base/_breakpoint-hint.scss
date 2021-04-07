@@ -1,0 +1,13 @@
+.breakpoint-hint-desktop {
+	width: 1rem;
+	height: 1rem;
+	display: none;
+	position: fixed;
+	top: -1rem;
+	left: -1rem;
+	pointer-events: none;
+
+	@include media-breakpoint-up($single-column-breakpoint) {
+		display: block;
+	}
+}

@@ -1,0 +1,19 @@
+<div class="carousel-controls">
+	<div class="carousel-controls__buttons">
+		{% if buttons is defined %}
+			{% for button in buttons %}
+				<a class="carousel-controls__button" href="{{ button.url | default('#') }}">{{ button.label | default }}</a>
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div class="carousel-controls__scrollbar">
+		<div class="carousel-controls__scrollbar-handle js-scrollbar-handle"></div>
+	</div>
+	{% if hideCarouselControls|default %}
+		<div class="carousel-controls__chevron-buttons">
+			{# TODO: Fade / disable chevrons when ends reached #}
+			<a href="#" class="carousel-controls__chevron-button js-carousel-prev disabled"><svg><use xlink:href="#chevron"></use></svg></a>
+			<a href="#" class="carousel-controls__chevron-button js-carousel-next"><svg><use xlink:href="#chevron"></use></svg></a>
+		</div>
+	{% endif %}
+</div>

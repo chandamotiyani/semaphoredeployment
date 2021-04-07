@@ -1,0 +1,71 @@
+@mixin card-carousel-experience {
+	@include card;
+	@include card-with-image;
+	@include card-with-image-fill;
+	@include card-with-fixed-aspect-ratio(2,3);
+	@include card-with-location;
+	@include card-with-title;
+	@include card-with-date-tag;
+	@include card-with-cta;
+	@include card-slide-text-up-on-hover;
+	@include card-carousel-card-with-border;
+
+	&__subtitle {
+		margin-block-start: 2em;
+		font-style: italic;
+	}
+
+	&__details {
+		transition: transform 0.6s ease;
+		padding: 2rem;
+
+		@include media-breakpoint-up(xs) {
+			padding: 3rem;
+		}
+	}
+
+	&__image {
+		transition: transform 0.6s ease;
+	}
+
+	&__expanded {
+		color: $white;
+		position: absolute;
+		bottom: 2rem;
+		left: 2rem;
+		z-index: 10;
+		opacity: 0;
+		transform: translateX(-200%);
+		transition: opacity 0.6s ease;
+		transition-property: transform,opacity;
+
+		@include media-breakpoint-up(xs) {
+			bottom: 3rem;
+			left: 3rem;
+		}
+	}
+
+	// TODO darken on hover like collage blocks
+}
+
+.card-carousel-experience {
+	@include card-carousel-experience;
+
+	overflow: hidden;
+
+	&:hover {
+		.card-carousel-experience__expanded {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		.card-carousel-experience__details {
+			transform: translateY(-2rem);
+		}
+
+		.card-carousel-experience__image {
+			transform: scale(1.1);
+		}
+	}
+
+}

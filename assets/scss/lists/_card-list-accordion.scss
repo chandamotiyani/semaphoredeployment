@@ -1,0 +1,28 @@
+.card-list-accordion {
+	@include list;
+	@include list-vertical;
+	@include list-hover-fade-effect;
+	
+	flex-wrap: nowrap;
+	display: block;
+//	flex-basis: 100%;
+	flex-basis: auto;
+
+	&__item {
+		cursor: pointer;
+	}
+
+	&__item > * {
+		// pointer-events: none;
+	}
+
+	&__item.is-open > * {
+		// pointer-events: all;
+		// border: 10px solid #f00;
+	}
+
+	&__item:not(:last-child) {
+		color: $black;
+		border-bottom: 1px solid transparentize($text-color-primary, 0.8);
+	}
+}

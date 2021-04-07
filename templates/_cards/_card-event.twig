@@ -1,0 +1,33 @@
+{# Chanda - changing [datefrom] value to a newly created variable in the backend query [next_on] so that it shows near future date #}
+{% embed '_cards/_card.twig' with { type: 'event', image: event.bannerImage.one.url, dateFrom: schedule.next_on|default, url: event.url, nextOn: schedule.scheduleCount|default(1) }%}
+	{% block details %}
+		<h3 class="{{ class }}__title">{{ event.title | typogrify }}</h3>
+		{# <div class="card-event__schedule-id">{{ schedule.id }}</div> #}
+
+		{% if schedule.startDateTime|default %}
+			<div class="{{ class }}__time">
+				{% if not schedule.endDateTime %}
+					from {{ schedule.startDateTime|date("h:ia") }}
+				{% else %}
+					{{ schedule.startDateTime|default | date('g:ia') }} - {{ schedule.endDateTime|default | date('g:ia') }}
+				{% endif %}
+			</div>
+		{% endif %}
+
+		<div class="{{ class }}__price">
+			{% if event.price > 0 %}
+				<span>$</span>
+				<span>{{ event.price|currency('AUD', stripZeros = true)|trim('$') }} </span>
+				<span>&nbsp;{{ event.ticketTypeText|default('per person') }}</span>
+			{% else %}
+				<span></span>
+				<span>Free</span>
+			{% endif %}
+		</div>
+		<div class="{{ class }}__buttons">
+			<div class="{{ class }}__button">
+				<div>View Details</div>
+			</div>
+		</div>
+	{% endblock %}
+{% endembed %}

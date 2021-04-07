@@ -1,0 +1,61 @@
+{% if cart is not defined %}
+  {% set cart = craft.commerce.carts.cart %}
+{% endif %}
+
+{% set storedCards = craft.commerce.paymentSources.allPaymentSourcesByUserId(currentUser.id ?? null) %}
+
+<div class="js-payment">
+    {% if craft.commerce.gateways.allCustomerEnabledGateways|length %}
+        <form method="POST" onsubmit="checkFullName()" class="form-horizontal paymentSource-form js-payments-pay-checkout-form" id="paymentForm">
+          <input type="hidden" name="action" value="commerce/payments/pay"/>
+          {{ redirectInput('/shop/customer/order?number='~cart.number) }}
+          {{ csrfInput() }}
+          <input type="hidden" name="cancelUrl" value="{{ '/shop/checkout'|hash }}"/>
+          <input type="hidden" name="orderEmail" value="{{ cart.email }}"/>
+            {% if not cart.paymentSourceId %}
+                {% if not craft.commerce.gateways.allCustomerEnabledGateways|length %}
+                    <p>No payment methods available.</p>
+                {% endif %}
+              <div class="js-payment-form checkout__form checkout__form--thin">
+                  {% if cart.gatewayId or cart.paymentSourceId %}
+                      {{ cart.gateway.getPaymentFormHtml({})|raw }}
+
+                      {% if cart.gateway.supportsPaymentSources() and currentUser %}
+                      <br>
+                      <div class="checkout__form-row">
+                        {% include "_forms/checkbox" with { name: 'savePaymentSource', value: "1", label: 'Save card for future purchases', blockClass: 'checkout' } %}
+                      </div>
+                      {% endif %}
+
+                  {% endif %}
+              </div>
+            {% endif %}
+
+
+            {% include "shop/checkout/_includes/shipping-methods.twig" %}
+
+            <div class="checkout-form checkout__form checkout__form--thin">
+            <h2 class="checkout__col-heading">Order Summary</h2>
+            <br>
+            {% include 'members/_partials/order-summary' with {
+                items: cart.lineItems, 
+                order: cart, 
+                orderDetail: cart, 
+                lineItemTemplate: 'line-item',
+                hideOrderStatus: true,
+              } %}
+
+            <div class="checkout__continue">
+                <input type="submit" value="Place order" class="checkout__continue-link" />
+
+                <!--input type="submit" value="Place order" class="checkout__button-next checkout__button-next--payment" data-panel-index="2" /-->
+            </div>
+
+            <div class="checkout__terms">By clicking Place Order, you agree to our <a href="/terms-and-conditions" class="checkout__terms-link" target="_blank">terms and conditions</a>.
+            </div>
+
+          </div>
+        </form>
+
+    {% endif %}
+</div>

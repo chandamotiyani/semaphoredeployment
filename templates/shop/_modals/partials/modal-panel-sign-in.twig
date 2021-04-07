@@ -1,0 +1,51 @@
+<div class="modal-panel-sign-in__panel collapsible__panel">
+    <strong class="modal-panel-sign-in__text modal-panel-sign-in__text--wide">
+        {{ text|default('Are you a Yalumba member? Sign in or become a member to get 10% off select wine purchases. You will also receive special monthly wine offers, invitations to events and free shipping for orders over $200.'|raw) }}</strong>
+    {# Chanda - Changing the copy for member only slide out provided by Amy #}
+    {% if not noInsider|default %}
+        <p class="modal-panel-sign-in__text modal-panel-sign-in__text--small">This will also
+        give you the ability to save and view your cart and wishlist across multiple devices.</p>
+    {% endif %}
+    {% if noInsider|default %}
+        <p class="modal-panel-sign-in__text modal-panel-sign-in__text--small">If you are not a Dabbler or Adventurer member, please feel free to explore the other great wines and gift packs in our range.</p>
+    {% endif %}
+    {# END #}
+
+    <form method="post" accept-charset="UTF-8" class="js-signin-form modal-panel-sign-in__form">
+
+        {{ csrfInput() }}
+        {{ actionInput('users/login') }}
+
+        <!--input type="hidden" name="redirect" value="/members/my-membership"-->
+
+        {% include "_forms/text-input" with {
+            name: 'loginName',
+            label: 'Email Address*',
+            blockClass: 'modal-panel-sign-in',
+            value: craft.app.user.rememberedUsername,
+            class: 'modal-panel-sign-in__form-input',
+            type: 'text'
+        } %}
+        {% include "_forms/text-input" with {
+            name: 'password',
+            type: 'password',
+            label: 'Password*',
+            blockClass: 'modal-panel-sign-in',
+            class: 'modal-panel-sign-in__form-input',
+        } %}
+        <p><a href="{{ url('members/forgot-password') }}" class="modal-panel-sign-in__link">Having trouble signing in or
+                forgotten your password?</a></p>
+
+        <div class="js-msg"></div>
+
+        <div class="modal-panel-sign-in__button-group">
+            <input type="submit" value="Sign In"
+                   class="signin-submit modal-panel-sign-in__button modal-panel-sign-in__button--submit">
+            {% if not noInsider|default %}
+                <a href="{{ url('members/sign-up') }}" class="modal-panel-sign-in__button">Join</a>
+            {% endif %}
+        </div>
+    </form>
+    <p class="modal-panel-sign-in__text modal-panel-sign-in__text--smaller">Yalumba online orders are currently
+        available for Australian addresses only.</p>
+</div>

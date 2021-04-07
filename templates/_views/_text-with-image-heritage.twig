@@ -1,0 +1,7 @@
+{% embed '_layouts/_section.twig' with { bleed: true, sideHeading: component.sideHeading.one().heading | default, watchViewport: true, includeInScrollIndicator: true } %}
+	{% block body %}
+	{% set fields = fields | merge({ fixedText: true, fullHeight: true }) %}
+		{% embed "_cards/_card-text-with-image.twig" with fields only %}
+		{% endembed %}
+	{% endblock %}
+{% endembed %}

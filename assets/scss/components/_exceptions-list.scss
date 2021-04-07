@@ -1,0 +1,59 @@
+.exceptions-list {
+  padding: 2rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  background: $background-primary;
+  border: solid 1px $grey;
+  opacity: 8.5;
+  transition: transform 0.4s ease;
+  transform: translateY(100%);
+  width: 100%;
+  left: -999999999px;
+
+  @include media-breakpoint-up(sm) {
+    transform: translateX(-100%);
+    width: 300px;
+  }
+  
+  &--active {
+    left: 0;
+    transform: translateX(0);
+  }
+
+  @include media-breakpoint-up($single-column-breakpoint) {
+    margin-left: $site-border-width;
+    margin-bottom: $site-border-width;
+  }
+
+  &__heading {
+    font-family: $font-primary;
+    text-transform: uppercase;
+    margin-top: 0;
+    font-size: em(17);
+    color: $black;
+    margin-bottom: 0.7rem;
+    font-weight: 500;
+  }
+
+  &__text {
+    font-size: em(17);
+    margin-bottom: 0;
+    color: $black;
+    margin-bottom: -5px;
+  }
+
+  &__icon--close {
+    width: 11px;
+    height: 11px;
+    right: 1.6rem;
+    top: 1.6rem;
+    stroke: $black;
+    position: absolute;
+
+    @mixin on-event() {
+      stroke: lighten($black, 70%);
+    }
+  }
+}

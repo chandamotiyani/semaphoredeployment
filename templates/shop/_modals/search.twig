@@ -1,0 +1,34 @@
+{% extends "_layouts/_modal" %}
+
+{% set modalID = 'search' %}
+
+{% block content %}
+  <div class="modal__col">
+    <form method="GET" action="/search">
+      <div class="search__heading-group">
+        <h2 class="search__heading modal__heading">Search</h2>
+        {% include "_forms/select" with { id: 'search-select', name: 'state', selectClass: 'search', label: 'the website', blockClass: 'search', hidePlaceholder: true,
+          options: { website: 'the website', shop: 'the shop', archives: 'the archives'} } %}
+      </div>
+
+      {% include "_forms/search-input" with { name: 'search', label: '', blockClass: 'search', placeholder: 'Search here' } %}
+    </form>
+
+    {% js %}
+      window.onload = function() {
+
+
+
+      var pathArray = window.location.pathname.split('/');
+      var secondLevelLocation = pathArray[1];
+
+      if (secondLevelLocation == 'archives' || secondLevelLocation == 'shop') {
+        document.getElementsByName('state')[0].value = secondLevelLocation;
+        document.getElementsByName('state')[0].parentElement.querySelector('label').innerText = document.getElementsByName('state')[0].selectedOptions[0].innerText;
+      } else {
+        document.getElementsByName('state')[0].value = "website";
+      }
+      }
+    {% endjs %}
+  </div>
+{% endblock %}

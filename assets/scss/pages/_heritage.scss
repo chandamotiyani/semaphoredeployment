@@ -1,0 +1,30 @@
+.page-heritage {
+    .card-text-with-image__details{
+        justify-content: center;
+        overflow: scroll;
+
+        &::-webkit-scrollbar {
+			display: none;
+        }
+        
+        > div {
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+    
+    .section--bleed .card-text-with-image__details{
+        @include media-breakpoint-up(md) {
+            padding-bottom: auto;
+            padding-left: 10rem !important;
+            padding-right: 10rem !important;
+        }
+    }
+    .card-text-with-image__super{
+        display: block;
+        height: 15px;
+    }
+}

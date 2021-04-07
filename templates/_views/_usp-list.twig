@@ -1,0 +1,9 @@
+{% embed '_layouts/_section.twig' %}
+	{% block body %}
+		{% embed '_partials/_card-list.twig' with { type: 'usp', items: items } %}
+			{% block item %}
+				{% include "_cards/_card-usp.twig" with item only %}
+			{% endblock %}
+		{% endembed %}
+	{% endblock %}
+{% endembed %}

@@ -1,0 +1,7 @@
+{% embed '_cards/_card.twig' with { type: 'link-featured', jsClass: 'js-card-link-featured' }%}
+	{% block details %}
+		<div class="{{ class }}__super">{{ subtitle | typogrify }}</div>
+		<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>
+		<p class="{{ class }}__cta">{{ cta }}</p>
+	{% endblock %}
+{% endembed %}

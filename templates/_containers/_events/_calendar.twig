@@ -1,0 +1,11 @@
+
+{% set filters = craft.getSchedule().getFilters() %}
+
+{# The calendar is populated using data from https://www.yalumba.local/calendar/filter endpoint #}
+{% embed '/events/_list.twig' with { items: [] } %}
+	{% block filter %}
+		{% include 'events/filters' with { filters: filters, action: '/events/calendar/', loadAjaxData: false } only %}
+	{% endblock %}
+{% endembed %}
+
+

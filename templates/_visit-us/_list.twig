@@ -1,0 +1,31 @@
+{% set navbar = 'small' %}
+{% extends "_layouts/_layout.twig" %}
+
+	{% set tabs = [
+		{
+			name: 'Wine Tasting',
+			url: '/wine-tasting',
+			active: craft.app.request.segments|last == 'wine-tasting',
+		},
+		{
+			name: 'Winery Tours',
+			url: '/winery-tours',
+			active: craft.app.request.segments|last == 'winery-tours',
+		}
+	] %}
+
+	{% block hero %}
+			{% include "_page-builder-components/hero-small.twig" with { 
+				title: entry.bannerTitle, 
+				image: entry.bannerImage.one.url | default, 			
+				focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '', } %}
+	{% endblock %}
+
+	{% block featured %}
+		{% include "_containers/_page-builder/_heading-with-text.twig" with { component: { headingWithText: entry.headingWithText.one } } only %}
+	{% endblock %}
+
+	{% block content %}
+		{% include "_containers/_page-builder/_newsletter.twig" with { component: { newsletter: entry.newsletter.one } } only %}
+		{% include "_containers/_page-builder/_cta.twig" with { component: { cta: entry.cta.one } } only %}
+	{% endblock %}

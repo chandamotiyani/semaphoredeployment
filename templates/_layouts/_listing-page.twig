@@ -1,0 +1,15 @@
+{% set navbar = 'small' %}
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% embed "_page-builder-components/hero-small.twig" with {
+		component: {
+			image: alias('@assetBaseUrl/img/wine-listing-cover.jpg'),
+			focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+		}, title: title|default('') } %}
+	{% endembed %}
+{% endblock %}
+
+{% block content %}
+	{% include "_containers/_page-builder/_newsletter.twig" %}
+{% endblock %}

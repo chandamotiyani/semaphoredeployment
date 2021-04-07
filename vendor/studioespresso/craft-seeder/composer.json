@@ -1,0 +1,44 @@
+{
+    "name": "studioespresso/craft-seeder",
+    "description": "Easy entries seeder for Craft CMS",
+    "type": "craft-plugin",
+    "version": "3.3.1",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "seeder"
+    ],
+    "support": {
+        "docs": "https://github.com/studioespresso/craft3-seeder/blob/master/README.md",
+        "issues": "https://github.com/studioespresso/craft3-seeder/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Studio Espresso",
+            "homepage": "https://www.studioepsresso.co"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.1.0",
+        "fzaninotto/faker": "^1.7.0"
+    },
+    "require-dev": {
+        "codeception/codeception": "2.4.2"
+    },
+    "autoload": {
+        "psr-4": {
+          "studioespresso\\seeder\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Seeder",
+        "handle": "seeder",
+        "hasCpSettings": false,
+        "hasCpSection": true,
+        "changelogUrl": "https://raw.githubusercontent.com/studioespresso/craft3-seeder/master/CHANGELOG.md",
+        "class": "studioespresso\\seeder\\Seeder"
+    }
+}

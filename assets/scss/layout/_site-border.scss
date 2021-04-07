@@ -1,0 +1,43 @@
+body {
+  @include media-breakpoint-up($single-column-breakpoint) {
+    margin-top: $site-border-width;
+    margin-left: $site-border-width;
+    margin-right: $site-border-width;
+  }
+}
+
+.site-border {
+
+  @include media-breakpoint-up($single-column-breakpoint) {
+
+    position: fixed;
+    z-index: 9999;
+    background: $white;
+
+    &--top {
+      height: $site-border-width;
+      width: 100%;
+      top: 0;
+    }
+
+    &--bottom {
+      height: $site-border-width;
+      width: 100%;
+      bottom: 0;
+    }
+
+    &--left {
+      height: 100vh;
+      width: $site-border-width;
+      top: 0;
+      left: 0;
+    }
+
+    &--right {
+      height: 100vh;
+      width: $site-border-width;
+      top: 0;
+      right: 0;
+    }
+  }
+}

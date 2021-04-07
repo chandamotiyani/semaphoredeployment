@@ -1,0 +1,33 @@
+@mixin msg-active {
+	padding: 2rem;
+	text-align: center;
+	margin: 3rem 0;
+	opacity: 1;
+}
+
+.js-msg {
+	opacity: 0;
+	transition: opacity 0.4s ease;
+	text-align: center;
+	font-weight: 600;
+
+  a{
+	text-decoration:underline;
+  }
+
+  &--fail {
+		@extend .body-text;
+		@include msg-active;
+
+		background: #F9F2EC;
+		border: 1px solid #D1A377;
+		color: #D1A377 !important;
+	}
+
+	&--success {
+		@extend .body-text;
+		@include msg-active;
+
+		border: 1px solid black;
+	}
+}

@@ -1,0 +1,39 @@
+<form method="POST" class="js-update-cart-user-details">
+
+    <input type="hidden" name="action" value="/commerce/cart/update-cart">
+    {{ csrfInput() }}
+
+    <input name="email" type="hidden" value="{{ cart.email }}">
+
+    {% include "shop/checkout/_includes/user-details-fields.twig" with {
+        firstName: {
+          name: 'fields[firstName]',
+          value: user.firstName|default ? user.firstName : cart.firstName|default,
+          disabled: user.id|default,
+        },
+        lastName: {
+          name: 'fields[lastName]',
+          value: user.lastName|default ? user.lastName : cart.lastName|default,
+          disabled: user.id|default,
+        },
+        phoneNumber: {
+          name: 'fields[phoneNumber]',
+          value: user.phoneNumber|default ? user.phoneNumber : cart.phoneNumber|default,
+          disabled: user.id|default,
+        },
+        dateOfBirth: {
+          name: 'fields[dateOfBirth]',
+          value: user.dateOfBirth|default ? user.dateOfBirth|date("yy-m-d") : cart.dateOfBirth|default ? cart.dateOfBirth|date("yy-m-d"),
+          disabled: user.id|default,
+        },
+      }
+    %}
+
+    {% if not user %}
+      <input type="submit" value="Next Step" class="checkout__continue-link">
+    {% else %}
+      <input type="submit" value="Confirm Details" class="checkout__continue-link">
+      <a href="/members/update-account-details" class="checkout__continue-link ">Update account details</a>
+    {% endif %}
+
+</form>

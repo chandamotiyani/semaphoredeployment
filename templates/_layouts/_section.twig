@@ -1,0 +1,34 @@
+{% set class = class | default('section') %}
+<section class="{{ class }} {{ removeTopPadding|default ? 'remove-top-padding' : '' }} section{{ narrow | default(false) ? ' section--narrow' : '' }}  section{{ constrained | default(false) ? ' section--constrained' : '' }}{{ padded | default(false) ? ' section--padded' : '' }} t-{{ colourScheme | default('black-on-transparent') }}{% if bleed is defined and bleed %} section--bleed{% endif %}{% if padBottom is defined and padBottom %} section--pad-bottom{% endif %}{% if inset is defined and inset %} section--inset{% endif %}{% if bleedMobile is defined and bleedMobile %} section--bleed-mobile{% endif %} js-section{% if includeInScrollIndicator is defined %} js-include-in-scroll-indicator{% endif %}{% if watchViewport is defined %} js-watch-viewport{% endif %}">
+	{% if header is defined and header | length %}
+		<div class="section__header">{% include '_partials/_section-header.twig' with header only %}</div>
+	{% endif %}
+	<div class="section__wrap">
+		{% if sideHeading is defined and sideHeading | length %}
+			<div class="section__gutter"><h2>{{ sideHeading }}</h2></div>
+		{% endif %}
+
+		{# {% if block('header') is not empty %}
+			<div class="section__header">
+				{% block header %}{% endblock %}
+			</div>
+		{% endif %} #}
+
+		{% if block('body') is not empty %}
+			<div class="section__body">
+				{% block body %}{% endblock %}
+			</div>
+		{% endif %}
+	</div>
+
+	{% block footer %}
+		{% if footer is defined and footer | length %}
+			<div class="section__footer">
+				{% spaceless %}
+					{% include '_partials/_section-footer.twig' with footer only %}
+				{% endspaceless %}
+			</div>
+		{% endif %}
+	{% endblock %}
+
+</section>

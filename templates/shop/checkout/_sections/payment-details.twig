@@ -1,0 +1,19 @@
+{##############################################################
+Step 4: If the user is logged in:
+Add payment source.
+###############################################################}
+<img src="{{ alias('@assetBaseUrl/img/payment-spreedly.png') }}" alt="Payment Option VISA" class="checkout__form-payment-option">
+
+{% if user  %}
+  {% include 'shop/checkout/_forms/update-cart-payment-source' %}
+{% endif %}
+
+{% if cart is not defined %}
+{% set cart = craft.commerce.carts.cart %}
+{% endif %}
+
+
+{##############################################################
+Step 5: Checkout
+###############################################################}
+{% include 'shop/checkout/payment' %}

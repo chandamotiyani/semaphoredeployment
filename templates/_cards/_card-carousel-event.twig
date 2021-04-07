@@ -1,0 +1,16 @@
+{% embed '_cards/_card.twig' with { type: 'carousel-event', nextOn: nextOn|default }%}
+	{% block details %}
+		<div class="{{ class }}__header">
+			<div class="{{ class }}__location">
+				{{ location }}
+			</div>
+
+			{% if isMembersOnly|default %}
+				<span class="{{ class }}__members-only">Members Only</span>
+			{% endif %}
+		</div>
+		
+		<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>
+		<div class="{{ class }}__cta">{{ cta }}</div>
+	{% endblock %}
+{% endembed %}

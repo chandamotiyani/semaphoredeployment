@@ -1,0 +1,15 @@
+{% embed '_cards/_card.twig' with { type: 'collage-dim', openInNewTab: openInNewTab|default, url: url|default }%}
+	{% block details %}
+		<div class="{{ class }}__wrap">
+			{% if title is defined %}<h3 class="{{ class }}__title">{{ title | typogrify }}</h3>{% endif %}
+			<div class="{{ class }}__hover">
+				{% if description | length %}<div class="{{ class }}__subhead">{{ description | typogrify }}</div>{% endif %}
+			{% if entry | length and cta is defined %}
+				<div class="{{ class }}__buttons">
+					<div class="{{ class }}__button"><div>{{ cta }}</div></div>
+				</div>
+			{% endif %}
+			</div>
+		</div>
+	{% endblock %}
+{% endembed %}

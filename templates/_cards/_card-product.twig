@@ -1,0 +1,192 @@
+{% import "_partials/_macros.twig" as macros %}
+
+<div class="card-product {{ hideCartButtons|default(null) is not null ? 'card-product--featured-home' : '' }}">
+
+	<a href="{{ product.url | default }}" class="card-product__image-container">
+
+		{% if product.isWineOfTheMonth|default(false) %}
+			{% if wineBadge == null %}
+				{% set wineBadge = shopSettings.wineOfTheMonthBadge.one.url|default %}
+			{% endif %}
+			<div class="card-product__badge" style="background-image: url({{ wineBadge }});"></div>
+		{% endif %}
+
+		<img {{ macros.srcset(
+			product.image, 
+			product.imageSrcSet|default,
+			product.imageSizes|default
+			) }} 
+			alt="{{ product.title ~ 'Wine Bottle' }}" class="card-product__image">
+	</a>
+
+	<div class="card-product__content">
+		{% if product.subtitle|default %}
+			<div class="card-product__animation-slide-viewport">
+				<div class="card-product__animation-slide-track">
+					<div class="card-product__animation-slide-slide">
+						<div class="card-product__sub-title">{{ product.subtitle }}</div>
+					</div>
+					{% if product.subtitleHover|default  %}
+						<div class="card-product__animation-slide-slide">
+							<div class="card-product__sub-title">{{ product.subtitleHover }}</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="card-product__content-slider">
+			<div class="card-product__content-detail">
+				<div class="card-product__content-detail--inner">
+					<h2 class="card-product__title card-product__title--details">
+						<a href="{{ product.url | default }}">{{ product.title }}</a>
+					</h2>
+						<div class="card-product__description">
+							<a href="{{ product.url | default }}">
+							{% if product.description|default %}
+								<span class="quote">&ldquo;</span>{{ product.description }}
+							{% endif %}
+							</a>
+						</div>
+					</a>
+					<div class="card-product__add-to-cart">
+						<div class="card-product__price">
+							{% if product.premiseOnly|default != true %}
+								<sup class="card-product__price-currency">$</sup>{{ product.price }}</span>
+							{% endif %}
+						</div>
+						{% if hideCartButtons|default(null) is not null %}
+						<a href="{{ product.url | default }}" class="card-product__learn-more">LEARN MORE</a>
+						{% endif %}
+
+						{# ADD TO CART  #}
+						{% if hideCartButtons|default(null) is null %}
+							<div class="product-form__buttons">
+								{% embed "shop/_partials/product/_product-form.twig" with product only %}
+									{% block addtocart %}
+										{% if variants|default|length > 1 %}
+											<span class="product-form__button product-form__cart-add-btn" data-for-product-list-modal="{{ id }}" {{ disableBuyButton|default == true ? 'disabled' }}>Add to cart</span>
+										{% elseif premiseOnly|default == true %}
+											<a href="{{ url }}" class="product-form__button product-form__cart-add-btn">Learn More</a>
+										{% else %}
+											{{ parent() }}
+										{% endif %}
+									{% endblock %}
+									{% block variants %}{% endblock %}
+									{% block tastingNotes %}{% endblock %}
+								{% endembed %}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="card-product__content-preview">
+				<div class="card-product__content-detail--inner">
+					<h2 class="card-product__title card-product__title--small">{{ product.title }}</h2>
+
+					{% if product.variety|default or product.vintage|default %}
+						<span class="card-product__info">{{ product.variety }} <br> {{ product.vintage|default }}</span>
+					{% endif %}
+
+					{% if product.isMembersOnly|default %}
+						<span class="product-form__cart-add-btn">Members Only</span>
+					{% endif %}
+					{% if hideCartButtons|default(null) is null %}
+						<strong class="card-product__price card-product__price--featured">
+							{% if product.premiseOnly|default != true %}
+							{% if product.isOnSale == true %}
+									<sup class="product__price-rrp">
+										(RRP ${{ product.rrpPrice }})
+									</sup>
+								{% endif %}
+								{% if product.variants|default|length > 1 %}
+									<sup class="card-product__price-from"><em>from</em></sup>
+								{% endif %}
+								<sup class="card-product__price-currency">$</sup>{{ product.price }}
+								<div class="card-product__status-buttons">
+									{% if product.outOfStock == true %}
+										<div class="product__status-circle product__status-circle--card">Out of stock</div>
+									{% elseif product.isAvailable == false %}
+										<div class="product__status-circle product__status-circle--card">Coming Soon</div>
+									{% elseif product.isOnSale == true %}
+										<div class="product__status-circle product__status-circle--card product__status-circle--highlight">On Sale</div>
+									{% endif %}
+								</div>
+							{% else %}
+								<div class="product__status-circle product__status-circle--card">On Premise only</div>
+							{% endif %}
+						</strong>
+						<div class="card-product__add-to-cart hidden-desktop">
+							{% if product.premiseOnly == true %}
+								<span class="card-product__cart">Learn More</span>
+							{% else %}
+								{% if product.variants|default|length > 1 %}
+									<span class="product-form__button product-form__cart-add-btn" data-for-product-list-modal="{{ product.id }}" {{ product.disableBuyButton|default == true ? 'disabled' }}>Add to cart</span>
+								{% else %}
+									<add-to-cart disable="{{ product.disableBuyButton|default }}" productid="{{ product.id }}" purchasableId="{{ product.purchasableId }}" lineitem="{{ product.lineItemId }}" notify="panel"></add-to-cart>
+								{% endif %}
+							{% endif %}
+								<add-to-wishlist inwishlist="{{ product.inWishlist|default(false) }}" purchasableid="{{ product.purchasableId }}" wishlisttoggleurl={{ product.wishlistToggleUrl|default }}></add-to-wishlist>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% if product.variants|default|length > 1 %}
+	<div class="product-list-modal" data-product-list-modal-id="{{ product.id }}">
+		<div class="product-list-modal__inner">
+			<span class="close"><svg class="svg-close"><use xlink:href="#close"></use></svg></span>
+			<form method="POST" class="js-product-list-modal-form product-list-modal__form" data-product-id="{{ product.id }}">
+				<input type="hidden" name="action" value="/commerce/cart/update-cart">
+
+				{{ csrfInput() }}
+
+				<div class="product-list-modal__form__options">
+					<h3 class="product-list-modal__options-title heading-primary-sm">Please select a size</h3>
+					<div class="product-list-modal__form__select">
+						<select name="purchasableId" class="select">
+							{% for variant in product.variants|default([]) %}
+								<option value="{{ variant.id }}" {{ product.purchasableId == variant.id ? 'selected' : '' }}data-disable-buy-button="{{ variant.stock <= 0 and variant.hasUnlimitedStock == false or disableBuyButton|default  }}">
+									{{ variant.bottleSizes|join('') }}
+								</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="product-list-modal__form__product-container">
+					<div class="product-list-modal__form__image-container">
+						{% if product.isWineOfTheMonth|default(false) %}
+							<div class="product-list-modal__form__badge" style="background-image: url({{ wineBadge }});"></div>
+						{% endif %}
+
+						<a href="{{ product.url | default }}">
+							<img src="{{ product.image }}" alt="{{ product.title ~ 'Wine Bottle' }}" class="product-list-modal__form__image">
+						</a>
+					</div>
+					<div class="product-list-modal__form__description-container">
+						<div class="product-list-modal__form__item-description">
+							<p class="product-list-modal__form__item-heading">{{ product.title }}</p>
+							<p class="product-list-modal__form__info">{{ product.vintage|default }} <br> {{ product.variety }}</p>
+						</div>
+
+						{% if product.premiseOnly == true %}
+							<a href="{{ product.url }}" class="card-product__cart">Learn More</a>
+						{% else %}
+							<add-to-cart disable="{{ product.disableBuyButton|default }}" productid="{{ product.id }}" purchasableId="{{ product.purchasableId }}" lineitem="{{ product.lineItemId }}" notify="panel"></add-to-cart>
+						{% endif %}
+
+
+						<div class="product-list-modal__form__price">
+							${{ product.price }}
+						</div>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
+{% endif %}

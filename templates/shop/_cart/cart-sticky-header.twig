@@ -1,0 +1,34 @@
+<nav class="cart-sticky-header">
+  <span class="cart-sticky-header__item cart-sticky-header__item--price hidden-desktop">${{ price }}</span>
+  <div class="cart-sticky-header__inner">
+    <div class="cart-sticky-header__col js-sticky-cart-description">
+      <h3 class="cart-sticky-header__item cart-sticky-header__item--title"><strong>{{ title }}</strong>&nbsp; <span class="hidden-mobile">{{ subtitle }}</span></h3>
+        <span class="cart-sticky-header__item cart-sticky-header__item--price hidden-mobile">${{ price }}</span>
+
+        {% if (bottleSize|default) %}
+          <span class="cart-sticky-header__item cart-sticky-header__item--price">{{ bottleSize|default }}</span>
+        {% endif %}
+    </div>
+
+    <div class="cart-sticky-header__col cart-sticky-header__col--right">
+
+          <add-to-cart disable="{{ disableBuyButton }}" notify="panel" v-bind:productid="{{ product.id }}" v-bind:purchasableid="{{ purchasableId ?? product.defaultVariant.id }}"></add-to-cart>
+
+
+        <div class="hidden-mobile cart-sticky-header__icons-right">
+          <a href="#wishlist" class="cart-sticky-header__item cart-sticky-header__item--icon">
+            {% include 'shop/_cart/wishlist-item-count' %}
+            <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#user-icon"></use></svg>
+          </a>
+          <a href="#cart-summary" class="cart-sticky-header__item cart-sticky-header__item--icon">
+            {% include 'shop/_cart/cart-item-count' %}
+            <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#cart-icon"></use></svg>
+          </a>
+        </div>
+    </div>
+  </div>
+  <a href="#wishlist" class="cart-sticky-header__item cart-sticky-header__item--icon hidden-desktop">
+    {% include 'shop/_cart/wishlist-item-count' %}
+    <svg class="primary-navigation__icon primary-navigation__icon--cart"><use xlink:href="#user-icon"></use></svg>
+  </a>
+</nav>

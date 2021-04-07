@@ -1,0 +1,21 @@
+{% embed '_cards/_card.twig' with { type: 'tour'}%}
+	{% block details %}
+		<div class="{{ class }}__location">{{ location }}</div>
+		<h3 class="{{ class }}__title">{{ title }}</h3>
+		<h3 class="{{ class }}__duration">{{ duration | typogrify }}</h3>
+	{% endblock %}
+	{% block expanded %}
+		<div class="{{ class }}__description">{{ description }}</div>
+		<div class="{{ class }}__price">
+			{% if event.price > 0 %}
+				<span>$</span>
+				<span>{{ event.price|currency('AUD', stripZeros = true)|trim('$') }} </span>
+				<span>&nbsp;{{ event.ticketTypeText|default('per person') }}</span>
+			{% else %}
+				<span></span>
+				<span>Free</span>
+			{% endif %}
+		</div>
+		<div class="{{ class }}__button">{{ event.price > 0 ? 'Book this tour' : 'View Details' }}</div>
+	{% endblock %}
+{% endembed %}

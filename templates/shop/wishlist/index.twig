@@ -1,0 +1,87 @@
+{% if currentUser %}
+  {% set tabs = [
+    {
+      name: 'My Membership',
+      url: '/members/my-membership',
+      active: craft.app.request.segments|last == 'my-membership',
+    },
+    {
+      name: 'Update Account Details',
+      url: '/members/update-account-details',
+      active: craft.app.request.segments|last == 'update-account-details',
+    },
+    {
+      name: 'View My Purchases',
+      url: '/members/my-purchases',
+      active: craft.app.request.segments|last == 'my-purchases',
+    },
+    {
+      name: 'View My Wishlist',
+      url: '/shop/wishlist',
+      active: craft.app.request.segments|last == 'wishlist',
+    },
+  ] %}
+{% endif %}
+
+{% embed "_layouts/_listing-page-wishlist.twig" with  { title: 'Wishlist' } %}
+  {% set list = craft.wishlist.lists().default(true).one() %}
+  {% if list is not null %}
+    {% set items = list.items.all() %}
+  {% endif %}
+
+  {% if items|default %}
+    {% set gifts = items|filterByProductType('gifts') %}
+    {% set merchandise = items|filterByProductType('merchandise') %}
+    {% set wine = items|filterByProductType(['wine', 'premiumWine']) %}
+  {% endif %}
+
+  {% block list %}
+  {% embed '_layouts/_section.twig' %}
+    {% block body %}
+
+      {% if items|default %}
+        <div class="js-product-listing card-list">
+          {% if wine|default %}
+            {% embed "_partials/_card-list.twig" with { items: wine, type: 'product', colourScheme: 'black-on-white' } only %}
+              {% block title %}<h2 class="heading-primary-sm list-heading">Wines</h2>{% endblock %}
+              {% block item %}
+                {% include "_containers/_shop/_product-wine-card" with { wine: item } only %}
+              {% endblock %}
+            {% endembed %}
+          {% endif %}
+
+          {% if gifts|default %}
+            <hr class="seperator">
+            {% embed "_partials/_card-list.twig" with { items: gifts, type: 'product--gift', colourScheme: 'black-on-white' } only %}
+              {% block title %}<h2 class="heading-primary-sm list-heading">Gifts & Packs</h2>{% endblock %}
+              {% block item %}
+                {% include "_containers/_shop/_product-gifts-card" with { wine: item } only %}
+              {% endblock %}
+            {% endembed %}
+          {% endif %}
+
+
+          {% if merchandise|default %}
+            <hr class="seperator">
+            {% embed "_partials/_card-list.twig" with { items: merchandise, type: 'product--gift', colourScheme: 'black-on-white' } only %}
+              {% block title %}<h2 class="heading-primary-sm list-heading">Merchandise</h2>{% endblock %}
+              {% block item %}
+                {% include "_containers/_shop/_product-merchandise-card" with { wine: item } only %}
+              {% endblock %}
+            {% endembed %}
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="cart">        
+          <p class="wishlist-text center">You currently have no items in your wishlist. <br>To add items and save to view later, click the <svg class="product-form__wishlist product-form__wishlist--active"><use xlink:href="#heart"></use></svg> on your favourite wines.
+
+          <br><br>
+          <a href="/shop/" class="boxed-button">Visit the shop</a>
+          </p>
+        </div>
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+
+{% endblock %}
+{% endembed %}

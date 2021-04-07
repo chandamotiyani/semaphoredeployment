@@ -1,0 +1,56 @@
+2021-03-09 16:36:02 [-][9][-][error][wishlist] Undefined variable: oldestListId - /Users/chandavyas/websites/production/vendor/verbb/wishlist/src/services/Lists.php: 241.
+2021-03-09 16:36:01 [-][9][-][info][application] $_GET = []
+
+$_POST = [
+    'CRAFT_CSRF_TOKEN' => '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'
+    'action' => 'users/login'
+    'loginName' => 'webmaster@kojo.com.au'
+    'password' => '••••••••••••••••'
+    'rememberMe' => '1'
+]
+2021-03-10 09:33:29 [-][9][-][error][wishlist] Undefined variable: oldestListId - /Users/chandavyas/websites/production/vendor/verbb/wishlist/src/services/Lists.php: 241.
+2021-03-10 09:33:28 [-][9][-][info][application] $_GET = []
+
+$_POST = [
+    'CRAFT_CSRF_TOKEN' => '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'
+    'action' => 'users/login'
+    'loginName' => 'webmaster@kojo.com.au'
+    'password' => '••••••••••••••••'
+    'rememberMe' => '1'
+]
+2021-03-10 09:37:03 [-][9][-][error][wishlist] Undefined variable: oldestListId - /Users/chandavyas/websites/production/vendor/verbb/wishlist/src/services/Lists.php: 241.
+2021-03-10 09:37:02 [-][9][-][info][application] $_GET = [
+    'p' => 'admin/actions/users/login'
+]
+
+$_POST = [
+    'loginName' => 'webmaster@kojo.com.au'
+    'password' => '••••••••••••••••'
+]
+2021-03-10 11:22:38 [-][9][-][error][wishlist] Undefined variable: oldestListId - /Users/chandavyas/websites/production/vendor/verbb/wishlist/src/services/Lists.php: 241.
+2021-03-10 11:22:37 [-][9][-][info][application] $_GET = [
+    'p' => 'admin/actions/users/login'
+]
+
+$_POST = [
+    'loginName' => 'webmaster@kojo.com.au'
+    'password' => '••••••••••••••••'
+]
+2021-03-10 13:34:37 [-][9][-][error][wishlist] Undefined variable: oldestListId - /Users/chandavyas/websites/production/vendor/verbb/wishlist/src/services/Lists.php: 241.
+2021-03-10 13:34:36 [-][9][-][info][application] $_GET = []
+
+$_POST = [
+    'CRAFT_CSRF_TOKEN' => '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'
+    'action' => 'users/login'
+    'loginName' => 'webmaster@kojo.com.au'
+    'password' => '••••••••••••••••'
+]
+2021-03-10 13:35:28 [-][9][-][error][wishlist] Undefined variable: oldestListId - /Users/chandavyas/websites/production/vendor/verbb/wishlist/src/services/Lists.php: 241.
+2021-03-10 13:35:28 [-][9][-][info][application] $_GET = []
+
+$_POST = [
+    'CRAFT_CSRF_TOKEN' => '••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••'
+    'action' => 'users/login'
+    'loginName' => 'webmaster@kojo.com.au'
+    'password' => '••••••••••••••••'
+]

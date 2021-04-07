@@ -1,0 +1,88 @@
+{% if currentUser %}
+    {% redirect "members/my-membership" %}
+{% endif %}
+
+{% set tabs = [
+	{
+		name: 'Sign In',
+		url: '/members/sign-in',
+		active: craft.app.request.segments|last == 'sign-in',
+	},
+	{
+		name: 'Sign Up',
+		url: '/members/sign-up',
+		active: craft.app.request.segments|last == 'sign-up',
+	},
+] %}
+
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+    {% if title is not defined %}
+      {% set title = 'Welcome to The Yalumba Wine Club' %}
+
+      {% if currentUser %}
+        {% set title = 'Welcome '~currentUser.firstName|capitalize %}
+      {% endif %}
+    {% endif %}
+
+
+    {% if cart is not defined %}
+      {% set cart = craft.commerce.carts.cart %}
+    {% endif %}
+
+    {% block hero %}
+      {% embed "_page-builder-components/hero-small.twig" with {
+          component: {
+            image: entry.heroImage.one.getUrl() ?? alias('@assetBaseUrl/img/members-banner.jpg'),
+          }, title: title|default('') } %}
+      {% endembed %}
+    {% endblock %}
+
+
+    {% block content %}
+      {% embed '_layouts/_section.twig' with { narrow: true } %}
+      {% block body %}
+
+        {% set states = craft.commerce.states.allStatesAsList %}
+
+        <form method="post" accept-charset="UTF-8" class="js-signin-form">
+
+          <div class="container">
+
+            <div class="checkout__form-row">
+              {{ csrfInput() }}
+              {{ actionInput('users/login') }}
+
+              {% include "_forms/text-input" with {
+                name: 'loginName',
+                label: 'Email Address*',
+                blockClass: 'member',
+                value: craft.app.user.rememberedUsername,
+                cssClass: 'form__input-wide login-address',
+                type: 'email',
+              } %}
+              {% include "_forms/text-input" with {
+                name: 'password',
+                type: 'password',
+                label: 'Password*',
+                blockClass: 'member',
+                cssClass: 'form__input-wide login-signin-pw',
+                type: 'password',
+                subText: '<a href="'~url('members/forgot-password')~'"  class="form__sign-in-link">Having trouble signing in or forgotten your password?</a>',
+              } %}
+            </div>
+
+            <div class="js-msg"></div>
+
+            <div class="checkout__form-row--center">
+              <input type="submit" value="Sign In" class="signin-submit modal-panel-sign-in__button modal-panel-sign-in__button--submit login-signin-submit">
+            </div>
+          </div>
+        </form>
+      {% endblock %}
+    {% endembed %}
+  {% endblock %}
+{% endembed %}
+
+
+

@@ -1,0 +1,124 @@
+{% set tabs = [
+	{
+		name: 'Wines',
+		url: '/shop/wines',
+		active: craft.app.request.segments|last == 'wines',
+	},
+	{
+		name: 'Wine Packs and Gifts',
+		url: '/shop/gifts',
+		active: craft.app.request.segments|last == 'gifts',
+	},
+	{
+		name: 'Merchandise',
+		url: '/shop/merchandise',
+		active: craft.app.request.segments|last == 'merchandise'
+	},
+] %}
+
+{% embed "_layouts/_listing-page.twig" with { title: category.title|default('Shop'), image: alias('@assetBaseUrl/img/wine-listing-cover.jpg'), tabs: tabs } %}
+
+{% set params = {} %}
+
+
+{% set cart = craft.commerce.getCarts().getCart() %}
+{% set wishList = craft.wishlist.lists().default(true).one() %}
+
+{% if wishList is null %}
+  {# Forces creation of a new wishlist. A new list doesn't get created until you start interacting with it, but we need the wishlist ID. #}
+	{% set wishList = craft.wishlist.lists(true, true) %}
+{% endif %}
+
+{% set categoryFilters = {
+  'Style': 'wineType',
+  'Occasion': 'occasion',
+  'Region': 'regions',
+  'Collection': 'collections',
+  'Food Pairing': 'foodPairing',
+} %}
+
+{% set customFieldFilters = {
+  'Special Release': 'specialReleases',
+} %}
+
+{% set sortFields = {
+  'Price Highest': 'defaultPrice|DESC',
+  'Price Lowest': 'defaultPrice|ASC',
+} %}
+
+  {% set items = craft.productService.filterBy(['wine', 'premiumWine'], categoryFilters, customFieldFilters, sortFields).with([
+		'productInfo',
+		['variants.productImageFront', {
+			withTransforms: ['productListingImage']
+		}],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+		]) %}
+
+  {% set gifts = craft.productService.filterBy(['gifts'], categoryFilters, customFieldFilters, sortFields).with([
+		'productinfogift',
+		['productinfogift.productImageFront', {
+			withTransforms: ['productListingImage']
+    }],
+		'variants.bottleSizes',
+		'variants',
+		'regionsCategory',
+		'wineType',
+		'collections',
+		'varieties',
+		'vintage',
+    ]) %}
+
+  {% set merchandise = craft.productService.filterBy(['merchandise'], categoryFilters, customFieldFilters, sortFields).with([
+		['productInfoMerchandise.productImageFront', {
+			withTransforms: ['productListingImage']
+    }],
+    'productInfoMerchandise',
+  ]) %}
+
+  {% set winesOfTheMonth = getWOMSales() %}
+
+  {% block list %}
+    {% embed '_layouts/_section.twig' %}
+      {% block body %}
+        <div class="js-product-listing card-list">
+          {% if items|default %}
+            {% embed "_partials/_card-list.twig" with { cart: cart, wishList: wishList, items: items, type: 'product', colourScheme: 'black-on-white', winesOfTheMonth: winesOfTheMonth|default } only %}
+              {% block title %}<h2 class="heading-primary-sm list-heading">Wines</h2>{% endblock %}
+              {% block item %}
+                {% include "_containers/_shop/_product-wine-card" with { wine: item, wishList: wishList, cart: cart, winesOfTheMonth: winesOfTheMonth|default, } only %}
+              {% endblock %}
+            {% endembed %}
+          {% endif %}
+
+          {% if gifts|default %}
+            <hr class="seperator">
+            {% embed "_partials/_card-list.twig" with { cart: cart, wishList: wishList, items: gifts, type: 'product--gift', colourScheme: 'black-on-white' } only %}
+              {% block title %}<h2 class="heading-primary-sm list-heading">Gifts & Packs</h2>{% endblock %}
+              {% block item %}
+                {% include "_containers/_shop/_product-gifts-card" with { wine: item, wishList: wishList, cart: cart } only %}
+              {% endblock %}
+            {% endembed %}
+          {% endif %}
+
+
+          {% if merchandise|default %}
+            <hr class="seperator">
+            {% embed "_partials/_card-list.twig" with { cart: cart, wishList: wishList, items: merchandise, type: 'product--gift', colourScheme: 'black-on-white' } only %}
+              {% block title %}<h2 class="heading-primary-sm list-heading">Merchandise</h2>{% endblock %}
+              {% block item %}
+                {% include "_containers/_shop/_product-merchandise-card" with { wine: item, wishList: wishList, cart: cart } only %}
+              {% endblock %}
+            {% endembed %}
+          {% endif %}
+        </div>
+      {% endblock %}
+    {% endembed %}
+
+  {% endblock %}
+{% endembed %}

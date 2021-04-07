@@ -1,0 +1,22 @@
+{% embed 'emails/layout' with { 
+  title: 'You have received a refund from Yalumba', 
+  heading: 'You have received a refund from Yalumba' 
+} %}
+
+  {% block content %}
+  
+    {% set transaction = order.transactions|last %}
+    
+      <ul style="margin-left: 0; list-style: none; padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+        <li>Your order number: #{{ order.number[:7] }}</li>
+        <li>Order date: {{ order.dateOrdered|date('medium') }}</li>
+        <li>Refund amount: {{ transaction.amount|currency('AUD', stripZeros = true) }}</li>
+        <li>Reason for refund: {{ transaction.note }}</li>
+      </ul>
+
+      <p style="padding: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px;">
+        If you have any questions, please contact The Wine Room on +61 8 8561 3309 or wineroom@​yalumba.​com.
+      </p>
+
+  {% endblock %}
+{% endembed %}

@@ -1,0 +1,13 @@
+{% set blockClass = blockClass|default('form') %}
+
+<div class="form__input-wrap {{ blockClass }}__input-wrap">
+
+  <input 
+  type="submit"
+  class="boxed-button {{ cssClass|default }}"
+  name="{{ name }}"
+  value="{{ value|default('') }}"
+  {{ disabled|default('') ? 'disabled="disabled"' : '' }}>
+
+
+</div>

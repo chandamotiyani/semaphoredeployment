@@ -1,0 +1,7 @@
+{% extends "_layouts/_layout.twig" %}
+
+{% block hero %}
+	{% if entry.articleBanner is defined %}
+		{% include "_page-builder-components/hero.twig" with { component: entry.articleBanner } %}
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+.card-list-two-column {
+	@include list;
+	// @include list-horizontal-wrap;
+	// @include list-hover-fade-effect;
+	@include list-columns($columns: 2, $breakpoint: $single-column-breakpoint);
+	
+	&__item {
+		flex-grow: 1;
+		min-height: 100%;
+	}
+
+	// @include media-breakpoint-up(md) {
+	// 	flex-direction: row;
+	// 	flex-wrap: wrap;
+	// 	align-content: stretch;
+	// 	align-items: stretch;
+	// }
+}

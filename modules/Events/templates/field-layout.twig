@@ -1,0 +1,23 @@
+{% extends "_layouts/cp" %}
+
+{% if title is not defined %}
+    {% set title = 'Events' %}
+{% endif %}
+
+
+{% block content %}
+    <h2>{{ "Order Fields"|t('commerce') }}</h2>
+
+    <form method="post" accept-charset="UTF-8" data-saveshortcut data-confirm-unload>
+        <input type="hidden" name="action" value="events/events/field-layout">
+        {{ csrfInput() }}
+        {% include "_includes/fieldlayoutdesigner" with {
+            fieldLayout : fieldLayout
+        } only %}
+
+        <div class="buttons">
+            <input type="submit" class="btn submit"
+                   value="{{ 'Save'|t('commerce') }}">
+        </div>
+    </form>
+{% endblock %}

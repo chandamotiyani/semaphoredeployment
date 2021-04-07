@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+
+    body {
+        font-size: 12px;
+        line-height: 1.2;
+        font-weight: 400;
+        font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #444;
+    }
+
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+    li {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    li span {
+        min-width: 108px;
+        display: inline-block;
+    }
+    .paidLogo{
+        font-weight:bold;
+        position: absolute;
+        left:30%;
+        font-family: 'Helvetica', serif;
+        color:rgb(211, 65, 50);
+        font-size:48px;
+        -ms-transform: rotate(-20deg); /* IE 9 */
+        -webkit-transform: rotate(-20deg); /* Safari */
+        transform: rotate(-20deg);
+    }
+    table.heading td{
+        vertical-align: top;
+    }
+    h5 {
+        font-weight: 400;
+        font-size: 12px;
+        margin-bottom: 10px;
+        font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .w-full {
+        width: 100%;
+    }
+
+    .order-table {
+        margin-top: 80px;
+        border-bottom: solid 1px black;
+    }
+
+    .order-table thead th {
+        border-bottom: 1px solid black;
+    }
+
+    .order-table td, 
+    .order-table th {
+        padding: 10px;
+    }
+
+
+    .totals-table td, 
+    .totals-table th {
+        padding: 10px 10px 0 30px;
+    }
+
+    .order-table tr, 
+    .order-table td, 
+    .order-table th:first-child {
+        text-align: center;
+    }
+
+
+    .text-right {
+        text-align: right !important;
+    }
+
+    .text-left {
+        text-align: left !important;
+    }
+
+    .text-center {
+        text-align: center !important;
+    }
+
+    h1 {
+        text-align: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 40px;
+        font-weight: normal;
+        margin-bottom: 65px;
+    }
+
+    header {
+        text-align: center;
+    }
+
+    header img {
+        width: 200px;
+    }
+
+    footer {
+        width: 100%;
+        margin-top: 90px;
+        margin-bottom: 90px;
+    }
+
+    .table-footer td {
+        padding: 0 60px;
+    }
+    .table-footer td:first-child {
+        padding-left: 20px;
+    }
+    </style>
+</head>
+
+<body>
+{% set orderTable %}
+
+    <div class="container mx-auto">
+        <table class="w-full heading">
+            <tr>
+                <td style="width: 250px">
+                    <strong>Order Details</strong><br><br>
+                    <ul>
+                        <li>{{ "Order Number"|t }}: #{{ order.number[:7] }}</li>
+                        <li style="word-wrap: break-word;">{{ "Customer"|t }}: {{ order.email }}</li>
+                        <li>{{ "Total"|t }}: {{ order.totalPrice|currency(order.currency) }}</li>
+                        <li>{{ "Paid"|t }}: {{ order.totalPaid|currency(order.currency) }}</li>
+                        <li>{{ "Date"|t }}: </span></span>{{ order.dateOrdered|date('medium') }}</li>
+                    </ul>
+                </td>
+                <td>
+                    <strong>Shipping Address</strong><br><br>
+                    {% if order.shippingAddress %}
+                    {% include 'shop/_pdf/addresses/address' with { address: order.shippingAddress } %}
+                    {% endif %}
+                </td>
+                <td>
+                    <strong>Billing Address</strong><br><br>
+                    {% if order.billingAddress %}
+                    {% include 'shop/_pdf/addresses/address' with { address: order.billingAddress } %}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        <table class="w-full order-table">
+            <thead>
+                <tr>
+                    <th class="text-left">Items</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th class="text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.lineItems %}
+                    <tr>
+                        <td valign="top" class="text-left">
+                            <strong>{{ item.description }}</strong><br>
+                            {{ item.snapshot.bottleSize|default }}<br>
+                            {% if item.adjustments|length %}
+                            {% for adjustment in item.adjustments %}
+                                {{ adjustment.name }} ({{ adjustment.amount|currency('AUD', stripZeros = true)}})
+                                <br>
+                                {% if item.note and adjustment.id == 1072 %}
+                                  Gift Note: "{{ item.note|nl2br }}"
+                                {% endif %}
+                            {% endfor %}
+                            {% if order.totalDiscount != 0 or order.couponCode %}
+                              - {{ order.totalDiscount | currency(order.currency) }}
+                            {% endif %}
+                          {% endif %}
+                        </td>
+                        <td>
+                            {% if item.onSale %}
+                                <strike>{{ item.price|currency(order.currency) }}</strike>   {{ item.salePrice|currency(order.currency) }}
+                            {% else %}
+                                {{ item.price|currency(order.currency) }}
+                            {% endif %}
+                        </td>
+                        <td>{{ item.qty }}</td>
+                        <td class="text-right">{{ item.total|currency(order.currency) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="w-full">
+            <tbody>
+                <thead>
+                    <tr>
+                        <th class="text-left"></th>
+                        <th class="text-left"></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                {% for adjustment in order.adjustments %}
+                    {% if adjustment.type == "shipping" %}
+                        <tr>
+                            <td colspan="2"><strong>Delivery</strong><br>({{ adjustment.name }})</td>
+                            <td class="text-right">{{ adjustment.amount|currency(order.currency) }}</td>
+                        </tr>
+                    {% endif %}
+
+                    {% if adjustment.type == "tax" %}
+                        <tr>
+                            <td colspan="2"><strong>{{ adjustment.name }} {{ adjustment.included?"included":"" }}</strong></td>
+                            <td class="text-right">{{ adjustment.amount|currency(order.currency) }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">
+                        Item Total: {{ order.itemTotal|currency(order.currency) }}<br>
+                        <h4>Total: {{ order.totalPrice|currency(order.currency) }}</h4>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endset %}
+
+
+<header><img src="{{ dataUrl('@webroot/assets/img/logo-inverse.png') }}" alt="logo" style="margin-top: -70px; margin-bottom: 30px"></header>
+<h1>Thank you.</h1>
+{# Use the option param passed into the pdf template to show different order pdf's depending on the context #}
+{% if option is defined %}
+{% switch option %}
+{% case "receipt" %}
+    {{ orderTable }}
+{% case "ajax" %}
+{% default %}
+    {{ orderTable }}
+{% endswitch %}
+{% endif %}
+
+<footer>
+    <table class="w-full heading">
+        <tbody>
+            <tr>
+                <td>
+                    <img src="{{ dataUrl('@webroot/assets/img/mobile-logo.png') }}" alt="logo" width="100">
+                </td>
+                <td>
+                    <strong>The Yalumba Wine Company</strong><br>
+                    40 Eden Valley Road<br>
+                    Angaston SA 5353<br>
+                    Australia<br>
+                </td>
+                <td>
+                    T: +61 8 8561 3309<br>
+                    F: +61 8 8561 3393<br>
+                    E: wineroom@yalumba.com<br>
+                    ABN. 17 007 871 427<br>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</footer>
+</body>
+</html>

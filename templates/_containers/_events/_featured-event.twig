@@ -1,0 +1,25 @@
+{% set featuredEvent = component.featuredEvent.withPermission().one %}
+
+{% if featuredEvent|default  %}
+	{% set schedules = featuredEvent.schedule|filter(s => s.startDateTime|date('U') > "now"|date('U')) %}
+	{%
+		set fields = {
+			constrainImageTo: 'square',
+			image: featuredEvent.bannerImage.one | default,
+			imagePosition: 'right',
+			buttons: [{ label: 'Learn More', entry: featuredEvent }],
+			super: featuredEvent.eventLocation.one.title | default ~ ', ' ~ featuredEvent.eventLocation.one.locationSuburb,
+			heading: featuredEvent.title | default,
+			text: featuredEvent.eventShortDescription | default,
+			colourScheme: 'black-on-transparent',
+			dateFrom: schedules.one.startDateTime|default,
+			class: 'card-event',
+			isMembersOnly: featuredEvent|isMembersOnly,
+		}
+	%}
+
+	{% if schedules|default %}
+		{% include '_views/_text-with-image' with { fields: fields, sideHeading: 'Featured Event' } only %}
+	{% endif %}
+
+{% endif %}

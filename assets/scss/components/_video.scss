@@ -1,0 +1,66 @@
+.video {
+	@include aspect-ratio(16,9);
+	display: flex;
+	justify-items: center;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	cursor: pointer;
+    pointer-events: all;
+
+	&:after {
+		content: '';
+		display: block;
+		@include absolute-fill-parent;
+		opacity: 0;
+		z-index: 1;
+	}
+
+	&__play-button {
+		color: white;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		z-index: 1000;
+		width: 6rem;
+		height: 6rem;
+		border: 2px solid white;
+		border-radius: 50%;
+
+		transition-duration: 0.25s;
+		transition-property: opacity;
+		will-change: opacity;
+
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-20%, -50%);
+			border: 0.5em solid white;
+			border-top: 0.5em solid white;
+			border-left: 0.5em solid white;
+			border-bottom: 50% solid white;
+			width: 1em;
+			height: 1em;
+			border-color: transparent transparent transparent white;
+			font-size: 2em;
+		}
+
+		opacity: 0.5;
+	}
+	
+	&:hover &__play-button {
+		opacity: 1;
+	}
+
+	&.is-playing &__play-button {
+		opacity: 0;
+	}
+
+	&__pause-button {
+		
+	}
+}

@@ -1,0 +1,8 @@
+.card-list-collage {
+	@include list;
+	@include card-list-collage-min-height;
+	@include card-list-collage-gutters;
+	@include card-list-collage-staggered-items;
+
+	justify-content: stretch;
+}

@@ -1,0 +1,20 @@
+{% set items = [] %}
+
+{% for button in buttons|default %}
+	{% set items = items | merge([{
+		label: button.label,
+		url: button.url
+	}]) %}
+
+	{# TODO:is this legacy??: button.type.handle == 'entryButton' ? button.entry.one().url : button.product.one().url #}
+{% endfor %}
+
+{% if items is defined and items | length %}
+	<footer class="button-group">
+			<ul class="button-group__buttons">
+				{% for button in items %}
+					<li><a href="{{ button.url }}" class="button-group__button">{{ button.label | typogrify(true) }}</a></li>
+				{% endfor %}
+			</ul>
+	</footer>
+{% endif %} 

@@ -1,0 +1,23 @@
+{% extends "_layouts/cp" %}
+{% set title = "Logs" %}
+{% block content %}
+    <table class="data fullwidth">
+        <tr>
+            <th class="tw-w-px tw-whitespace-no-wrap" style="width:1px; white-space: nowrap;">Name</th>
+            <th class="tw-w-px tw-whitespace-no-wrap" style="width:1px; white-space: nowrap;">DateTime</th>
+            <th>Data</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td class="tw-w-px tw-whitespace-no-wrap" style="width:1px; white-space: nowrap;">{{ log.name }}</td>
+            <td class="tw-w-px tw-whitespace-no-wrap" style="width:1px; white-space: nowrap;">{{ log.dateCreated|date }} {{ log.dateCreated|time }}</td>
+            <td class="highlight"><code class="language-json">{{ log.data }}</code></td>
+        </tr>
+        {% endfor %}
+    </table>
+<script>
+    // $(function() {
+    //     Prism.highlightAll();
+    // });
+</script>
+{% endblock %}

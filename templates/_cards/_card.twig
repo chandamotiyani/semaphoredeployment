@@ -1,0 +1,30 @@
+{% set class = 'card-' ~ (type | default) %}
+
+{% set tag = tag | default('a') %}
+
+<{{ tag }} class="{{ class }}{{ jsClass is defined and jsClass ? ' ' ~ jsClass : '' }}"{% if tag == 'a' and (entry|default or url|default) %} href="{{ url|default ? url : entry.url ?? '#' }}{{ hash|default }}" {% endif %} {% if openInNewTab is defined and openInNewTab %}target="_blank"{% endif %}>
+	<div class="{{ class }}__image-mask">
+		<div class="{{ class }}__image" style="background-image: url('{{ (image is iterable) ?  image.getUrl('cardImage') | default : image|default }}')">{% if block('imageInner') is not empty %}{% block imageInner %}{% endblock %}{% endif %}</div>
+	</div>
+	{% if block('details') is not empty %}
+		<div class="{{ class }}__details">
+			{% block details %}{% endblock %}
+		</div>
+	{% endif %}
+	{% if dateFrom is defined and dateFrom %}
+		<div class="{{ class }}__date-tag {{ nextOn|default > 1 ? class~'__date-tag--has-multiple' : '' }}">
+			{% if nextOn|default > 1 %}
+				<div class="{{ class }}__next-on">NEXT ON</div>
+			{% endif %}
+			<span class="{{ class }}__date-tag-month">{{ dateFrom | date('M') }}</span>
+			<span>{{ dateFrom | date('d') }}</span>
+		</div>
+	{% endif %}
+	{% if block('expanded') is not empty %}
+		<div class="{{ class }}__expanded">
+			<div class="{{ class }}__expanded-wrap">
+				{% block expanded %}{% endblock %}
+			</div>
+		</div>
+	{% endif %}
+</{{ tag }}>

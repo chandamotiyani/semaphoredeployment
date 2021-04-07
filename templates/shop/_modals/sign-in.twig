@@ -1,0 +1,17 @@
+{% extends "_layouts/_modal" %}
+
+{% set user = craft.commerce.customers.customer.user %}
+{% set modalID = 'sign-in' %}
+
+{% block content %}
+    <div class="cart-summary__col cart-summary__col--left collapsible modal__col collapsible--active">
+        <div class="">
+            <h2 class="cart-summary__heading collapsible__trigger modal__heading">
+                {# Chanda - Changing the copy for member only slide out provided by Amy #}
+                <span>Exclusive to Members</span>
+            </h2>
+        </div>
+        {% include "shop/_modals/partials/modal-panel-sign-in" with { text: 'This product is exclusive to our Yalumba Wine Club members. Please log in or sign up to access this product.' } %}
+        {# END #}
+    </div>
+{% endblock %}

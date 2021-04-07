@@ -1,0 +1,110 @@
+{% embed "_layouts/_layout.twig" %}
+	{% set location = event.location.one() %}
+	{% block hero %}
+		{% if event is defined %}
+			{% embed "_page-builder-components/hero.twig" with {
+					component: {
+						image: event.bannerImage,
+						buttonText: event.isExternalBooking ? 'Book Tickets' : '',
+						buttonLink: { one: { url: event.bookingUrl } } | default,
+						heading: event.title,
+						overlay: 'gradient',
+						buttonTarget: event.bookingUrl ? "target='_blank'" : '',
+						externalUrl: event.bookingUrl,
+						buttonUrl: event.bookingUrl
+					}
+				} %}
+				{% block extended %}
+					{% if event.schedule|length > 1 %}
+						Multiple dates<br>
+					{% else %}
+						{% if event.startDateString | length > 0 %}
+							{{ event.startDateString }}<br/>
+						{% endif %}
+					{% endif %}
+					{{ event.venue is defined and event.venue | length ? event.venue ~ ', ' : '' }}{{ location.title|default }}<br/>
+					<i>{{ event.price }}</i>
+				{% endblock %}
+			{% endembed %}
+		{% endif %}
+	{% endblock %}
+
+
+  {% block content %}
+	{% if event is defined and event.isBookable %}
+		{% include "_views/_events/_event-sticky-header" with { event: event, class: 'list_section' } %}
+	{% endif %}
+    {% embed '_layouts/_section.twig' with { class: 'list-section' } %}
+			{% block body %}
+
+
+				<div class="event-single row event-single--constrain">
+					<div class="event-single__detail col col__large">
+						<div class="row">
+							<div class="col col__x-large">
+								<h2 class="event-single__title">{{ event.title | typogrify(true) }}</h2>
+								{% include "_views/_article-text" with { text: event.description } only %}
+								{% if event.isBookable %}
+									<div class="hidden-mobile">
+										{% include "_views/_events/_partials/_content-book-button" with { event: event } only %}
+									</div>
+								{% endif %}
+							</div>
+							{% include "_views/_events/_event-booking-info" with { event: event, location:location } %}
+						</div>
+
+						{% if event.isBookable %}
+							<div class="hidden-desktop">
+								{% include "_views/_events/_partials/_content-book-button" with { event: event } only %}
+							</div>
+						{% endif %}
+					</div>
+				</div>
+
+
+				{% if event.multipleSchedule %}
+					<div class="product-list-modal" data-product-list-modal-id="{{ event.id }}">
+						<div class="product-list-modal__inner">
+							<span class="close"><svg class="svg-close"><use xlink:href="#close"></use></svg></span>
+							<form method="POST" class="js-product-list-modal-form product-list-modal__form" data-product-id="{{ event.id }}">
+								<input type="hidden" name="action" value="/commerce/cart/update-cart">
+								<input type="hidden" name="options" value="{{ event.schedule[0].start }}">
+								{{ csrfInput() }}
+
+								<div class="product-list-modal__form__options">
+									<h3 class="product-list-modal__options-title heading-primary-sm">Please select a date</h3>
+									<div class="product-list-modal__form__select">
+										<select name="purchasableId" class="choices">
+											{% for schedule in event.schedule %}
+												<option value="{{ schedule.id }}">
+													{{ schedule.start| date('D j M') }} {{ schedule.start| date('h:i a') }}
+												</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+
+								<div class="product-list-modal__form__product-container">
+									<div class="product-list-modal__form__description-container">
+										<div class="product-list-modal__form__item-description">
+											<p class="product-list-modal__form__item-heading">{{ event.title }}</p>
+										</div>
+										<div>
+											<add-to-cart v-bind:productid="{{ event.id }}" purchasableId="{{ event.schedule[0].id }}" schedule="{{ event.schedule[0].start }}" notify="panel"></add-to-cart>
+										</div>
+										<div class="product-list-modal__form__price">
+											{{ event.price }}
+										</div>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				{% endif %}
+
+      {% endblock %}
+    {% endembed %}
+    {% include "_partials/_page-builder.twig" with { components: event.components } %}
+  {% endblock %}
+{% endembed %}

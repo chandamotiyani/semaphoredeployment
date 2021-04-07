@@ -1,0 +1,28 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+
+  {% block content %}
+    {% set cart = craft.commerce.getCarts().getCart()%}
+    {% if title is not defined %}
+      {% set title = 'Your Cart' %}
+    {% endif %}
+
+    {% include "_page-builder-components/hero-small.twig" %}
+
+    <section class="cart">
+      <div class="container-fluid cart__container-thin">
+        <div class="cart__items">
+          <div class="cart__list cart__list--products">
+
+            <cart-summary group="true"></cart-summary>
+
+            <div class="cart__continue">
+              <a href="/shop/" class="cart__continue-button">Continue shopping</a>
+              <a href="/shop/checkout" class="cart__continue-button">Go to Checkout</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  {% endblock %}
+{% endembed %}

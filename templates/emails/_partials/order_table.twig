@@ -1,0 +1,85 @@
+<table id="table" style="margin: 20px 48px; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; color: #4a4a4a; line-height: 24px; width: 504px;">
+  <tr>
+    <th>Item</th>
+    <th>Qty</th>
+    <th>Price</th>
+    <th style="text-align: right">Total</th>
+  </tr>
+
+  {% for item in order.lineItems %}
+    <tr>
+      <td>
+        <strong>{{ item.description }} {{ item.snapshot.bottleSize|default }}</strong>
+
+        {% if item.onSale %}
+          <small class="order-summary__option">(Sale Price: 
+            <strike>{{ item.price|currency('AUD', stripZeros = true) }}</strike> {{ item.salePrice|currency('AUD', stripZeros = true) }})
+          </small>
+        {% endif %}
+
+        {% if item.snapshot.options %}
+          {% for options in item.snapshot.options %}
+            {% set option = (options | json_decode) %}
+            {% if option %}
+              <small>{{ option.name|default }} {% if option.note %} <i>"{{ option.note }}"</i>{% endif %}</small>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% for adjustment in item.adjustments %}
+          {% if adjustment.type != 'gift_options' %}
+
+            {% if adjustment.type == 'discount' and order.couponCode %}
+              <small>'{{ adjustment.name }}' {{ adjustment.amount|currency('AUD', stripZeros = true)}}</small>
+            {% else %}
+              <small>{{ lineItem.qty }} x {{ adjustment.name }} ({{ adjustment.amount|currency('AUD', stripZeros = true)}})</small>
+            {% endif %}
+
+          {% endif %}
+        {% endfor %}
+      </td>
+      <td>{{ item.qty }}</td>
+      <td>
+        {{ item.salePrice|currency('AUD', stripZeros = true) }}
+      </td>
+      <td style="text-align: right">{{ item.total|currency('AUD', stripZeros = true) }}</td>
+    </tr>
+  {% endfor %}
+
+  {% for orderAdjustment in order.adjustments %}
+    {% if orderAdjustment.type == "shipping" %}
+    <tr>
+        <td colspan="3" style="text-align: right">
+          <span>Delivery:</span>
+        </td>
+        <td colspan="1" style="text-align: right">
+          <span>{{ orderAdjustment.name|default }}</span>
+          {{ orderAdjustment.amount|commerceCurrency(order.currency) }}
+        </td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+
+  {% for adjustment in order.adjustments %}
+    {% if adjustment.type == 'tax' %}
+      <tr>
+        <td colspan="3" style="text-align: right">
+          <span>Tax:</span>
+        </td>
+        <td colspan="1" style="text-align: right">
+          {{ adjustment.amount|currency(order.currency) }}
+        </td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+
+  <tr>
+    <td colspan="3" style="text-align: right">
+      <span>Total:</span>
+    </td>
+    <td colspan="1" style="text-align: right">
+      <span>{{ order.totalPrice|currency(order.currency) }}</span>
+    </td>
+  </tr>
+</table>
+

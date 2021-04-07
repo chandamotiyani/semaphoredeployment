@@ -1,0 +1,29 @@
+{% extends "_layouts/_modal" %}
+
+{% set user = craft.commerce.customers.customer.user %}
+{% set modalID = 'wishlist' %}
+
+{% block content %}
+  {% if user is null %}
+    <div class="cart-summary__col cart-summary__col--left collapsible modal__col">
+      <div class="">
+        <h2 class="cart-summary__heading collapsible__trigger modal__heading">
+          <span>Sign in</span>
+          <svg class="cart-summary__panel-trigger-icon collapsible__icon"><use xlink:href="#chevron"></use></svg>
+        </h2>
+      </div>
+      {% include "shop/_modals/partials/modal-panel-sign-in" %}
+    </div>
+    {% else %}
+      <div class="cart-summary__col cart-summary__col--left collapsible modal__col">
+        <div class="">
+          <h2 class="cart-summary__heading collapsible__trigger modal__heading">
+            <span>Welcome<br> {{ user.firstName }}</span>
+            <svg class="cart-summary__panel-trigger-icon collapsible__icon"><use xlink:href="#chevron"></use></svg>
+          </h2>
+        </div>
+        {% include "shop/_modals/partials/modal-panel-signed-in" %}
+      </div>
+  {% endif %}
+  {% include "shop/_cart/cart-wishlist" %}
+{% endblock %}

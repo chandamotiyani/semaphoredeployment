@@ -1,0 +1,134 @@
+.card-link-featured {
+	@include card;
+	@include card-with-image;
+	// @include card-with-image($hide-on-mobile: true);
+	// @include card-with-cta;
+	// @include card-with-inset-details;
+	// @include card-with-white-background;
+
+	// color: $white;
+
+	overflow: hidden;
+
+	text-align: center;
+	background-color: $white;
+
+	&:hover, &.is-active {
+		color: $white;
+	}
+
+	&:hover &__cta, &.is-active &__cta {
+		@extend .boxed-button--on-dark;
+	}
+
+	&:hover &__image, &.is-active &__image {
+		opacity: 1;
+		transform: scale(1.4) translateX($padding-small);
+	}
+
+	&__image {
+		// @include aspect-ratio(4,3);
+		@include absolute-fill-parent;
+		background-size: cover;
+		background-position: center center;
+		background-repeat: no-repeat;
+		
+		transition: all 0.4s ease-out;
+		transition-property: transform, opacity;
+		transform: scale(1.4);
+		transform-origin: center center;
+		opacity: 0;
+		transform: scale(1.4);
+
+		&:before {
+			@include overlay($brand-secondary);
+			opacity: 0.4;
+		}
+	}
+	
+	&__details {
+		position: relative; // To sit text above image
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		padding: $padding-large $padding-small;
+
+		@include media-breakpoint-up(sm) {
+			padding: $padding-large * 2 $padding-small;
+		}
+	}
+
+	&__title {
+		@extend .heading-primary-lg;
+		// margin-block-start: 1em;
+		margin-block-end: 0em;
+		transition: all 0.4s ease;
+	}
+
+	&__cta {
+		@extend .boxed-button;
+		margin-block-start: $padding-small;
+	}
+
+	&__super {
+		@extend .heading-secondary-sm;
+		@extend .heading-secondary-sm--underlined;
+
+		margin-bottom: $padding-small;
+
+		// color: $black;
+		display: inline-block;
+		font-weight: 200;
+	}
+
+
+// 	&:hover,
+//     &--active {
+//       cursor: pointer;
+
+//       .two-column-images__image {
+//         opacity: 1;
+//         transform: scale(1.4) translateY(-50px);
+
+//         &--first {
+//           transform: scale(1.4) translateY(50px);
+//         }
+
+//         @include media-breakpoint-up(md) {
+//           transform: scale(1.4) translateX(50px);
+
+//           &--first {
+//             transform: scale(1.4) translateX(-50px);
+//           }
+//         }
+//       }
+
+//       .two-column-images__heading {
+//         color: $white;
+//       }
+
+//       .two-column-images__sub-heading {
+//         color: $white;
+//       }
+
+//       .two-column-images__button {
+//         border-color: $white;
+//         color: $white;
+//       }
+
+//       &:before {
+//         @include overlay(rgba(0,0,0,0.4));
+
+//         z-index: 1;
+//       }
+//     }
+
+//     @at-root .two-column-images--no-hover &:hover {
+//       .two-column-images__image {
+//         opacity: 1;
+//         transform: scale(1.35);
+//       }
+//     }
+//   }
+}

@@ -1,0 +1,22 @@
+{# {% set component = component.heading %} #}
+
+{# <pre>{{ dump(component.one) }}</pre> #}
+
+
+{# {% set super = component.super %}
+{% set heading = component.heading %}
+{% set copy = component.copy %} #}
+
+<header class="section-header">
+	{% if super is defined and super | length %}
+		<div class="section-header__super">{{ super | typogrify(true) }}</div>
+	{% endif %}
+
+	{% if heading is defined and heading | length %}
+		<h2 class="section-header__heading">{{ heading | typogrify(true) }}</h2>
+	{% endif %}
+
+	{% if copy is defined and copy | length %}
+		<div class="section-header__text">{{ copy | typogrify(true) }}</div>
+	{% endif %} 
+</header>

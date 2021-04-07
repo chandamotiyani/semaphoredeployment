@@ -1,0 +1,13 @@
+{% embed '_cards/_card.twig' with { type: 'article-big' } %}
+	{% block details %}
+		<div class="{{ class }}__date">
+			<span>{{ entryType }}</span>
+			<span>{{ date | date('F j, o') }}</span>
+		</div>
+		<h2 class="{{ class }}__title">{{ contentHeading }}</h2>
+		<div class="{{ class }}__description">{{ contentText }}</div>
+		<div class="{{ class }}__buttons">
+			<div class="{{ class }}__button">{{ linkLabel }}</div>
+		</div>
+	{% endblock %}
+{% endembed %}

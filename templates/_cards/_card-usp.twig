@@ -1,0 +1,9 @@
+{# TODO This isn't really used as a card. Move to partial? #}
+
+{# NOTE: We're not using typogrify here as the last two words joined by a &nbsp; are often
+longer than the container's horizontal space allows, which expands the width of the card
+and therefore breaks the parent flexbox layout #}
+<div class="card-usp">
+	<div class="card-usp__icon"><span><img src="{{ icon.url | default }}"></span></div>
+	<div class="card-usp__description">{{ description | default }}</div>
+</div>

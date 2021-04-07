@@ -1,0 +1,55 @@
+.boxed-layout {
+	padding-top: $padding-large;
+
+  &__header {
+    background: $background-secondary;
+    display: flex;
+    flex-direction: row;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    position: relative;
+
+    &--large {
+      padding-top: 9rem;
+      padding-bottom: 6rem;
+    }
+
+    &--sticky {
+     // position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      margin-top: -4rem;
+    }
+  }
+
+
+  &__content {
+    background: $background-primary;
+	padding: $padding-large;
+	
+	& > :not(:first-child) {
+		margin-top: $padding-large;
+	}
+  }
+
+  .search-content--wines .card-list {
+    &__item {
+      padding-left: $padding-large/2;
+      padding-right: $padding-large/2;
+    }
+  }
+
+  &__loadmore {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 4rem;
+  }
+
+  &__loadmore-button {
+    @extend .boxed-button;
+
+    margin: 0 auto;
+  }
+}

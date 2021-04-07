@@ -1,0 +1,7 @@
+.card-list-region {
+	@include list;
+	@include card-list-collage-gutters;
+	@include list-columns($columns: 3, $breakpoint: $single-column-breakpoint);
+
+	justify-content: stretch;
+}

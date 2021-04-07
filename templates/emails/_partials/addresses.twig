@@ -1,0 +1,13 @@
+<div style="padding: 20px 48px; text-align: left;">
+  <h3 style="font-weight: 900; margin-bottom: 10px">Shipping Address</h3>
+  {% if order.shippingAddress %}
+    {% include 'shop/_pdf/addresses/address' with { address: order.shippingAddress } %}
+  {% endif %}
+</div>
+
+<div style="padding: 20px 48px; text-align: left;">
+  <h3 style="font-weight: 900; margin-bottom: 10px">Billing Address</h3>
+  {% if order.billingAddress %}
+    {% include 'shop/_pdf/addresses/address' with { address: order.billingAddress } %}
+  {% endif %}
+</div>

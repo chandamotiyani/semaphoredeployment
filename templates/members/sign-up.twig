@@ -1,0 +1,18 @@
+{% if currentUser %}
+    {% redirect "/members/my-membership" %}
+{% endif %}
+
+{% set tabs = [
+	{
+		name: 'Sign In',
+		url: '/members/sign-in',
+		active: craft.app.request.segments|last == 'sign-in',
+	},
+	{
+		name: 'Sign Up',
+		url: '/members/sign-up',
+		active: craft.app.request.segments|last == 'sign-up',
+	},
+] %}
+
+{% extends "members/index" %}

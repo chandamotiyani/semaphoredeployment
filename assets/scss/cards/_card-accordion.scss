@@ -1,0 +1,161 @@
+@mixin card-accordion-title {
+	&__title {
+		position: relative;
+		& h3 {
+			@extend .heading-primary-xs;
+			margin-block-start: 0;
+			margin-block-end: 0;
+
+			@include media-breakpoint-down(sm) {
+				@at-root .page-my-purchases & {
+					max-width: 70%;
+				}
+			}
+		}
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		padding-right: $padding-small * 2;
+
+		@include media-breakpoint-down(sm) {
+			@at-root .page-my-purchases & {
+				padding-right: 1rem;
+			}
+		}
+
+	}
+}
+
+@mixin card-accordion-chevron {
+	&__title:after
+	{
+		content: '';
+		display: block;
+		border-bottom: 1.5px solid $text-color-primary;
+		border-right: 1.5px solid $text-color-primary;
+		width: 0.75em;
+		height: 0.75em;
+		transform-origin: center;
+		opacity: 0.5;
+
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translate(-0.2em, -50%) rotate(-45deg);
+		
+		transition-property: transform opacity;
+		transition-duration: 0.25s;
+		transition-timing-function: easeOutQuad;
+
+		.is-open & {
+			transform: translate(-0.2em, -50%) rotate(45deg);
+			opacity: 1;
+		}
+	}
+}
+
+@mixin card-accordion-title-translate-on-hover {
+	&__title h3 {
+		transition-duration: 0.25s;
+		transition-timing-function: easeOutQuad;
+	}
+
+	&:hover &__title h3, .is-open &__title h3 {
+		transform: translateX($padding-small);
+	}
+}
+
+@mixin card-accordion-details {
+	&__details {
+		@extend .body-text;
+		padding: $padding-small * 0.5 $padding-small;
+	}
+
+	&__details-mask {
+		max-height: 0;
+		overflow: hidden;
+
+		transition-duration: 0.25s;
+		transition-property: max-height;
+		// transition-timing-function: easeOut;
+
+		// padding-top: $padding-small;
+
+		.is-open & {
+			max-height: 90rem;
+		}
+	}
+}
+
+.card-accordion {
+	@include card-accordion-title;
+	@include card-accordion-title-translate-on-hover;
+	@include card-accordion-details;
+	@include card-accordion-chevron;
+
+	padding: $padding-small 0;
+	position: relative;
+	cursor: pointer;
+
+
+	&__header {
+		@extend .heading-secondary-sm;
+
+		display: flex;
+    align-items: center;
+	}
+
+	&__submit {
+		margin: 0 auto;
+    display: flex;
+	}
+}
+
+.checkout__form-footer {
+	display: flex;
+	flex-direction: column;
+	margin-top: 2rem;
+
+	.form__checkbox {
+		display: flex;
+		padding-left: 2.5rem;
+		padding-top: 2px;
+	}
+	.form__checkout-label {
+		font-size: 13px;
+		color: $text-color-primary;
+	}
+}
+
+.checkout__address-footer {
+	display: flex;
+	flex-direction: column;
+
+	@include media-breakpoint-up(sm) {
+		flex-direction: row;
+	}
+
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 2rem;
+
+	.submit {
+		margin-bottom: 2rem;
+
+		@include media-breakpoint-up(sm) {
+			margin-bottom: 0;
+		}
+	}
+}
+
+.add-new-payment-type {
+	margin-left: -2rem;
+	margin-right: -2rem;
+	margin-top: 2rem !important;
+}
+
+.payment-source {
+	margin-top: 2rem !important;
+}

@@ -1,0 +1,19 @@
+{# TODO colourScheme isn't getting through #}
+
+<div class="card-story-text-image t-{{ colourScheme | default('white-on-black') }}">
+	<div class="card-story-text-image__image-mask">
+		<div class="card-story-text-image__image"{% if image is defined %} style="background-image: url('{{ image.url }}')"{% endif %}></div>
+	</div>
+	<div class="card-story-text-image__details">
+		{% if super is defined %}<div class="card-story-text-image__super">{{ super | typogrify }}</div>{% endif %}
+		{% if heading is defined %}<h2 class="card-story-text-image__heading">{{ heading | typogrify }}</h2>{% endif %}
+		{% if text is defined %}<div class="card-story-text-image__text">{{ text | typogrify }}</div>{% endif %}
+		{% if actions is defined and actions %}
+			<div class="card-story-text-image__buttons">
+				{% for action in actions %}
+					<a class="card-story-text-image__button" href="{{ action.url | default }}"><div>{{ action.label | default }}</div></a>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+</div>

@@ -1,0 +1,92 @@
+{% set navbar = 'small' %}
+{% extends '_layouts/_layout.twig' %}
+
+{% block hero %}
+	{%
+		include "_page-builder-components/hero.twig" with {
+			small: true,
+			component: {
+				image: library.libraryHeroImage,
+				heading: library.bannerTitle
+			}
+		}
+	%}
+{% endblock %}
+
+{% block filter %}
+
+
+{% set blogCategories = craft.categories().group('blogCategories').level(1) %}
+
+<div class="search-header-container search-header-container--blog">
+	<div class="search-header">
+
+		<div class="filters__show-filter-buttons hidden-desktop">
+			<strong class="filters__show-filter-buttons-button js-toggle-target" data-toggle-target-class="filters">
+				Filter:
+			</strong>
+		</div>
+
+		<form class="filters js-product-filters">
+			<div class="search-header__col search-header__col">
+					<strong class="filters__list-title hidden-desktop">Filter Blog</strong>
+					<a href="#" class="filters__list-close hidden-desktop js-toggle-target" data-toggle-target-class="filters">
+						<svg class="exceptions-list__icon--close">
+							<use xlink:href="#close"></use>
+						</svg>
+					</a>
+					<ul class="filters__list filters__list--centered filters__list--blog">
+						<li class="filters__list-item">
+							<a href="/archives" class="filters__list-item-text {{ craft.request.getPath() == 'archives' ? 'filters__list-item-text--active' }}">Most recent</a>
+						</li>
+						{% for node in blogCategories %}
+							<li class="filters__list-item">
+								<a href="{{ node.url }}" class="filters__list-item-text {{ node.url == craft.request.getUrl() ? 'filters__list-item-text--active' }}">{{ node.title }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+
+				</div>
+			</form>
+		<div class="filters__filter-list">
+			<label for="" class="tag tag--tmp" style="display: none">All red wines</label>
+		</div>
+		<!--button href="#" class="filters__dropdown-clear-btn">Clear All</button-->
+	</div>
+</div>
+{% endblock %}
+
+{% block featured %}
+	{% if featuredItem is defined and featuredItem | length %}
+		{% embed "_layouts/_section.twig" %}
+			{% block body %}
+				{% include "_cards/_card-article-big.twig" with featuredItem only %}
+			{% endblock %}
+		{% endembed %}
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	{% embed '_layouts/_section.twig' with { class: 'list-section' } %}
+		{% block body %}
+			{% embed "_partials/_card-list.twig" with { type: type, items: items, appendJsClass: true } only %}
+				{% block item %}
+					{% include "_cards/_card-article.twig" with item only %}
+				{% endblock %}
+			{% endembed %}
+		{% endblock %}
+
+		{% block footer %}
+			{% if paginationInfo is defined and paginationInfo.nextUrl %}
+				<div class="section__footer">
+					<div class="card-list__pagination">
+						{% if paginationInfo.nextUrl %}
+							<a href="{{ paginationInfo.nextUrl }}" class="js-paginate boxed-button" data-paginate-selector=".js-card-list-mixed">Load More</a>
+						{% endif %}
+					</div>
+				</div>
+			{% endif %}
+		{% endblock %}
+
+	{% endembed %}
+{% endblock %}

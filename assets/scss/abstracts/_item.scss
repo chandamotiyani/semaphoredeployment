@@ -1,0 +1,34 @@
+@mixin item {
+	display: flex;
+	position: relative;
+	color: inherit; // For when the item is an <a/> element
+	&:hover {
+		color: inherit; // For when the item is an <a/> element
+		text-decoration: inherit;
+	}
+}
+
+@mixin item-with-image {
+	&__image-mask {
+		position: relative;
+		@include aspect-ratio(4, 3);
+	}
+	&__image {
+		@include absolute-fill-parent;
+		background-position: center;
+		background-size: cover;
+	}
+}
+
+@mixin item-hover-image-zoom {
+	&__image {
+		transition-duration: 0.4s;
+		transition-timing-function: ease-out;
+		transition-property: transform, opacity;
+	}
+
+	&:hover &__image {
+		opacity: 1;
+		transform: scale(1.1);
+	}
+}

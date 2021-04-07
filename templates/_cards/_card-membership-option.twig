@@ -1,0 +1,12 @@
+{% embed '_cards/_card.twig' with { type: 'membership-option' }%}
+	{% block details %}
+		<h3 class="card-membership-option__title">{{ title | typogrify }}</h3>
+		<div class="card-membership-option__description">{{ description | typogrify }}</div>
+		<div class="card-membership-option__price">
+			<span>$</span>
+			<span>{{ price }}</span>
+			<span>{{ perLabel }}</span>
+		</div>
+		<div class="card-membership-option__button"><div class="boxed-button">{{ buttonLabel }}</div></div>
+	{% endblock %}
+{% endembed %}

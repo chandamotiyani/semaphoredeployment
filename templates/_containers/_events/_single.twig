@@ -1,0 +1,60 @@
+{% import "_partials/_macros.twig" as macros %}
+
+{% if cart is not defined %}
+  {% set cart = craft.commerce.getCarts().getCart() %}
+{% endif %}
+
+{% set lineItem = null %}
+{% for item in cart.lineItems %}
+  {% if item.purchasableId is defined and event.id == item.purchasableId  %}
+    {% set lineItem = item %}
+  {% endif %}
+{% endfor %}
+
+{% set schedule = [] %}
+
+{% for scheduleDate in event.schedule.orderBy('startDateTime')|filter(s => s.noticeDateTime|default(s.startDateTime) | date('U') >= "now"|date('U')) %}
+	{% set schedule = schedule | merge([{
+		startDate: scheduleDate.startDateTime | date('l j F'),
+		startTime: macros.formatTimeRange(scheduleDate.startDateTime),
+		id: scheduleDate.id,
+		start: scheduleDate.startDateTime.date|date('Y/m/d H:i:s'),
+		end: scheduleDate.endDateTime.date|default ? scheduleDate.endDateTime.date|date('Y/m/d H:i:s'),
+		price: scheduleDate.salePrice(),
+	}]) %}
+	{# 2021-01-01 11:00:00.000000#}
+	
+{% endfor %}
+
+{%
+	set scheduleData = {
+		id: event.id,
+		title: event.title,
+		bannerImage: event.bannerImage,
+		contentImage: event.bannerImage.one().getUrl()| default,
+		description: event.eventLongDescription,
+		bookingUrl: event.eventBookingUrl,
+		isExternalBooking: event.eventBookingUrl,
+		isBookable: event.price > 0,
+		location: event.eventLocation,
+		notes: event.eventNotes,
+		schedule: schedule,
+		duration: event.eventDuration,
+		multipleSchedule: schedule|length > 1 and event.price > 0 and not event.eventBookingUrl,
+		startDateString: schedule[0]|default ? schedule[0].start|date('l j F') : '',
+		startTimeString: schedule[0]|default ? macros.formatTimeRange(schedule[0].start,schedule[0].end) : '',
+		start: schedule[0].start | default,
+		end: schedule[0].start | default,
+		price: schedule[0].price|default > 0 ? schedule[0].price|currency('AUD', stripZeros = true) ~ ' ' ~ event.ticketTypeText|default('per person') : 'Free',
+		section: event.getGroup().name,
+		hasContentImage: schedule|length > 1 or event.groupHandle,
+		components: event.components,
+		template: event.groupHandle == 'events' ? 'events' : 'tours-tastings',
+		qtyInCart: lineItem.qty|default(0),
+		lineItemId: lineItem.id|default(false),
+		groupHandle: event.groupHandle,
+		banner: toursSection.heroImage.one.getUrl|default(alias('@assetBaseUrl/img/tours.jpg')),
+	}
+%}
+
+{% include '_views/_events/_event-'~scheduleData.template with { event: scheduleData } %}

@@ -1,0 +1,87 @@
+{% embed "_layouts/_layout.twig" with { navbar: 'small' } %}
+  {% set tabs = [
+    {
+      name: 'Wine tasting',
+      url: '/wine-tasting',
+      active: craft.app.request.segments|last == 'wine-tasting' or event.groupHandle == 'tastings',
+    },
+    {
+      name: 'Winery Tours',
+      url: '/winery-tours',
+      active: craft.app.request.segments|last == 'winery-tours' or event.groupHandle == 'tours',
+    },
+  ] %}
+
+  {% set bannerImage = alias('@assetBaseUrl/img/tours.jpg') %}
+
+  {% if event.groupHandle == 'tours' %}
+    {% set bannerImage = toursSection.heroImage.one.getUrl|default(alias('@assetBaseUrl/img/tours.jpg')) %}
+  {% endif %}
+
+  {% if event.groupHandle == 'tastings' %}
+    {% set bannerImage = tastingsSection.heroImage.one.getUrl|default(alias('@assetBaseUrl/img/tours.jpg')) %}
+  {% endif %}
+
+  {% block hero %}
+    {% if event is defined %}
+      {% include "_page-builder-components/hero-small.twig" with {
+        component: {
+          image: bannerImage,
+          buttonText: '',
+          heading: event.title,
+          overlay: 'gradient',
+          buttonLink: { one: { url: event.bookingUrl } } | default,
+          focalPoint: entry.bannerImage.one|default ? entry.bannerImage.one.focalPoint : '',
+        }
+      } %}
+    {% endif %}
+
+
+    {% if event is defined and event.isBookable %}
+	  	{% include "_views/_events/_event-sticky-header" with { event: event } %}
+  	{% endif %}
+  {% endblock %}
+
+{% block featured %}
+{% endblock %}
+
+{% block content %}
+	{% embed '_layouts/_section.twig' %}
+		{% block body %}
+
+		<span class="event-single__title-super">{{ event.location.one.title }}</span>
+		<h2 class="event-single__title">{{ event.title }}</h2>
+
+		<div class="event-single row">
+			<div class="event-single__detail col col__large">
+
+				{% if event.contentImage %}{# TODO: the calendar in sidebar only looks good with an image #}
+					<div class="event-single__content-image" style="background-image: url({{ event.contentImage }})"></div>
+				{% endif %}
+
+				<div class="row">
+					<div class="col col__x-large">
+						{% include "_views/_article-text" with { text: event.description } only %}
+            {% if not (event.schedule[0]|default) %}
+                <div class="event-single__form-heading">This event is no longer available to book</div>
+            {% endif %}
+
+            {% if event.bookingUrl|default %}
+              <a href="{{ event.bookingUrl }}" target="_blank" class="boxed-button event-single__book-external">Book Now</a>
+            {% endif %}
+					</div>
+				</div>
+      </div>
+			<div class="event-single__book col">
+        {% if event.bookingUrl|default %}
+          {% include "_views/_events/_event-booking-info" with { event: event, hideDates: true } %}
+        {% else %}
+          {% include "_views/_events/_event-booking-form-calendar" with { event: event } %}
+        {% endif %}
+			</div>
+		</div>
+		{% endblock %}
+	{% endembed %}
+	{% include "_partials/_page-builder.twig" with { components: event.components } %}
+{% endblock %}
+{% endembed %}
